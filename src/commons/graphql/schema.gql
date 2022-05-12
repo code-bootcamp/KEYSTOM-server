@@ -1,0 +1,152 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type ProductCategory {
+  id: String!
+  name: String!
+}
+
+type Product {
+  id: String!
+  name: String!
+  description: String!
+  price: Int!
+  like: Int!
+  image: String!
+  thumbnailImage: String!
+}
+
+type Custom {
+  id: String!
+  key: String!
+  color: String!
+}
+
+type Review {
+  id: String!
+  reviewContent: String!
+  like: Boolean!
+}
+
+type Order {
+  id: String!
+  count: Int!
+  price: Int!
+  address: String!
+  recieverName: String!
+  recieverPhone: String!
+}
+
+type Payment {
+  id: String!
+  price: Int!
+  discountAmount: Int!
+  impUid: String!
+  status: PAYMENT_STATUS_ENUM!
+  paymentDate: DateTime!
+}
+
+enum PAYMENT_STATUS_ENUM {
+  PAYMENT
+  CANCEL
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type User {
+  id: String!
+  email: String!
+  name: String!
+  nickName: String!
+  profileImage: String!
+  isAdmin: Boolean!
+  address: String!
+}
+
+type Coupon {
+  id: String!
+  discount_price: Int!
+  description: String!
+}
+
+type Query {
+  fetchCoupons: [Coupon!]!
+  fecthCoupon(couponId: String!): Coupon!
+  fetchCustoms: [Custom!]!
+  fetchCustom(customId: String!): Custom!
+  fetchOrder: [Order!]!
+  fetchOrders: String!
+  fetchProducts: [Product!]!
+  fetchProduct(productId: String!): Product!
+  fetchReviews: [Review!]!
+  fetchReview(reviewId: String!): Review!
+  fetchUsers: [User!]!
+  fetchUser(email: String!): User!
+  fetchUser111: String!
+}
+
+type Mutation {
+  login(email: String!, password: String!): String!
+  restoreAccessToken: String!
+  logout: String!
+  createCoupon(createCouponInput: CreateCouponInput!): Coupon!
+  deleteCoupon(couponId: String!): Boolean!
+  createCustom(createCustomInput: CreateCustomInput!): Custom!
+  createOrder(createOrderInput: CreateOrderInput!): Order!
+  Payment(impUid: String!, price: Float!): Payment!
+  createProductCategory(name: String!): ProductCategory!
+  createProduct(createProductInput: CreateProductInput!): Product!
+  createReview(createReviewInput: CreateReviewInput!): Review!
+  createUser(createUserInput: CreateUserInput!): User!
+  signUp(phone: String!): String!
+}
+
+input CreateCouponInput {
+  discount_price: Int!
+  description: String!
+}
+
+input CreateCustomInput {
+  key: String!
+  color: String!
+  productId: String!
+}
+
+input CreateOrderInput {
+  count: Int!
+  price: Int!
+  address: String!
+  recieverName: String!
+  recieverPhone: String!
+  productId: String!
+}
+
+input CreateProductInput {
+  name: String!
+  description: String!
+  price: Int!
+  like: Int!
+  image: String!
+  thumbnailImage: String!
+  productTags: [String!]!
+}
+
+input CreateReviewInput {
+  reviewContent: String!
+  like: Boolean!
+  productId: String!
+}
+
+input CreateUserInput {
+  email: String!
+  password: String!
+  name: String!
+  nickName: String!
+  profileImage: String!
+  isAdmin: Boolean!
+  address: String!
+}

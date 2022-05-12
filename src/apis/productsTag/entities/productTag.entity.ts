@@ -1,0 +1,16 @@
+import { ObjectType, Field } from '@nestjs/graphql';
+import { Product } from 'src/apis/products/entities/product.entity';
+import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
+
+@Entity()
+@ObjectType()
+export class ProductTag {
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
+
+  @Column()
+  tag: string;
+
+  @ManyToMany(() => Product, (product) => product.productTag)
+  products: Product[];
+}
