@@ -1,0 +1,38 @@
+import { Injectable, Scope } from '@nestjs/common';
+import { PassportStrategy } from '@nestjs/passport';
+import { Strategy } from 'passport-kakao'; //jwt방식
+import { json } from 'stream/consumers';
+
+//방어막 설계
+@Injectable()
+export class JwtKakaoStrategy extends PassportStrategy(Strategy, 'kakao') {
+  //jwt방식(strategy)으로 인가를 처리할거야 이름은 naver
+  constructor() {
+    super({
+      //검증부 => 여기 내용은 다 네이버에서 발급받음 => 이 내용으로 passportStrategy 실행 => 브라우저 페이지가 바뀜
+      clientID: 'c6260cee8e98ca38722c7de89e9b3d41',
+      clientSecret: '2Cq19T5fSfsbAvAyiXUNsZIEk2718MPA',
+      callbackURL: 'http://localhost:3003/login/kakao',
+      scope: ['account_email', 'profile_nickname'], //프로필 중에 어떤 걸 받을것인가 => 구글/카카오 사이트마다 다 다르다 =>지금은 구글에 맞춰서
+    }); // =>super를 가지고 PassportStrategy실행
+  }
+
+  async validate(accessToken: string, refreshToken: string, profile: any) {
+    // 구글에서 받는 것
+    //검증 완료되면 실행(검증 실패하면 중간에 에러 떨어짐)
+    console.log('accessToken은 ', accessToken); //복호화된 내용들...
+    console.log('refreshToken은', refreshToken);
+    console.log(profile); //스코프는 프로필에서 정보 뽑아 오면 됨
+
+
+    return {
+      email: profile._json.kakao_account.email,
+      password: '1111', // 비밀번호는 알려주지 않으므로 임의로 적어 놓는다
+      name: profile.displayName,
+      nickName: '111',
+      profileImage: '12',
+      isAdmin: true,
+      address: '12', //내 백엔드에서 강제 회원가입,
+    }; //return 하면 context 안으로 들어감(context.req.user => user 는 라이브러리에서 자동으로 지정해준것)
+  }
+}

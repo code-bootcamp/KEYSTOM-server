@@ -14,7 +14,7 @@ import { CACHE_MANAGER, Inject } from '@nestjs/common';
 import { Cache } from 'cache-manager';
 import { UserService } from '../user/users.service';
 import axios from 'axios';
-import dotenv from 'dotenv'
+import 'dotenv/config';
 
 @Resolver()
 export class SignUpResolver {

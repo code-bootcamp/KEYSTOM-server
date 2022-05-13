@@ -14,8 +14,10 @@ import type { RedisClientOptions } from 'redis';
 import * as redisStore from 'cache-manager-redis-store';
 import { SignUpModule } from './apis/signup/signup.module';
 import { CouponModule } from './apis/coupon/coupon.module';
+import { ConfigModule } from '@nestjs/config';
 // import { AppController } from './app.controller';
 // import { AppService } from './app.service';
+import 'dotenv/config';
 
 @Module({
   imports: [
@@ -33,6 +35,10 @@ import { CouponModule } from './apis/coupon/coupon.module';
       driver: ApolloDriver,
       autoSchemaFile: 'src/commons/graphql/schema.gql',
       context: ({ req, res }) => ({ req, res }), //이게 있어야 setheader가능하다
+      // cors: {
+      //   credential:true,
+      //   origin:["http://localhost:3003/graphql"]
+      // },
     }),
     TypeOrmModule.forRoot({
       type: 'mysql',
@@ -49,6 +55,11 @@ import { CouponModule } from './apis/coupon/coupon.module';
     CacheModule.register<RedisClientOptions>({
       store: redisStore,
       url: 'redis://my-redis:6379',
+      isGlobal: true,
+    }),
+    ConfigModule.forRoot({
+      envFilePath: '.env',
+      ignoreEnvFile: true,
       isGlobal: true,
     }),
   ],
