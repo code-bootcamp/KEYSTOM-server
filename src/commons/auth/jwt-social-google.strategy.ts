@@ -9,10 +9,9 @@ export class JwtGoogleStrategy extends PassportStrategy(Strategy, 'google') {
   constructor() {
     super({
       //검증부 => 여기 내용은 다 구글에서 발급받음 => 이 내용으로 passportStrategy 실행 => 브라우저 페이지가 바뀜
-      clientID:
-        '523485314710-ai9823abs2ked0r0akadamvgbs5gtg6c.apps.googleusercontent.com',
-      clientSecret: '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',
-      callbackURL: 'http://localhost:3003/login/google',
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      callbackURL: process.env.GOOGLE_CALLBACKURL,
       scope: ['email', 'profile'], //프로필 중에 어떤 걸 받을것인가 => 구글/카카오 사이트마다 다 다르다 =>지금은 구글에 맞춰서
     }); // =>super를 가지고 PassportStrategy실행
   }

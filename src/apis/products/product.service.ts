@@ -1,9 +1,4 @@
-import {
-  HttpException,
-  HttpStatus,
-  Injectable,
-  UnprocessableEntityException,
-} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ProductTag } from '../productsTag/entities/productTag.entity';
@@ -26,9 +21,6 @@ export class ProductService {
   async create({ createProductInput }) {
     // 상품을 데이터베이스에 저장
     const { productTags, ...product } = createProductInput;
-    console.log('-----------------');
-    console.log(productTags);
-    console.log('---------------');
     //productTags 저장
     const result2 = [];
     for (let i = 0; productTags.length > i; i++) {
@@ -51,5 +43,10 @@ export class ProductService {
       ...product,
       productTags: result2,
     });
+  }
+
+  async delete({ productId }) {
+    const result = await this.productRepository.softDelete({ id: productId });
+    return result.affected ? true : false;
   }
 }

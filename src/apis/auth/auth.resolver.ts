@@ -76,8 +76,8 @@ export class AuthResolver {
     ].replace('refreshToken=', '');
     // //토큰 검증
     try {
-      const decoded1 = jwt.verify(accessToken, 'myAccesskey');
-      const decoded2 = jwt.verify(refreshToken, 'myRefreshKey');
+      const decoded1 = jwt.verify(accessToken, process.env.ACCESS_SECRET_KEY);
+      const decoded2 = jwt.verify(refreshToken, process.env.REFRESH_SECRET_KEY);
       console.log(decoded1, decoded2);
     } catch (err) {
       throw new UnauthorizedException('토큰 검증 실패!!');

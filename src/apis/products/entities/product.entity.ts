@@ -1,10 +1,14 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
+// import { ProductImage } from 'src/apis/productImage/entities/productImage.entity';
 import { ProductTag } from 'src/apis/productsTag/entities/productTag.entity';
 import {
   Column,
+  CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   JoinTable,
   ManyToMany,
+  ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -39,7 +43,19 @@ export class Product {
   @Field(() => String)
   thumbnailImage: string;
 
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @DeleteDateColumn()
+  deletedAt: Date;
+
   @JoinTable()
-  @ManyToMany(() => ProductTag, (productTag) => productTag.products)
+  @ManyToMany(() => ProductTag, (productTag) => productTag.products, {
+    onDelete: 'CASCADE',
+  })
   productTag: ProductTag[];
+
+  // @ManyToOne(() => ProductImage, { onDelete: 'CASCADE' })
+  // @Field(() => ProductImage)
+  // productImage: ProductImage;
 }

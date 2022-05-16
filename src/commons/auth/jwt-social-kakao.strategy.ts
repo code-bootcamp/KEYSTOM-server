@@ -10,9 +10,9 @@ export class JwtKakaoStrategy extends PassportStrategy(Strategy, 'kakao') {
   constructor() {
     super({
       //검증부 => 여기 내용은 다 네이버에서 발급받음 => 이 내용으로 passportStrategy 실행 => 브라우저 페이지가 바뀜
-      clientID: 'c6260cee8e98ca38722c7de89e9b3d41',
-      clientSecret: '2Cq19T5fSfsbAvAyiXUNsZIEk2718MPA',
-      callbackURL: 'http://localhost:3003/login/kakao',
+      clientID: process.env.KAKAO_CLIENT_ID,
+      clientSecret: process.env.KAKAO_CLIENT_SECRET,
+      callbackURL: process.env.KAKAO_CALLBACKURL,
       scope: ['account_email', 'profile_nickname'], //프로필 중에 어떤 걸 받을것인가 => 구글/카카오 사이트마다 다 다르다 =>지금은 구글에 맞춰서
     }); // =>super를 가지고 PassportStrategy실행
   }
@@ -23,7 +23,6 @@ export class JwtKakaoStrategy extends PassportStrategy(Strategy, 'kakao') {
     console.log('accessToken은 ', accessToken); //복호화된 내용들...
     console.log('refreshToken은', refreshToken);
     console.log(profile); //스코프는 프로필에서 정보 뽑아 오면 됨
-
 
     return {
       email: profile._json.kakao_account.email,

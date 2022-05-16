@@ -18,9 +18,6 @@ export class SignUpService {
   }
 
   async sendTokenToSMS({ phoneNum, token }) {
-    // const appKey = process.env.SMS_APP_KEY;
-    // const XSecretKey = process.env.SMS_X_SECRET_KEY;
-    // const sender = process.env.SMS_SENDER;
     const appKey = process.env.SMS_APP_KEY;
     const XSecretKey = process.env.SMS_XSECRET_KEY;
     const sender = process.env.SMS_SENDER;

@@ -23,7 +23,7 @@ import { AuthService } from './auth.service';
     JwtRefreshStrategy,
     JwtGoogleStrategy,
     JwtNaverStrategy,
-    JwtKakaoStrategy
+    JwtKakaoStrategy,
   ],
   controllers: [AuthController],
 })

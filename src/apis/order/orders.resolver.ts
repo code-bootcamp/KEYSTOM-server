@@ -15,10 +15,6 @@ export class OrderResolver {
   fetchOrders() {
     return 'hello';
   }
-  // @Query(() => Review)
-  // fetchReview(@Args('reviewId') reviewId: string) {
-  //   return this.reviewService.findOne({ reviewId });
-  // }
   @Mutation(() => Order)
   createOrder(@Args('createOrderInput') createOrderInput: CreateOrderInput) {
     return this.orderService.create({ createOrderInput });

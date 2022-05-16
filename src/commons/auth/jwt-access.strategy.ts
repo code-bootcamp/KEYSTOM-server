@@ -10,7 +10,7 @@ export class JwtAccessStrategy extends PassportStrategy(Strategy, 'access') {
     super({
       //검증부
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(), //"authorization":"Bearer 토큰"=> 토큰만 나오도록 함수로 구현 가능(라이브러리에 내장도 되어있다)
-      secretOrKey: 'myAccesskey',
+      secretOrKey: process.env.ACCESS_SECRET_KEY,
       passReqToCallback: true,
     }); // =>super를 가지고 PassportStrategy실행
   }

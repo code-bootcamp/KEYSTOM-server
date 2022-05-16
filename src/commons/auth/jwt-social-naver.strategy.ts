@@ -9,9 +9,9 @@ export class JwtNaverStrategy extends PassportStrategy(Strategy, 'naver') {
   constructor() {
     super({
       //검증부 => 여기 내용은 다 네이버에서 발급받음 => 이 내용으로 passportStrategy 실행 => 브라우저 페이지가 바뀜
-      clientID: 'sE2YsTKuVuGffcGZehGq',
-      clientSecret: 'enthaPZHeU',
-      callbackURL: 'http://localhost:3003/login/naver',
+      clientID: process.env.NAVER_CLIENT_ID,
+      clientSecret: process.env.NAVER_CLIENT_SECRET,
+      callbackURL: process.env.NAVER_CALLBACKURL,
       scope: ['email', 'profile'], //프로필 중에 어떤 걸 받을것인가 => 구글/카카오 사이트마다 다 다르다 =>지금은 구글에 맞춰서
     }); // =>super를 가지고 PassportStrategy실행
   }
@@ -26,7 +26,7 @@ export class JwtNaverStrategy extends PassportStrategy(Strategy, 'naver') {
     return {
       email: profile.emails[0].value,
       password: '1111', // 비밀번호는 알려주지 않으므로 임의로 적어 놓는다
-      name: "선종현",
+      name: '선종현',
       nickName: '111',
       profileImage: '12',
       isAdmin: true,

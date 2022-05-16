@@ -2,7 +2,6 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { CacheModule, Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ProductCategoryModule } from './apis/productsCategory/productCategory.module';
 import { ProductModule } from './apis/products/product.module';
 import { CustomModule } from './apis/custom/customs.module';
 import { ReviewModule } from './apis/review/reviews.module';
@@ -26,7 +25,6 @@ import 'dotenv/config';
     CustomModule,
     OrderModule,
     PaymentModule,
-    ProductCategoryModule,
     ProductModule,
     ReviewModule,
     UserModule,
