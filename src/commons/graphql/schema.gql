@@ -2,11 +2,6 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type ProductCategory {
-  id: String!
-  name: String!
-}
-
 type Product {
   id: String!
   name: String!
@@ -98,8 +93,8 @@ type Mutation {
   createCustom(createCustomInput: CreateCustomInput!): Custom!
   createOrder(createOrderInput: CreateOrderInput!): Order!
   Payment(impUid: String!, price: Float!): Payment!
-  createProductCategory(name: String!): ProductCategory!
   createProduct(createProductInput: CreateProductInput!): Product!
+  deleteProduct(productId: String!): String!
   createReview(createReviewInput: CreateReviewInput!): Review!
   createUser(createUserInput: CreateUserInput!): User!
   signUp(phone: String!): String!

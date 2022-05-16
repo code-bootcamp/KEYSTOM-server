@@ -28,13 +28,11 @@ export class ProductResolver {
   async createProduct(
     @Args('createProductInput') createProductInput: CreateProductInput,
   ) {
-    // //캐시 매니저 연습
-    // await this.cacheManager.set('aaa', createProductInput, {
-    //   ttl: 0,
-    // });
-    // const mycache = await this.cacheManager.get('aaa')
-    // console.log(mycache)
-    // return '캐시 테스트중!'
     return this.productService.create({ createProductInput });
+  }
+
+  @Mutation(() => String)
+  deleteProduct(@Args('productId') productId: string) {
+    return this.productService.delete({ productId });
   }
 }
