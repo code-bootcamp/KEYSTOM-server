@@ -41,10 +41,14 @@ export class AuthResolver {
     if (!isAuthenticated)
       throw new UnprocessableEntityException('암호가 틀렸습니다!!');
 
-    this.authService.setRefreshToken({ user, res: context.res });
+    this.authService.setRefreshToken({
+      user,
+      res: context.res,
+      req: context.req,
+    });
     const accessToken = this.authService.getAccessToken({ user });
     return accessToken;
-  }
+ }
   @UseGuards(GqlAuthRefreshGuard)
   @Mutation(() => String)
   async restoreAccessToken(@CurrentUser() currentUser: ICurrentUser) {
@@ -77,7 +81,7 @@ export class AuthResolver {
     // //토큰 검증
     try {
       const decoded1 = jwt.verify(accessToken, process.env.ACCESS_SECRET_KEY);
-      const decoded2 = jwt.verify(refreshToken, process.env.REFRESH_SECRET_KEY);
+      const decoded2 = jwt.verify(refreshToken, process.env.R);
       console.log(decoded1, decoded2);
     } catch (err) {
       throw new UnauthorizedException('토큰 검증 실패!!');
