@@ -33,10 +33,10 @@ import 'dotenv/config';
       driver: ApolloDriver,
       autoSchemaFile: 'src/commons/graphql/schema.gql',
       context: ({ req, res }) => ({ req, res }), //이게 있어야 setheader가능하다
-      // cors: {
-      //   credential:true,
-      //   origin:["http://localhost:3003/graphql"]
-      // },
+      cors: {
+        credential: true,
+        origin: [' http://localhost:3000', 'http://localhost:3000/signup'],
+      },
     }),
     TypeOrmModule.forRoot({
       type: 'mysql',
