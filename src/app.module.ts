@@ -51,7 +51,7 @@ import { CouponModule } from './apis/coupon/coupon.module';
     }),
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: '10.51.0.4',//머지 하기 전에 호스트 꼭 바꾸기 !!!!!!!!!!!!!!!!!!!
+      host: '10.51.0.4',
       port: 3306,
       username: 'root',
       password: 'root',
