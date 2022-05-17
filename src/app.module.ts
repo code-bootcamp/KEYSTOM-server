@@ -45,8 +45,8 @@ import { CouponModule } from './apis/coupon/coupon.module';
       autoSchemaFile: 'src/commons/graphql/schema.gql',
       context: ({ req, res }) => ({ req, res }), //이게 있어야 setheader가능하다
       cors: {
-        origin: [' http://localhost:3000', 'http://localhost:3000/signup'],
         credential: true,
+        origin: [' http://localhost:3000', 'http://localhost:3000/signup'],
       },
     }),
     TypeOrmModule.forRoot({
