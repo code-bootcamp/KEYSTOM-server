@@ -20,7 +20,7 @@ export class AuthService {
     );
     console.log('리프레시토큰은?', refreshToken);
     res.setHeader('Set-Cookie', `refreshToken=${refreshToken}`);
-    res.setHeader('Access-Control-Allow-Origin', req.headers.origin)
+    res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
     res.setHeader('Access-Control-Allow-Credentials', 'true');
     res.setHeader('Access-Control-Allow-Methods', 'GET,HEAD,OPTIONS,POST,PUT');
     res.setHeader(
