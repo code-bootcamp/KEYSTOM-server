@@ -1,5 +1,6 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { Product } from 'src/apis/products/entities/product.entity';
+import { User } from 'src/apis/user/entities/user.entity';
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 
 @Entity()
@@ -29,6 +30,6 @@ export class Order {
   @Field(() => String)
   recieverPhone: string;
 
-  @ManyToOne(() => Product)
-  product: Product;
+  @ManyToOne(() => User)
+  user: User;
 }

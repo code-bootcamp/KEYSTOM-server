@@ -1,29 +1,34 @@
-import { Query, Resolver, Mutation, Args } from '@nestjs/graphql';
-import { CouponService } from './coupon.service';
+import { Args, Mutation, Resolver, Query } from '@nestjs/graphql';
 import { CreateCouponInput } from './dto/createCoupon.input';
 import { Coupon } from './entities/coupon.entity';
+import { CouponService} from './coupon.service';
 
 @Resolver()
 export class CouponResolver {
-  constructor(private readonly couponService: CouponService) {}
+  constructor(
+    private readonly couponService: CouponService, //
+
+  ) {}
+
   @Query(() => [Coupon])
   fetchCoupons() {
     return this.couponService.findAll();
   }
-
   @Query(() => Coupon)
-  fecthCoupon(@Args('couponId') couponId: string) {
+  async fetchCoupon(
+    @Args('couponId') couponId: string, //
+  ) {
     return this.couponService.findOne({ couponId });
   }
   @Mutation(() => Coupon)
-  createCoupon(
+  async createCoupon(
     @Args('createCouponInput') createCouponInput: CreateCouponInput,
   ) {
     return this.couponService.create({ createCouponInput });
   }
 
-  @Mutation(() => Boolean)
-  deleteCoupon(@Args('couponId') couponId: string) {
-    return this.couponService.delete({ couponId });
-  }
+  // @Mutation(() => String)
+  // deleteProduct(@Args('productId') productId: string) {
+  //   return this.productService.delete({ productId });
+  // }
 }

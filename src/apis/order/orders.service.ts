@@ -2,14 +2,15 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Product } from '../products/entities/product.entity';
+import { User } from '../user/entities/user.entity';
 import { Order } from './entities/order.entity';
 @Injectable()
 export class OrderService {
   constructor(
     @InjectRepository(Order)
     private readonly orderRepository: Repository<Order>,
-    @InjectRepository(Product)
-    private readonly productRepository: Repository<Product>,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
   ) {}
 
   async findAll() {
@@ -19,13 +20,13 @@ export class OrderService {
   //   return await this.reviewRepository.findOne({ where: { id: reviewId } });
   // }
   async create({ createOrderInput }) {
-    const { productId, ...order } = createOrderInput;
-    const result1 = await this.productRepository.findOne({
-      id: productId,
+    const { userId, ...order } = createOrderInput;
+    const result1 = await this.userRepository.findOne({
+      id: userId,
     });
     const result2 = await this.orderRepository.save({
       ...order,
-      product: result1,
+      user: result1,
     });
     return result2;
   }

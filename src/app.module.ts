@@ -12,22 +12,33 @@ import { AuthModule } from './apis/auth/auth.module';
 import type { RedisClientOptions } from 'redis';
 import * as redisStore from 'cache-manager-redis-store';
 import { SignUpModule } from './apis/signup/signup.module';
-import { CouponModule } from './apis/coupon/coupon.module';
 import { ConfigModule } from '@nestjs/config';
 // import { AppController } from './app.controller';
 // import { AppService } from './app.service';
 import 'dotenv/config';
+import { ProductImageModule } from './apis/productImage/productImage.module';
+import { ReviewImageModule } from './apis/reviewImage/reviewImage.module';
+import { CommentModule } from './apis/comments/comment.module';
+import { CartProductModule } from './apis/cart/cartProduct.module';
+import { UserCoupon } from './apis/UserCoupon/entities/userCoupon.entity';
+import { Coupon } from './apis/coupon/entities/coupon.entity';
+import { CouponModule } from './apis/coupon/coupon.module';
 
 @Module({
   imports: [
     AuthModule,
+    CartProductModule,
+    CommentModule,
     CouponModule,
     CustomModule,
     OrderModule,
     PaymentModule,
+    ProductImageModule,
     ProductModule,
     ReviewModule,
+    ReviewImageModule,
     UserModule,
+    UserCoupon,
     SignUpModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,

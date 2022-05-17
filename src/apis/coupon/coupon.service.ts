@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Coupon } from './entities/coupon.entity';
 import { Repository } from 'typeorm';
+import { ProductTag } from '../productsTag/entities/productTag.entity';
+import { Coupon } from './entities/coupon.entity';
 
 @Injectable()
 export class CouponService {
@@ -9,25 +10,21 @@ export class CouponService {
     @InjectRepository(Coupon)
     private readonly couponRepository: Repository<Coupon>,
   ) {}
-
-  async create({ createCouponInput }) {
-    return await this.couponRepository.save({ ...createCouponInput });
-  }
-
-  async delete({ couponId }) {
-    const result = await this.couponRepository.softDelete({ id: couponId });
-    return result.affected ? true : false;
-  }
-
   async findAll() {
-    const result = await this.couponRepository.find();
-    return result;
+    return await this.couponRepository.find();
+  }
+  async findOne({ couponId }) {
+    return await this.couponRepository.findOne({ where: { id: couponId } });
+  }
+  async create({ createCouponInput }) {
+    // 상품을 데이터베이스에 저장;
+    return await this.couponRepository.save({
+      ...createCouponInput
+    });
   }
 
-  async findOne({ couponId }) {
-    const result = await this.couponRepository.findOne({
-      where: { id: couponId },
-    });
-    return result;
-  }
+  // async delete({ productId }) {
+  //   const result = await this.productRepository.softDelete({ id: productId });
+  //   return result.affected ? true : false;
+  // }
 }

@@ -44,6 +44,7 @@ export class Product {
   thumbnailImage: string;
 
   @CreateDateColumn()
+  @Field(() => String)
   createdAt: Date;
 
   @DeleteDateColumn()

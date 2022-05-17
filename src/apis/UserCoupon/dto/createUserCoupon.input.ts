@@ -1,11 +1,13 @@
 import { InputType, Field, Int } from '@nestjs/graphql';
 
 @InputType()
-export class CreateCouponInput {
-
-  @Field(()=>Int)
-  discountPrice: number
+export class CreateUserCouponInput {
 
   @Field(()=>String)
-  couponName: string
+  userId:string;
+
+  @Field(()=>String)
+  couponId:string
+
+
 }

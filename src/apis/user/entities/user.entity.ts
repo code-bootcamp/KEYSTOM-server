@@ -28,7 +28,7 @@ export class User {
 
   @Column()
   @Field(() => String)
-  nickName: string;
+  identify: string;
 
   @Column()
   @Field(() => String)
@@ -41,4 +41,11 @@ export class User {
   @Column()
   @Field(() => String)
   address: string;
+
+  // @JoinTable()
+  // @ManyToMany(() => Coupon, (coupon) => coupon.users, {
+  //   onDelete: 'CASCADE',
+  // })
+  // coupon: Coupon[]
+  
 }

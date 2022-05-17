@@ -17,7 +17,6 @@ import { JwtRefreshStrategy } from 'src/commons/auth/jwt-refresh.strategy';
 import { CACHE_MANAGER, Inject } from '@nestjs/common';
 import { Cache } from 'cache-manager';
 import { UserService } from '../user/users.service';
-import axios from 'axios';
 
 @Resolver()
 export class AuthResolver {

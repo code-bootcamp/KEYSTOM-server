@@ -10,12 +10,23 @@ type Product {
   like: Int!
   image: String!
   thumbnailImage: String!
+  createdAt: String!
 }
 
 type Custom {
   id: String!
   key: String!
   color: String!
+}
+
+type User {
+  id: String!
+  email: String!
+  name: String!
+  identify: String!
+  profileImage: String!
+  isAdmin: Boolean!
+  address: String!
 }
 
 type Review {
@@ -40,6 +51,7 @@ type Payment {
   impUid: String!
   status: PAYMENT_STATUS_ENUM!
   paymentDate: DateTime!
+  order: Order!
 }
 
 enum PAYMENT_STATUS_ENUM {
@@ -52,33 +64,53 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
-type User {
+type ProductImage {
   id: String!
-  email: String!
-  name: String!
-  nickName: String!
-  profileImage: String!
-  isAdmin: Boolean!
-  address: String!
+  productImageUrl: String!
+}
+
+type ReviewImage {
+  id: String!
+  reviewImageUrl: String!
+}
+
+type Comment {
+  id: String!
+  commentContent: String!
+  ParentId: String!
+}
+
+type CartProduct {
+  id: String!
+  count: Int!
+  priceAll: Int!
 }
 
 type Coupon {
   id: String!
-  discount_price: Int!
-  description: String!
+  discountPrice: Int!
+  couponName: String!
 }
 
 type Query {
+  fetchCartProducts: [CartProduct!]!
+  fetchCartProduct(cartProductId: String!): CartProduct!
+  fetchComments: [Comment!]!
+  fetchComment(commentId: String!): Comment!
   fetchCoupons: [Coupon!]!
-  fecthCoupon(couponId: String!): Coupon!
+  fetchCoupon(couponId: String!): Coupon!
   fetchCustoms: [Custom!]!
   fetchCustom(customId: String!): Custom!
   fetchOrder: [Order!]!
   fetchOrders: String!
+  fetchProductImages: [ProductImage!]!
+  fetchProductImage(productImageId: String!): ProductImage!
   fetchProducts: [Product!]!
   fetchProduct(productId: String!): Product!
   fetchReviews: [Review!]!
   fetchReview(reviewId: String!): Review!
+  fetchReviewImages: [ReviewImage!]!
+  fetchReviewImage(reviewImageId: String!): ReviewImage!
   fetchUsers: [User!]!
   fetchUser(email: String!): User!
   fetchUser111: String!
@@ -88,21 +120,36 @@ type Mutation {
   login(email: String!, password: String!): String!
   restoreAccessToken: String!
   logout: String!
+  createCartProduct(createCartProductInput: CreateCartProdcutInput!): CartProduct!
+  createComment(createCommentInput: CreateCommentInput!): Comment!
   createCoupon(createCouponInput: CreateCouponInput!): Coupon!
-  deleteCoupon(couponId: String!): Boolean!
   createCustom(createCustomInput: CreateCustomInput!): Custom!
   createOrder(createOrderInput: CreateOrderInput!): Order!
-  Payment(impUid: String!, price: Float!): Payment!
+  Payment(createPaymentInput: CreatePaymentInput!): Payment!
+  createProductImage(productImageUrl: String!, productId: String!): ProductImage!
   createProduct(createProductInput: CreateProductInput!): Product!
   deleteProduct(productId: String!): String!
   createReview(createReviewInput: CreateReviewInput!): Review!
+  createReivewImage(reviewImageUrl: String!, reviewId: String!): ReviewImage!
   createUser(createUserInput: CreateUserInput!): User!
   signUp(phone: String!): String!
 }
 
+input CreateCartProdcutInput {
+  count: Int!
+  priceAll: Int!
+  productId: String!
+}
+
+input CreateCommentInput {
+  commentContent: String!
+  ParentId: String!
+  reviewId: String!
+}
+
 input CreateCouponInput {
-  discount_price: Int!
-  description: String!
+  discountPrice: Int!
+  couponName: String!
 }
 
 input CreateCustomInput {
@@ -117,7 +164,13 @@ input CreateOrderInput {
   address: String!
   recieverName: String!
   recieverPhone: String!
-  productId: String!
+  userId: String!
+}
+
+input CreatePaymentInput {
+  price: Int!
+  impUid: String!
+  order: CreateOrderInput!
 }
 
 input CreateProductInput {
@@ -134,13 +187,14 @@ input CreateReviewInput {
   reviewContent: String!
   like: Boolean!
   productId: String!
+  userId: String!
 }
 
 input CreateUserInput {
   email: String!
   password: String!
   name: String!
-  nickName: String!
+  identify: String!
   profileImage: String!
   isAdmin: Boolean!
   address: String!

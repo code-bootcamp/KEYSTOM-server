@@ -10,4 +10,7 @@ export class CreateReviewInput {
 
   @Field(() => String)
   productId: string;
+
+  @Field(()=>String)
+  userId: string
 }

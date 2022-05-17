@@ -18,5 +18,5 @@ export class CreateOrderInput {
   recieverPhone: string;
 
   @Field(() => String)
-  productId: string;
+  userId: string;
 }

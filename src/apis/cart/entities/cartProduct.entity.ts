@@ -1,26 +1,24 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { Product } from 'src/apis/products/entities/product.entity';
-import { User } from 'src/apis/user/entities/user.entity';
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 
 @Entity()
 @ObjectType()
-export class Review {
+export class CartProduct {
   @PrimaryGeneratedColumn('uuid')
   @Field(() => String)
   id: string;
 
   @Column()
-  @Field(() => String)
-  reviewContent: string;
+  @Field(() => Int)
+  count: number;
 
   @Column()
-  @Field(() => Boolean)
-  like: boolean;
+  @Field(() => Int)
+  priceAll: number;
 
   @ManyToOne(() => Product)
   product: Product;
 
-  @ManyToOne(()=>User)
-  user: User
+  
 }
