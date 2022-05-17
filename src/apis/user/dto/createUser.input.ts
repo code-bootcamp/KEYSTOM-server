@@ -12,7 +12,7 @@ export class CreateUserInput {
   name: string;
 
   @Field(() => String)
-  nickName: string;
+  identify: string;
 
   @Field(() => String)
   profileImage: string;
@@ -22,4 +22,8 @@ export class CreateUserInput {
 
   @Field(() => String)
   address: string;
+
+  // @Field(()=>[String])
+  // coupons: string[]
+  
 }
