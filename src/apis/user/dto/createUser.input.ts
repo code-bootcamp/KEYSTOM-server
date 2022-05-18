@@ -12,15 +12,6 @@ export class CreateUserInput {
   name: string;
 
   @Field(() => String)
-  identify: string;
-
-  @Field(() => String)
-  profileImage: string;
-
-  @Field(() => Boolean)
-  isAdmin: boolean;
-
-  @Field(() => String)
   address: string;
 
   // @Field(()=>[String])

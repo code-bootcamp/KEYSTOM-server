@@ -21,4 +21,9 @@ export class ReviewResolver {
   ) {
     return this.reviewService.create({ createReviewInput });
   }
+
+  @Mutation(() => String)
+  deleteReview(@Args('reviewId') reviewId: string) {
+    return this.reviewService.delete({ reviewId });
+  }
 }

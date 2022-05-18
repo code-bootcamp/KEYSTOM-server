@@ -4,6 +4,7 @@ import { Product } from './entities/product.entity';
 import { ProductService } from './product.service';
 import { CACHE_MANAGER, Inject } from '@nestjs/common';
 import { Cache } from 'cache-manager';
+import { UpdateProductInput } from './dto/updateProduct.input';
 
 @Resolver()
 export class ProductResolver {
@@ -29,6 +30,14 @@ export class ProductResolver {
     @Args('createProductInput') createProductInput: CreateProductInput,
   ) {
     return this.productService.create({ createProductInput });
+  }
+  @Mutation(() => Product)
+  async updateProduct(
+    @Args('productId') productId: string,
+    @Args('updateProductInput') updateProductInput: UpdateProductInput,
+  ) {
+    this.productService.delete({ productId });
+    return this.productService.update({ updateProductInput });
   }
 
   @Mutation(() => String)

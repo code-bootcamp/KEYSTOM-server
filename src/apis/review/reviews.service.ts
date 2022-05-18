@@ -17,24 +17,33 @@ export class ReviewService {
   ) {}
 
   async findAll() {
-    return await this.reviewRepository.find();
+    return await this.reviewRepository.find({
+      relations: ['product', 'user'],
+    });
   }
   async findOne({ reviewId }) {
-    return await this.reviewRepository.findOne({ where: { id: reviewId } });
+    return await this.reviewRepository.findOne({
+      where: { id: reviewId },
+      relations: ['product', 'user'],
+    });
   }
   async create({ createReviewInput }) {
-    const { productId, userId,...review } = createReviewInput;
+    const { productId, email, ...review } = createReviewInput;
     const result1 = await this.productRepository.findOne({
       id: productId,
     });
     const result3 = await this.userRepository.findOne({
-      id:userId
-    })
+      email: email,
+    });
     const result2 = await this.reviewRepository.save({
       ...review,
       product: result1,
-      user:result3
+      user: result3,
     });
     return result2;
+  }
+  async delete({ reviewId }) {
+    const result = await this.reviewRepository.softDelete({ id: reviewId });
+    return result.affected ? true : false;
   }
 }

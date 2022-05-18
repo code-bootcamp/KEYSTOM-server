@@ -4,7 +4,7 @@ import { InputType, Field, Int } from '@nestjs/graphql';
 export class CreateUserCouponInput {
 
   @Field(()=>String)
-  userId:string;
+  email:string;
 
   @Field(()=>String)
   couponId:string

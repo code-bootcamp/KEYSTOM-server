@@ -11,19 +11,26 @@ type Product {
   image: String!
   thumbnailImage: String!
   createdAt: String!
+  productTags: [ProductTag!]!
+}
+
+type ProductTag {
+  id: String!
+  tag: String!
+  products: [Product!]!
 }
 
 type Custom {
   id: String!
   key: String!
   color: String!
+  product: Product!
 }
 
 type User {
-  id: String!
+  nickName: String!
   email: String!
   name: String!
-  identify: String!
   profileImage: String!
   isAdmin: Boolean!
   address: String!
@@ -31,8 +38,12 @@ type User {
 
 type Review {
   id: String!
+  reviewTitle: String!
   reviewContent: String!
-  like: Boolean!
+  like: Int!
+  createdAt: String!
+  product: Product!
+  user: User!
 }
 
 type Order {
@@ -120,6 +131,7 @@ type Mutation {
   login(email: String!, password: String!): String!
   restoreAccessToken: String!
   logout: String!
+  myPage(accessToken: String!): String!
   createCartProduct(createCartProductInput: CreateCartProdcutInput!): CartProduct!
   createComment(createCommentInput: CreateCommentInput!): Comment!
   createCoupon(createCouponInput: CreateCouponInput!): Coupon!
@@ -128,11 +140,17 @@ type Mutation {
   Payment(createPaymentInput: CreatePaymentInput!): Payment!
   createProductImage(productImageUrl: String!, productId: String!): ProductImage!
   createProduct(createProductInput: CreateProductInput!): Product!
+  updateProduct(productId: String!, updateProductInput: UpdateProductInput!): Product!
   deleteProduct(productId: String!): String!
   createReview(createReviewInput: CreateReviewInput!): Review!
+  deleteReview(reviewId: String!): String!
   createReivewImage(reviewImageUrl: String!, reviewId: String!): ReviewImage!
   createUser(createUserInput: CreateUserInput!): User!
-  signUp(phone: String!): String!
+  deleteUser(nickName: String!): String!
+  updateUser(email: String!, updateUserInput: UpdateUserInput!): User!
+  sendToken(phone: String!): String!
+  checkToken(token: String!): String!
+  checkEmail(email: String!): Boolean!
 }
 
 input CreateCartProdcutInput {
@@ -164,7 +182,7 @@ input CreateOrderInput {
   address: String!
   recieverName: String!
   recieverPhone: String!
-  userId: String!
+  email: String!
 }
 
 input CreatePaymentInput {
@@ -183,19 +201,32 @@ input CreateProductInput {
   productTags: [String!]!
 }
 
+input UpdateProductInput {
+  name: String!
+  description: String!
+  price: Int!
+  like: Int!
+  image: String!
+  thumbnailImage: String!
+  productTags: [String!]!
+}
+
 input CreateReviewInput {
+  reviewTitle: String!
   reviewContent: String!
-  like: Boolean!
   productId: String!
-  userId: String!
+  email: String!
 }
 
 input CreateUserInput {
   email: String!
   password: String!
   name: String!
-  identify: String!
+  address: String!
+}
+
+input UpdateUserInput {
+  name: String!
   profileImage: String!
-  isAdmin: Boolean!
   address: String!
 }

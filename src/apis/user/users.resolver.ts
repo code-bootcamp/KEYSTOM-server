@@ -5,6 +5,7 @@ import { UserService } from './users.service';
 import * as bcrypt from 'bcrypt';
 import { UseGuards } from '@nestjs/common';
 import { GqlAuthAccessGuard } from 'src/commons/auth/gql-auth.guard';
+import { UpdateUserInput } from './dto/updateUserInput';
 
 @Resolver()
 export class UserResolver {
@@ -38,5 +39,17 @@ export class UserResolver {
     return this.userService.create({
       bcryptUser,
     });
+  }
+  @Mutation(() => String)
+  deleteUser(@Args('nickName') nickName: string) {
+    return this.userService.delete({ nickName });
+  }
+
+  @Mutation(() => User)
+  async updateUser(
+    @Args('email') email: string,
+    @Args('updateUserInput') updateUserInput: UpdateUserInput,
+  ) {
+    return this.userService.update({ email, updateUserInput });
   }
 }

@@ -18,5 +18,6 @@ export class Custom {
   color: string;
 
   @ManyToOne(() => Product)
+  @Field(()=>Product)
   product: Product;
 }

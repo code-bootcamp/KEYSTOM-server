@@ -2,6 +2,7 @@ import { ObjectType, Field, Int } from '@nestjs/graphql';
 import { ProductTag } from 'src/apis/productsTag/entities/productTag.entity';
 import {
   Column,
+  DeleteDateColumn,
   Entity,
   JoinTable,
   ManyToMany,
@@ -13,7 +14,7 @@ import {
 export class User {
   @PrimaryGeneratedColumn('uuid')
   @Field(() => String)
-  id: string;
+  nickName: string;
 
   @Column()
   @Field(() => String)
@@ -26,15 +27,11 @@ export class User {
   @Field(() => String)
   name: string;
 
-  @Column()
-  @Field(() => String)
-  identify: string;
-
-  @Column()
+  @Column({ default: '' })
   @Field(() => String)
   profileImage: string;
 
-  @Column()
+  @Column({ default: false })
   @Field(() => Boolean)
   isAdmin: boolean;
 
@@ -42,10 +39,12 @@ export class User {
   @Field(() => String)
   address: string;
 
+  @DeleteDateColumn()
+  deletedAt: Date;
+
   // @JoinTable()
   // @ManyToMany(() => Coupon, (coupon) => coupon.users, {
   //   onDelete: 'CASCADE',
   // })
   // coupon: Coupon[]
-  
 }
