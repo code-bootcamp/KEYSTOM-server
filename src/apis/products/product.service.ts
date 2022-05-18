@@ -14,12 +14,26 @@ export class ProductService {
   ) {}
   async findAll() {
     return await this.productRepository.find({
-      relations:['productTags']
+      relations: ['productTags'],
     });
   }
   async findOne({ productId }) {
     return await this.productRepository.findOne({ where: { id: productId } });
   }
+
+  async findRowCount() {
+    return await this.productRepository.count();
+  }
+
+  async findBest() {
+    return await this.productRepository.find({
+      order: {
+        like: 'DESC',
+      },
+      take: 3,
+    });
+  }
+
   async create({ createProductInput }) {
     // 상품을 데이터베이스에 저장
     const { productTags, ...product } = createProductInput;
@@ -73,8 +87,6 @@ export class ProductService {
       productTags: result2,
     });
   }
-
-
   async delete({ productId }) {
     const result = await this.productRepository.softDelete({ id: productId });
     return result.affected ? true : false;

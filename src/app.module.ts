@@ -23,6 +23,7 @@ import { CartProductModule } from './apis/cart/cartProduct.module';
 import { UserCoupon } from './apis/UserCoupon/entities/userCoupon.entity';
 import { Coupon } from './apis/coupon/entities/coupon.entity';
 import { CouponModule } from './apis/coupon/coupon.module';
+import { FileModule } from './apis/file/file.module';
 
 @Module({
   imports: [
@@ -31,15 +32,16 @@ import { CouponModule } from './apis/coupon/coupon.module';
     CommentModule,
     CouponModule,
     CustomModule,
+    FileModule,
     OrderModule,
     PaymentModule,
     ProductImageModule,
     ProductModule,
     ReviewModule,
     ReviewImageModule,
+    SignUpModule,
     UserModule,
     UserCoupon,
-    SignUpModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: 'src/commons/graphql/schema.gql',
@@ -57,7 +59,7 @@ import { CouponModule } from './apis/coupon/coupon.module';
       username: 'root',
       password: 'root',
       // database: 'team-f12-db',
-      database: 'mydocker-02',
+      database: 'mydocker02',
       entities: [__dirname + '/apis/**/*.entity.*'],
       synchronize: true,
       logging: true,
