@@ -51,12 +51,10 @@ export class Product {
   deletedAt: Date;
 
   @JoinTable()
-  @ManyToMany(() => ProductTag, (productTag) => productTag.products, {
+  @ManyToMany(() => ProductTag, (productTags) => productTags.products, {
     onDelete: 'CASCADE',
   })
-  productTag: ProductTag[];
+  @Field(()=>[ProductTag])
+  productTags: ProductTag[];
 
-  // @ManyToOne(() => ProductImage, { onDelete: 'CASCADE' })
-  // @Field(() => ProductImage)
-  // productImage: ProductImage;
 }

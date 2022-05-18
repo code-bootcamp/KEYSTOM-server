@@ -20,9 +20,9 @@ export class OrderService {
   //   return await this.reviewRepository.findOne({ where: { id: reviewId } });
   // }
   async create({ createOrderInput }) {
-    const { userId, ...order } = createOrderInput;
+    const { email, ...order } = createOrderInput;
     const result1 = await this.userRepository.findOne({
-      id: userId,
+      email: email,
     });
     const result2 = await this.orderRepository.save({
       ...order,

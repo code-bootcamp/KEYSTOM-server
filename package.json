@@ -47,6 +47,7 @@
     "graphql-upload": "^13.0.0",
     "jquery": "^3.6.0",
     "jsonwebtoken": "^8.5.1",
+    "jwt-decode": "^3.1.2",
     "mysql2": "^2.3.3",
     "passport-google-oauth20": "^2.0.0",
     "passport-jwt": "^4.0.0",

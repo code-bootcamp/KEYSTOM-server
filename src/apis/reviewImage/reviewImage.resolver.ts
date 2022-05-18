@@ -1,5 +1,5 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import {ReviewImage } from './entities/reviewImage.entity';
+import { ReviewImage } from './entities/reviewImage.entity';
 import { ReviewImageService } from './reviewImage.service';
 
 @Resolver()
@@ -18,6 +18,6 @@ export class ReivewImageResolver {
     @Args('reviewImageUrl') reviewImageUrl: string,
     @Args('reviewId') reviewId: string,
   ) {
-    return this.reviewImageService.create({ reviewImageUrl,reviewId });
+    return this.reviewImageService.create({ reviewImageUrl, reviewId });
   }
 }

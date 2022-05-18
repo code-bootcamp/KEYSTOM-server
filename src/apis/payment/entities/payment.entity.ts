@@ -55,8 +55,4 @@ export class Payment {
   @OneToOne(() => Order, { onDelete: 'CASCADE' })
   @Field(() => Order)
   order: Order;
-
-  // @CreateDateColumn()
-  // @Field(() => Date)
-  // refundDate: Date;
 }

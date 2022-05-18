@@ -19,7 +19,7 @@ export class SignUpService {
 
   async sendTokenToSMS({ phoneNum, token }) {
     const appKey = process.env.SMS_APP_KEY;
-    const XSecretKey = process.env.SMS_XSECRET_KEY;
+    const XSecretKey = process.env.SMS_X_SECRETE_KEY;
     const sender = process.env.SMS_SENDER;
     const result = await axios.post(
       `https://api-sms.cloud.toast.com/sms/v3.0/appKeys/${appKey}/sender/sms`,
@@ -35,7 +35,17 @@ export class SignUpService {
         },
       },
     );
-    console.log(result);
     return '전송 완료!';
   }
+  
+  checkValidationEmail({email}){
+    if(email === undefined || !email.includes("@")){
+      console.log("에러발생!! 이메일을 제대로 입력해 주세요!!!!")
+      return false
+    } else {
+      return true
+    }
+  }
+
+
 }
