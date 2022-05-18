@@ -18,8 +18,11 @@ export class UserService {
   async findAll() {
     return await this.userRepository.find();
   }
+  async findOne({ email }) {
+    return await this.userRepository.findOne({ where: { email: email } });
+  }
   async create({ bcryptUser }) {
-    const {password, ...user } = bcryptUser;
+    const { password, ...user } = bcryptUser;
     const user1 = await this.userRepository.findOne({ email: user.email });
     if (user1) throw new ConflictException('이미 등록된 이메일 입니다');
     const result = await this.userRepository.save({
@@ -28,7 +31,15 @@ export class UserService {
     });
     return result;
   }
-  async findOne({ email }) {
-    return await this.userRepository.findOne({ where: { email: email } });
+  async update({ email, updateUserInput }) {
+    const user = await this.userRepository.findOne({ email: email });
+    const newUser = { ...user, ...updateUserInput };
+    const updateUser = await this.userRepository.save(newUser);
+    return updateUser;
+  }
+
+  async delete({ nickName }) {
+    const result = await this.userRepository.delete({ nickName });
+    return result.affected ? true : false;
   }
 }

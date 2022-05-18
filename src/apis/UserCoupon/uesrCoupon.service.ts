@@ -23,9 +23,9 @@ export class UserCouponService {
     return await this.userCouponRepository.findOne({ where: { id: userCouponId } });
   }
   async create({createUserCouponInput}) {
-    const {userId,couponId,...userCoupon} = createUserCouponInput
+    const {email,couponId,...userCoupon} = createUserCouponInput
     const result1 = await this.userRepository.findOne({
-      id: userId,
+      email: email,
     });
     const result3 = await this.couponRepository.findOne({
       id:couponId

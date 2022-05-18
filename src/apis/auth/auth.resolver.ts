@@ -17,6 +17,9 @@ import { JwtRefreshStrategy } from 'src/commons/auth/jwt-refresh.strategy';
 import { CACHE_MANAGER, Inject } from '@nestjs/common';
 import { Cache } from 'cache-manager';
 import { UserService } from '../user/users.service';
+import jwt_decode from 'jwt-decode';
+import { access } from 'fs';
+import { Any } from 'typeorm';
 
 @Resolver()
 export class AuthResolver {
@@ -47,7 +50,7 @@ export class AuthResolver {
     });
     const accessToken = this.authService.getAccessToken({ user });
     return accessToken;
- }
+  }
   @UseGuards(GqlAuthRefreshGuard)
   @Mutation(() => String)
   async restoreAccessToken(@CurrentUser() currentUser: ICurrentUser) {
@@ -102,5 +105,16 @@ export class AuthResolver {
     }
 
     return '로그아웃 성공!!';
+  }
+
+  @UseGuards(GqlAuthAccessGuard)
+  @Mutation(() => String)
+  async myPage(
+    @Args('accessToken') accessToken: string, //
+  ) {
+    const decoded = jwt_decode(accessToken);
+
+    console.log(decoded['email']);
+    return decoded['email']
   }
 }

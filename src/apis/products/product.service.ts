@@ -87,7 +87,6 @@ export class ProductService {
       productTags: result2,
     });
   }
-
   async delete({ productId }) {
     const result = await this.productRepository.softDelete({ id: productId });
     return result.affected ? true : false;
