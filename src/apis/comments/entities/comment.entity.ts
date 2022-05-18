@@ -1,5 +1,11 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { Column, Entity, PrimaryGeneratedColumn,ManyToOne, CreateDateColumn, } from 'typeorm';
+import {
+  Column,
+  Entity,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  CreateDateColumn,
+} from 'typeorm';
 import { Review } from 'src/apis/review/entities/review.entity';
 
 @Entity()
@@ -17,7 +23,10 @@ export class Comment {
   @Field(() => String)
   ParentId: string;
 
-
   @ManyToOne(() => Review)
   review: Review;
+
+  @CreateDateColumn()
+  @Field(() => String)
+  createdAt: Date;
 }

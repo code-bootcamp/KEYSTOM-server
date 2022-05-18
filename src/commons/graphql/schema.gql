@@ -124,6 +124,7 @@ type Mutation {
   createComment(createCommentInput: CreateCommentInput!): Comment!
   createCoupon(createCouponInput: CreateCouponInput!): Coupon!
   createCustom(createCustomInput: CreateCustomInput!): Custom!
+  uploadFile(file: Upload!): String!
   createOrder(createOrderInput: CreateOrderInput!): Order!
   Payment(createPaymentInput: CreatePaymentInput!): Payment!
   createProductImage(productImageUrl: String!, productId: String!): ProductImage!
@@ -131,8 +132,8 @@ type Mutation {
   deleteProduct(productId: String!): String!
   createReview(createReviewInput: CreateReviewInput!): Review!
   createReivewImage(reviewImageUrl: String!, reviewId: String!): ReviewImage!
-  createUser(createUserInput: CreateUserInput!): User!
   signUp(phone: String!): String!
+  createUser(createUserInput: CreateUserInput!): User!
 }
 
 input CreateCartProdcutInput {
@@ -157,6 +158,9 @@ input CreateCustomInput {
   color: String!
   productId: String!
 }
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
 
 input CreateOrderInput {
   count: Int!
