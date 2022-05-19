@@ -20,4 +20,14 @@ export class CommentResolver {
   ) {
     return this.commentService.create({ createCommentInput });
   }
+
+  @Mutation(()=>Comment)
+  createReComment(
+    @Args('parentId') parentId: string ,
+    @Args('createCommentInput') createCommentInput: CreateCommentInput
+  ){
+    
+  }
+
+
 }
