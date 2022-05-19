@@ -12,10 +12,10 @@ export class CreateOrderInput {
   address: string;
 
   @Field(() => String)
-  recieverName: string;
+  receiverName: string;
 
   @Field(() => String)
-  recieverPhone: string;
+  receiverPhone: string;
 
   @Field(() => String)
   email: string;
