@@ -104,7 +104,31 @@ type Coupon {
   couponName: String!
 }
 
+type UsedProductTag {
+  id: String!
+  tag: String!
+  usedProducts: [UsedProduct!]!
+}
+
+type UsedProduct {
+  id: String!
+  sellTitle: String!
+  hopePrice: Int!
+  method: String!
+  description: String!
+  createdAt: String!
+  seller: String!
+  usedProductTags: [UsedProductTag!]!
+}
+
+type UsedProductImage {
+  id: String!
+  usedProductImageUrl: String!
+  isThumbnail: Boolean!
+}
+
 type Query {
+  fetchUserLoggedIn: User!
   fetchCartProducts: [CartProduct!]!
   fetchCartProduct(cartProductId: String!): CartProduct!
   fetchComments: [Comment!]!
@@ -127,6 +151,12 @@ type Query {
   fetchReviewRowCount: Int!
   fetchReviewImages: [ReviewImage!]!
   fetchReviewImage(reviewImageId: String!): ReviewImage!
+  fetchUsedProductImages: [UsedProductImage!]!
+  fetchUsedProductImage(usedProductImageId: String!): UsedProductImage!
+  fetchUsedProducts: [UsedProduct!]!
+  fetchUsedProduct(usedProductId: String!): UsedProduct!
+  fetchBestUsedProduct: [UsedProduct!]!
+  fetchUsedRowCount: Int!
   fetchUsers: [User!]!
   fetchUser(email: String!): User!
   fetchUser111: String!
@@ -137,7 +167,6 @@ type Mutation {
   logintest(email: String!, password: String!): String!
   restoreAccessToken: String!
   logout: String!
-  myPage(accessToken: String!): String!
   createCartProduct(createCartProductInput: CreateCartProdcutInput!): CartProduct!
   createComment(createCommentInput: CreateCommentInput!): Comment!
   createCoupon(createCouponInput: CreateCouponInput!): Coupon!
@@ -155,6 +184,9 @@ type Mutation {
   sendToken(phone: String!): String!
   checkToken(token: String!): String!
   checkEmail(email: String!): Boolean!
+  createUsedProductImage(usedProductImageUrl: String!, usedProductId: String!, isThumbnail: Boolean!): UsedProductImage!
+  createUsedProduct(createUsedProductInput: CreateUsedProductInput!): UsedProduct!
+  deleteUsedProduct(usedProductId: String!): String!
   createUser(createUserInput: CreateUserInput!): User!
   deleteUser(nickName: String!): String!
   updateUser(email: String!, updateUserInput: UpdateUserInput!): User!
@@ -168,7 +200,6 @@ input CreateCartProdcutInput {
 
 input CreateCommentInput {
   commentContent: String!
-  ParentId: String!
   reviewId: String!
 }
 
@@ -226,6 +257,15 @@ input CreateReviewInput {
   reviewContent: String!
   productId: String!
   email: String!
+}
+
+input CreateUsedProductInput {
+  sellTitle: String!
+  hopePrice: Int!
+  method: String!
+  description: String!
+  seller: String!
+  usedProductTags: [String!]!
 }
 
 input CreateUserInput {

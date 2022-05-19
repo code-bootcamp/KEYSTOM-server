@@ -1,4 +1,4 @@
-import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Context, Mutation, Resolver,Query } from '@nestjs/graphql';
 import { AuthService } from './auth.service';
 import * as bcrypt from 'bcrypt';
 import {
@@ -20,6 +20,7 @@ import { UserService } from '../user/users.service';
 import jwt_decode from 'jwt-decode';
 import { access } from 'fs';
 import { Any } from 'typeorm';
+import { User } from '../user/entities/user.entity';
 
 @Resolver()
 export class AuthResolver {
@@ -134,13 +135,13 @@ export class AuthResolver {
   }
 
   @UseGuards(GqlAuthAccessGuard)
-  @Mutation(() => String)
-  async myPage(
-    @Args('accessToken') accessToken: string, //
+  @Query(() => User)
+  async fetchUserLoggedIn(
+    @Context() context: IContext
   ) {
+    const accessToken = context.req.rawHeaders[13].replace('Bearer ', '')
     const decoded = jwt_decode(accessToken);
-
-    console.log(decoded['email']);
-    return decoded['email'];
+    const email = decoded['email'];
+    return this.userService.findOne({ email })
   }
 }
