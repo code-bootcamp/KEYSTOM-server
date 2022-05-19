@@ -6,14 +6,14 @@ import { Strategy } from 'passport-jwt';
 export class JwtRefreshStrategy extends PassportStrategy(Strategy, 'refresh') {
   constructor() {
     super({
-      jwtFromRequest: (req) => {
+      jwtFromRequest: (req: { headers: { cookies: any } }) => {
         const cookies = req.headers.cookies;
         if (cookies) return cookies.replace('refreshToken=', '');
       },
       secretOrKey: process.env.REFRESH_SECRET_KEY,
     });
   }
-  async validate(req, payload: any) {
+  async validate(payload: any) {
     return {
       id: payload.sub,
       email: payload.email,

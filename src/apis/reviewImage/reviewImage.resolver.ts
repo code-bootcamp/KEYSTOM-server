@@ -5,14 +5,17 @@ import { ReviewImageService } from './reviewImage.service';
 @Resolver()
 export class ReivewImageResolver {
   constructor(private readonly reviewImageService: ReviewImageService) {}
+
   @Query(() => [ReviewImage])
   fetchReviewImages() {
     return this.reviewImageService.findAll();
   }
+
   @Query(() => ReviewImage)
   fetchReviewImage(@Args('reviewImageId') reviewImageId: string) {
     return this.reviewImageService.findOne({ reviewImageId });
   }
+
   @Mutation(() => ReviewImage)
   createReivewImage(
     @Args('reviewImageUrl') reviewImageUrl: string,

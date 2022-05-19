@@ -19,14 +19,14 @@ export class CommentService {
   async findOne({ commentId }) {
     return await this.commentRepository.findOne({ where: { id: commentId } });
   }
-  async create({createCommentInput}) {
-    const {reviewId,...comment} = createCommentInput
+  async create({ createCommentInput }) {
+    const { reviewId, ...comment } = createCommentInput;
     const result1 = await this.reviewRepository.findOne({
       id: reviewId,
     });
     const result2 = await this.commentRepository.save({
       ...comment,
-      review: result1
+      review: result1,
     });
     return result2;
   }

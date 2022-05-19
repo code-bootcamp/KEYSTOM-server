@@ -19,7 +19,7 @@ export class Comment {
   @Field(() => String)
   commentContent: string;
 
-  @Column()
+  @Column({ default: null })
   @Field(() => String)
   ParentId: string;
 

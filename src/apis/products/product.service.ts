@@ -12,16 +12,29 @@ export class ProductService {
     @InjectRepository(ProductTag)
     private readonly productTagRepository: Repository<ProductTag>,
   ) {}
-  async findAll() {
-    return await this.productRepository.find({
-      relations: ['productTags'],
-    });
+  // async findAll() {
+  //   return await this.productRepository.find({
+  //     relations: ['productTags'],
+  //     order: {
+  //       createdAt: 'DESC',
+  //     },
+  //   });
+  // }
+  async findAll({ page }) {
+    return await this.productRepository
+      .createQueryBuilder('product')
+      .leftJoinAndSelect('product.productTags', 'tags')
+      .orderBy('product.createdAt', 'DESC')
+      .skip(0 + Number((page - 1) * 10))
+      .take(10)
+      .getMany();
   }
+
   async findOne({ productId }) {
     return await this.productRepository.findOne({ where: { id: productId } });
   }
 
-  async findRowCount() {
+  async findCount() {
     return await this.productRepository.count();
   }
 
@@ -41,7 +54,6 @@ export class ProductService {
     const result2 = [];
     for (let i = 0; productTags.length > i; i++) {
       const tagname = productTags[i].replace('#', '');
-      console.log(tagname);
       //이미 등록된 태그인지 확인
       const prevTag = await this.productTagRepository.findOne({
         tag: tagname,
@@ -68,7 +80,6 @@ export class ProductService {
     const result2 = [];
     for (let i = 0; productTags.length > i; i++) {
       const tagname = productTags[i].replace('#', '');
-      console.log(tagname);
       //이미 등록된 태그인지 확인
       const prevTag = await this.productTagRepository.findOne({
         tag: tagname,
@@ -87,6 +98,7 @@ export class ProductService {
       productTags: result2,
     });
   }
+
   async delete({ productId }) {
     const result = await this.productRepository.softDelete({ id: productId });
     return result.affected ? true : false;

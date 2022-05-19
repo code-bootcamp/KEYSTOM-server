@@ -9,15 +9,17 @@ export class ProductImageResolver {
   fetchProductImages() {
     return this.productImageService.findAll();
   }
+
   @Query(() => ProductImage)
   fetchProductImage(@Args('productImageId') productImageId: string) {
     return this.productImageService.findOne({ productImageId });
   }
+
   @Mutation(() => ProductImage)
   createProductImage(
     @Args('productImageUrl') productImageUrl: string,
     @Args('productId') productId: string,
   ) {
-    return this.productImageService.create({ productImageUrl,productId });
+    return this.productImageService.create({ productImageUrl, productId });
   }
 }

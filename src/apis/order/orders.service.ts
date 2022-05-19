@@ -13,12 +13,14 @@ export class OrderService {
     private readonly userRepository: Repository<User>,
   ) {}
 
+  async find({ id }) {
+    return await this.orderRepository.findOne({ where: { id } });
+  }
+
   async findAll() {
     return await this.orderRepository.find();
   }
-  // async findOne({ reviewId }) {
-  //   return await this.reviewRepository.findOne({ where: { id: reviewId } });
-  // }
+
   async create({ createOrderInput }) {
     const { email, ...order } = createOrderInput;
     const result1 = await this.userRepository.findOne({

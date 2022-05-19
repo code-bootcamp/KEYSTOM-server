@@ -54,7 +54,6 @@ export class Product {
   @ManyToMany(() => ProductTag, (productTags) => productTags.products, {
     onDelete: 'CASCADE',
   })
-  @Field(()=>[ProductTag])
+  @Field(() => [ProductTag])
   productTags: ProductTag[];
-
 }

@@ -16,17 +16,37 @@ export class ReviewService {
     private readonly userRepository: Repository<User>,
   ) {}
 
-  async findAll() {
-    return await this.reviewRepository.find({
-      relations: ['product', 'user'],
-    });
-  }
   async findOne({ reviewId }) {
     return await this.reviewRepository.findOne({
       where: { id: reviewId },
       relations: ['product', 'user'],
     });
   }
+
+  async findBest() {
+    return await this.reviewRepository.find({
+      order: {
+        like: 'DESC',
+      },
+      take: 3,
+    });
+  }
+
+  async findAll({ page }) {
+    return await this.reviewRepository
+      .createQueryBuilder('review')
+      .leftJoinAndSelect('review.product', 'product')
+      .leftJoinAndSelect('review.user', 'user')
+      .orderBy('review.createdAt', 'DESC')
+      .skip(0 + Number((page - 1) * 10))
+      .take(10)
+      .getMany();
+  }
+
+  findCount() {
+    return this.productRepository.count();
+  }
+
   async create({ createReviewInput }) {
     const { productId, email, ...review } = createReviewInput;
     const result1 = await this.productRepository.findOne({

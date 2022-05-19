@@ -46,20 +46,46 @@ export class AuthResolver {
     this.authService.setRefreshToken({
       user,
       res: context.res,
-      req: context.req,
     });
     const accessToken = this.authService.getAccessToken({ user });
     return accessToken;
   }
+
+  @Mutation(() => String)
+  async logintest(
+    @Args('email') email: string,
+    @Args('password') password: string,
+    @Context() context: IContext,
+  ) {
+    const user = await this.userService.findOne({ email });
+    if (!user) throw new UnprocessableEntityException('이메일이 없습니다!!');
+    const isAuthenticated = await bcrypt.compare(password, user.password);
+    if (!isAuthenticated)
+      throw new UnprocessableEntityException('암호가 틀렸습니다!!');
+
+    this.authService.setRefreshToken({
+      user,
+      res: context.res,
+    });
+    const accessToken = this.authService.getTestToken({ user });
+    return accessToken;
+  }
+
   @UseGuards(GqlAuthRefreshGuard)
   @Mutation(() => String)
-  async restoreAccessToken(@CurrentUser() currentUser: ICurrentUser) {
+  async restoreAccessToken(
+    @CurrentUser() currentUser: ICurrentUser,
+    @Context() context: IContext,
+  ) {
     const user = currentUser;
     //context.res.setHeder
+    console.log(user);
+    this.authService.setRefreshToken({ user, res: context.res });
     const accessToken = this.authService.getAccessToken({ user });
     return accessToken;
     // return this.authService.getAccessToken({ user: currentUser });
   }
+
   @UseGuards(GqlAuthAccessGuard)
   @Mutation(() => String)
   async logout(@Context() context: IContext) {
@@ -115,6 +141,6 @@ export class AuthResolver {
     const decoded = jwt_decode(accessToken);
 
     console.log(decoded['email']);
-    return decoded['email']
+    return decoded['email'];
   }
 }
