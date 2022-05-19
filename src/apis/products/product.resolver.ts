@@ -16,33 +16,38 @@ export class ProductResolver {
   ) {}
 
   @Query(() => [Product])
-  fetchProducts() {
-    return this.productService.findAll();
+  fetchProducts(
+    @Args('page') page: number, //
+  ) {
+    return this.productService.findAll({ page });
   }
+
   @Query(() => Product)
-  async fetchProduct(
+  fetchProduct(
     @Args('productId') productId: string, //
   ) {
     return this.productService.findOne({ productId });
   }
+
   @Query(() => [Product])
   fetchBestProduct() {
     return this.productService.findBest();
   }
 
   @Query(() => Int)
-  fetchRowCount() {
-    return this.productService.findRowCount();
+  fetchProductRowCount() {
+    return this.productService.findCount();
   }
 
   @Mutation(() => Product)
-  async createProduct(
+  createProduct(
     @Args('createProductInput') createProductInput: CreateProductInput,
   ) {
     return this.productService.create({ createProductInput });
   }
+
   @Mutation(() => Product)
-  async updateProduct(
+  updateProduct(
     @Args('productId') productId: string,
     @Args('updateProductInput') updateProductInput: UpdateProductInput,
   ) {

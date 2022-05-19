@@ -1,20 +1,9 @@
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { SignUpService } from './signup.service';
-import * as bcrypt from 'bcrypt';
-import {
-  UnauthorizedException,
-  UnprocessableEntityException,
-  UseGuards,
-} from '@nestjs/common';
-import { IContext } from 'src/commons/types/context';
-import { CurrentUser, ICurrentUser } from 'src/commons/auth/gql-user.param';
-import * as jwt from 'jsonwebtoken';
-import { JwtRefreshStrategy } from 'src/commons/auth/jwt-refresh.strategy';
+import { UnprocessableEntityException } from '@nestjs/common';
 import { CACHE_MANAGER, Inject } from '@nestjs/common';
 import { Cache } from 'cache-manager';
 import { UserService } from '../user/users.service';
-import axios from 'axios';
-import 'dotenv/config';
 
 @Resolver()
 export class SignUpResolver {
@@ -24,6 +13,7 @@ export class SignUpResolver {
     @Inject(CACHE_MANAGER)
     private readonly cacheManager: Cache,
   ) {}
+
   @Mutation(() => String)
   async sendToken(@Args('phone') phone: string) {
     const phoneNum = phone;
@@ -33,37 +23,33 @@ export class SignUpResolver {
       //핸드폰 토큰 6자리 만들기
       const token = this.singUpService.getToken();
       //토큰 레디스에 저장
-      const tokenCache = await this.cacheManager.get(`token:${token}`)
-      if(tokenCache) return tokenCache
-      await this.cacheManager.set(`token:${token}`,token,{ttl:300})
+      const tokenCache = await this.cacheManager.get(`token:${token}`);
+      if (tokenCache) return tokenCache;
+      await this.cacheManager.set(`token:${token}`, token, { ttl: 300 });
       //핸드폰번호에 토큰 전송하기
       return this.singUpService.sendTokenToSMS({ phoneNum, token });
     }
   }
-  @Mutation(()=> String)
-  async checkToken(
-    @Args('token') token: string 
-  ){
-    const tokenCache = await this.cacheManager.get(`token:${token}`)
-    if(tokenCache){
-      return "인증이 완료 되었습니다!"
-    }else{
-      return "잘못된 토큰 정보입니다"
-    }
-
+  @Mutation(() => String)
+  async checkToken(@Args('token') token: string) {
+    const tokenCache = await this.cacheManager.get(`token:${token}`);
+    return tokenCache ? '인증이 완료 되었습니다!' : '잘못된 토큰 정보입니다';
   }
-  @Mutation(()=>Boolean)
-  async checkEmail(@Args('email') email: string){
-    const isValid = this.singUpService.checkValidationEmail({email})
-    if(isValid){
-      const user = await this.userService.findOne({email})
-      if(user){
-        return true
-      }else{
-        return false
+
+  @Mutation(() => Boolean)
+  async checkEmail(@Args('email') email: string) {
+    const isValid = this.singUpService.checkValidationEmail({ email });
+    if (isValid) {
+      const user = await this.userService.findOne({ email });
+      if (user) {
+        return true;
+      } else {
+        return false;
       }
-    }else{
-      throw new UnprocessableEntityException("에러발생!! 이메일을 제대로 입력해 주세요!!!!")
+    } else {
+      throw new UnprocessableEntityException(
+        '에러발생!! 이메일을 제대로 입력해 주세요!!!!',
+      );
     }
   }
 }

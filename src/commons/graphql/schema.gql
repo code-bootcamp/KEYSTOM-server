@@ -89,6 +89,7 @@ type Comment {
   id: String!
   commentContent: String!
   ParentId: String!
+  createdAt: String!
 }
 
 type CartProduct {
@@ -112,14 +113,18 @@ type Query {
   fetchCoupon(couponId: String!): Coupon!
   fetchCustoms: [Custom!]!
   fetchCustom(customId: String!): Custom!
-  fetchOrder: [Order!]!
-  fetchOrders: String!
+  fetchOrders: [Order!]!
+  fetchOrder(id: String!): String!
   fetchProductImages: [ProductImage!]!
   fetchProductImage(productImageId: String!): ProductImage!
-  fetchProducts: [Product!]!
+  fetchProducts(page: Float!): [Product!]!
   fetchProduct(productId: String!): Product!
-  fetchReviews: [Review!]!
+  fetchBestProduct: [Product!]!
+  fetchProductRowCount: Int!
   fetchReview(reviewId: String!): Review!
+  fetchBestReview: [Review!]!
+  fetchReviews(page: Float!): [Review!]!
+  fetchReviewRowCount: Int!
   fetchReviewImages: [ReviewImage!]!
   fetchReviewImage(reviewImageId: String!): ReviewImage!
   fetchUsers: [User!]!
@@ -129,6 +134,7 @@ type Query {
 
 type Mutation {
   login(email: String!, password: String!): String!
+  logintest(email: String!, password: String!): String!
   restoreAccessToken: String!
   logout: String!
   myPage(accessToken: String!): String!
@@ -146,6 +152,12 @@ type Mutation {
   createReview(createReviewInput: CreateReviewInput!): Review!
   deleteReview(reviewId: String!): String!
   createReivewImage(reviewImageUrl: String!, reviewId: String!): ReviewImage!
+  sendToken(phone: String!): String!
+  checkToken(token: String!): String!
+  checkEmail(email: String!): Boolean!
+  createUser(createUserInput: CreateUserInput!): User!
+  deleteUser(nickName: String!): String!
+  updateUser(email: String!, updateUserInput: UpdateUserInput!): User!
 }
 
 input CreateCartProdcutInput {

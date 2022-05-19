@@ -6,7 +6,7 @@ import { ProductImageResolver } from './productImage.resolver';
 import { ProductImageService } from './productImage.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([ProductImage,Product])],
-  providers: [ProductImageResolver,ProductImageService],
+  imports: [TypeOrmModule.forFeature([ProductImage, Product])],
+  providers: [ProductImageResolver, ProductImageService],
 })
 export class ProductImageModule {}

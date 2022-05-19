@@ -19,7 +19,7 @@ export class CouponService {
   async create({ createCouponInput }) {
     // 상품을 데이터베이스에 저장;
     return await this.couponRepository.save({
-      ...createCouponInput
+      ...createCouponInput,
     });
   }
 

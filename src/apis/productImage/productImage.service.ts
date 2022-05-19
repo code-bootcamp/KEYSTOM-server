@@ -16,15 +16,19 @@ export class ProductImageService {
   async findAll() {
     return await this.productImageRepository.find();
   }
+
   async findOne({ productImageId }) {
-    return await this.productImageRepository.findOne({ where: { id: productImageId } });
+    return await this.productImageRepository.findOne({
+      where: { id: productImageId },
+    });
   }
-  async create({productImageUrl,productId}) {
+
+  async create({ productImageUrl, productId }) {
     const result1 = await this.productRepository.findOne({
       id: productId,
     });
     const result2 = await this.productImageRepository.save({
-      productImageUrl:productImageUrl,
+      productImageUrl: productImageUrl,
       product: result1,
     });
     return result2;

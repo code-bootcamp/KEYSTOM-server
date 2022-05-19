@@ -35,7 +35,7 @@ export class AuthController {
     }
 
     //3.로그인
-    this.authService.setRefreshToken({ user, res, req });
+    this.authService.setRefreshToken({ user, res });
 
     res.redirect(
       'http://localhost:5500/f6b2-team6-server/frontend/login/index.html', //forntend live server 주소 복붙 //로그인 끝나면 이 페이지로 돌아와라
@@ -57,7 +57,7 @@ export class AuthController {
       // 1:1관계의 결제테이블
     }
     //3.로그인
-    this.authService.setRefreshToken({ user, res, req });
+    this.authService.setRefreshToken({ user, res });
 
     res.redirect(
       'http://localhost:5500/f6b2-team6-server/frontend/login/index.html', //forntend live server 주소 복붙 //로그인 끝나면 이 페이지로 돌아와라
@@ -80,7 +80,7 @@ export class AuthController {
       // 1:1관계의 결제테이블
     }
     //3.로그인
-    this.authService.setRefreshToken({ user, res, req });
+    this.authService.setRefreshToken({ user, res });
 
     res.redirect(
       'http://localhost:5500/f6b2-team6-server/frontend/login/index.html', //forntend live server 주소 복붙 //로그인 끝나면 이 페이지로 돌아와라

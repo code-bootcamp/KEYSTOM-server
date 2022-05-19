@@ -9,9 +9,8 @@ export class PaymentResolver {
 
   @Mutation(() => Payment)
   async Payment(
-    @Args('createPaymentInput')createPaymentInput: CreatePaymentInput
-    ) {
-    return await this.paymentService.create({ createPaymentInput});
+    @Args('createPaymentInput') createPaymentInput: CreatePaymentInput,
+  ) {
+    return await this.paymentService.create({ createPaymentInput });
   }
 }
-  

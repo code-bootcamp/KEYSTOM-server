@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Review } from '../review/entities/review.entity';
-import {ReviewImage } from './entities/reviewImage.entity';
+import { ReviewImage } from './entities/reviewImage.entity';
 
 @Injectable()
 export class ReviewImageService {
@@ -16,15 +16,19 @@ export class ReviewImageService {
   async findAll() {
     return await this.reviewImageRepository.find();
   }
+
   async findOne({ reviewImageId }) {
-    return await this.reviewImageRepository.findOne({ where: { id: reviewImageId } });
+    return await this.reviewImageRepository.findOne({
+      where: { id: reviewImageId },
+    });
   }
-  async create({reviewImageUrl,reviewId}) {
+
+  async create({ reviewImageUrl, reviewId }) {
     const result1 = await this.reviewRepository.findOne({
       id: reviewId,
     });
     const result2 = await this.reviewImageRepository.save({
-      reviewImageUrl:reviewImageUrl,
+      reviewImageUrl: reviewImageUrl,
       review: result1,
     });
     return result2;
