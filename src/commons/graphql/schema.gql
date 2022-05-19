@@ -133,6 +133,7 @@ type Query {
   fetchCartProduct(cartProductId: String!): CartProduct!
   fetchComments: [Comment!]!
   fetchComment(commentId: String!): Comment!
+  fetchReviewComments(reviewId: String!): [Comment!]!
   fetchCoupons: [Coupon!]!
   fetchCoupon(couponId: String!): Coupon!
   fetchCustoms: [Custom!]!
