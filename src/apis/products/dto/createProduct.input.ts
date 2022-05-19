@@ -20,6 +20,6 @@ export class CreateProductInput {
   @Field(() => String)
   thumbnailImage: string;
 
-  @Field(() => [String])
+  @Field(() => [String], { nullable: true })
   productTags: string[];
 }

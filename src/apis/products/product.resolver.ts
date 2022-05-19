@@ -17,8 +17,9 @@ export class ProductResolver {
 
   @Query(() => [Product])
   fetchProducts(
-    @Args('page') page: number, //
+    @Args('page', { nullable: true }) page: number, //
   ) {
+    if (!page) page = 1;
     return this.productService.findAll({ page });
   }
 
