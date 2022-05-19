@@ -24,11 +24,11 @@ export class Order {
 
   @Column()
   @Field(() => String)
-  recieverName: string;
+  receiverName: string;
 
   @Column()
   @Field(() => String)
-  recieverPhone: string;
+  receiverPhone: string;
 
   @ManyToOne(() => User)
   user: User;

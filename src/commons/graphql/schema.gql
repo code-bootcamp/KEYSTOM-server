@@ -141,13 +141,13 @@ type Query {
   fetchOrder(id: String!): String!
   fetchProductImages: [ProductImage!]!
   fetchProductImage(productImageId: String!): ProductImage!
-  fetchProducts(page: Float!): [Product!]!
+  fetchProducts(page: Float): [Product!]!
   fetchProduct(productId: String!): Product!
   fetchBestProduct: [Product!]!
   fetchProductRowCount: Int!
   fetchReview(reviewId: String!): Review!
   fetchBestReview: [Review!]!
-  fetchReviews(page: Float!): [Review!]!
+  fetchReviews(page: Float): [Review!]!
   fetchReviewRowCount: Int!
   fetchReviewImages: [ReviewImage!]!
   fetchReviewImage(reviewImageId: String!): ReviewImage!
@@ -239,7 +239,7 @@ input CreateProductInput {
   like: Int!
   image: String!
   thumbnailImage: String!
-  productTags: [String!]!
+  productTags: [String!]
 }
 
 input UpdateProductInput {

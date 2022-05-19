@@ -6,11 +6,12 @@ import { Strategy } from 'passport-jwt';
 export class JwtRefreshStrategy extends PassportStrategy(Strategy, 'refresh') {
   constructor() {
     super({
-      jwtFromRequest: (req: { headers: { cookies: any } }) => {
-        const cookies = req.headers.cookies;
-        if (cookies) return cookies.replace('refreshToken=', '');
-      },
-      secretOrKey: process.env.REFRESH_SECRET_KEY,
+      jwtFromRequest: (req) =>
+        req.headers.cookie
+          .split('; ')
+          .filter((el) => el.includes('refreshToken='))[0]
+          .replace('refreshToken=', ''),
+      secretOrKey: 'myRefreshKey',
     });
   }
   async validate(payload: any) {
