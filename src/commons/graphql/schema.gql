@@ -128,6 +128,7 @@ type UsedProductImage {
 }
 
 type Query {
+  fetchUserLoggedIn: User!
   fetchCartProducts: [CartProduct!]!
   fetchCartProduct(cartProductId: String!): CartProduct!
   fetchComments: [Comment!]!
@@ -166,7 +167,6 @@ type Mutation {
   logintest(email: String!, password: String!): String!
   restoreAccessToken: String!
   logout: String!
-  myPage(accessToken: String!): String!
   createCartProduct(createCartProductInput: CreateCartProdcutInput!): CartProduct!
   createComment(createCommentInput: CreateCommentInput!): Comment!
   createCoupon(createCouponInput: CreateCouponInput!): Coupon!
@@ -200,7 +200,6 @@ input CreateCartProdcutInput {
 
 input CreateCommentInput {
   commentContent: String!
-  ParentId: String!
   reviewId: String!
 }
 
