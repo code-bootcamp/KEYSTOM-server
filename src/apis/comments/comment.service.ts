@@ -17,7 +17,10 @@ export class CommentService {
     return await this.commentRepository.find();
   }
   async findOne({ commentId }) {
-    return await this.commentRepository.findOne({ where: { id: commentId } });
+    return await this.commentRepository.findOne({ where: { id: commentId },relations:['review'] });
+  }
+  async find({reviewId}){
+    return await this.commentRepository.find({where:{review:reviewId}})
   }
   async create({ createCommentInput }) {
     const { reviewId, ...comment } = createCommentInput;

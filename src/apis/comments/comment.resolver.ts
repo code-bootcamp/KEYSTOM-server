@@ -14,6 +14,14 @@ export class CommentResolver {
   fetchComment(@Args('commentId') commentId: string) {
     return this.commentService.findOne({ commentId });
   }
+
+  @Query(()=>[Comment])
+  fetchReviewComments(
+    @Args('reviewId') reviewId: string
+  ){
+    return this.commentService.find({reviewId})
+  }
+
   @Mutation(() => Comment)
   createComment(
     @Args('createCommentInput') createCommentInput: CreateCommentInput,
@@ -21,13 +29,14 @@ export class CommentResolver {
     return this.commentService.create({ createCommentInput });
   }
 
-  @Mutation(()=>Comment)
-  createReComment(
-    @Args('parentId') parentId: string ,
-    @Args('createCommentInput') createCommentInput: CreateCommentInput
-  ){
+
+  // @Mutation(()=>Comment)
+  // createReComment(
+  //   @Args('parentId') parentId: string ,
+  //   @Args('createCommentInput') createCommentInput: CreateCommentInput
+  // ){
     
-  }
+  // }
 
 
 }
