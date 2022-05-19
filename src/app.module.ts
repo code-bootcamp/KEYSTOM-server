@@ -24,6 +24,8 @@ import { UserCoupon } from './apis/UserCoupon/entities/userCoupon.entity';
 import { Coupon } from './apis/coupon/entities/coupon.entity';
 import { CouponModule } from './apis/coupon/coupon.module';
 import { FileModule } from './apis/file/file.module';
+import { UsedProductImageModule } from './apis/usedProductImage/usedproductImage.module';
+import { UsedProductModule } from './apis/usedProducts/usedProduct.module';
 
 @Module({
   imports: [
@@ -40,6 +42,8 @@ import { FileModule } from './apis/file/file.module';
     ReviewModule,
     ReviewImageModule,
     SignUpModule,
+    UsedProductImageModule,
+    UsedProductModule,
     UserModule,
     UserCoupon,
     GraphQLModule.forRoot<ApolloDriverConfig>({
