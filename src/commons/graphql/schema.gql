@@ -170,6 +170,7 @@ type Mutation {
   logout: String!
   createCartProduct(createCartProductInput: CreateCartProdcutInput!): CartProduct!
   createComment(createCommentInput: CreateCommentInput!): Comment!
+  deleteComment(reviewId: String!, commentId: String!): String!
   createCoupon(createCouponInput: CreateCouponInput!): Coupon!
   createCustom(createCustomInput: CreateCustomInput!): Custom!
   uploadFile(file: Upload!): String!

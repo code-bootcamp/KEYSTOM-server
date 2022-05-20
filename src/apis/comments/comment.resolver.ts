@@ -22,11 +22,22 @@ export class CommentResolver {
     return this.commentService.find({reviewId})
   }
 
+  
+
   @Mutation(() => Comment)
   createComment(
     @Args('createCommentInput') createCommentInput: CreateCommentInput,
   ) {
     return this.commentService.create({ createCommentInput });
+  }
+
+  @Mutation(()=> String)
+  async deleteComment(
+    @Args('reviewId') reviewId:string ,
+    @Args('commentId') commentId: string
+  ){
+    await this.commentService.delete({reviewId,commentId})
+    return '성공!!'
   }
 
 
