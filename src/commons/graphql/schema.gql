@@ -51,8 +51,8 @@ type Order {
   count: Int!
   price: Int!
   address: String!
-  recieverName: String!
-  recieverPhone: String!
+  receiverName: String!
+  receiverPhone: String!
 }
 
 type Payment {
@@ -173,7 +173,7 @@ type Mutation {
   deleteComment(reviewId: String!, commentId: String!): String!
   createCoupon(createCouponInput: CreateCouponInput!): Coupon!
   createCustom(createCustomInput: CreateCustomInput!): Custom!
-  uploadFile(file: Upload!): String!
+  uploadFile(files: [Upload!]!): [String!]!
   createOrder(createOrderInput: CreateOrderInput!): Order!
   Payment(createPaymentInput: CreatePaymentInput!): Payment!
   createProductImage(productImageUrl: String!, productId: String!): ProductImage!
@@ -223,8 +223,8 @@ input CreateOrderInput {
   count: Int!
   price: Int!
   address: String!
-  recieverName: String!
-  recieverPhone: String!
+  receiverName: String!
+  receiverPhone: String!
   email: String!
 }
 
