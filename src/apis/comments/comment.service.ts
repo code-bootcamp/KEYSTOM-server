@@ -33,4 +33,15 @@ export class CommentService {
     });
     return result2;
   }
+  async delete({reviewId,commentId}){
+    const comments = await this.commentRepository.find({where:{review:reviewId}})
+    console.log("========================")
+    console.log("========================")
+    console.log("========================")
+    console.log("========================")
+    console.log("========================")
+    console.log(comments)
+    // const comment = await this.commentRepository.findOne({where:{commentId:comments.Comment.id}})
+    // console.log(comment)
+  }
 }

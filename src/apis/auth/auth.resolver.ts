@@ -137,11 +137,9 @@ export class AuthResolver {
   @UseGuards(GqlAuthAccessGuard)
   @Query(() => User)
   async fetchUserLoggedIn(
-    @Context() context: IContext
+    @CurrentUser() currentUser: ICurrentUser
   ) {
-    const accessToken = context.req.rawHeaders[13].replace('Bearer ', '')
-    const decoded = jwt_decode(accessToken);
-    const email = decoded['email'];
+    const email = currentUser.email
     return this.userService.findOne({ email })
   }
 }
