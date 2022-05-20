@@ -62,7 +62,7 @@ import { UsedProductModule } from './apis/usedProducts/usedProduct.module';
       port: 3306,
       username: 'root',
       password: 'root',
-      database: 'team-f12-db',
+      database: 'team-f12-light-db',
       // database: 'mydocker02',
       entities: [__dirname + '/apis/**/*.entity.*'],
       synchronize: true,

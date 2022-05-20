@@ -78,10 +78,9 @@ export class AuthResolver {
     // @Context() context: IContext,
   ) {
     // this.authService.setRefreshToken({ user, res: context.res });
-    console.log(currentUser);
-    // const accessToken = this.authService.getAccessToken({ user: currentUser });
-    // return accessToken;
-    return this.authService.getAccessToken({ user: currentUser });
+    const accessToken = this.authService.getAccessToken({ user: currentUser });
+    return accessToken;
+    // return this.authService.getAccessToken({ user: currentUser });
   }
 
   @UseGuards(GqlAuthAccessGuard)

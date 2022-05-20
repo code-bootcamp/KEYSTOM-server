@@ -6,6 +6,7 @@
 
 *.gql
 
+gcp-file-storage.json
 ### macOS ###
 # General
 .DS_Store
