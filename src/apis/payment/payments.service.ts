@@ -14,29 +14,32 @@ export class PaymentService {
     private readonly orderRepository: Repository<Order>,
   ) {}
 
-  async create({ createPaymentInput }) {
+  async payment({ createPaymentInput }) {
     const { order, ...payment } = createPaymentInput;
-    const result1 = await this.orderRepository.save({
+    const orderResult = await this.orderRepository.save({
       ...order,
     });
     const paymentImp = this.paymentRepository.create({
       ...payment,
       status: PAYMENT_STATUS_ENUM.PAYMENT,
       discountAmount: 0,
-      order: result1,
+      order: orderResult,
     });
     return paymentImp;
   }
 
-  // async create({ impUid, price }) {
-  //   const paymentImp = this.paymentRepository.create({
-  //     impUid,
-  //     price,
-  //     status: PAYMENT_STATUS_ENUM.PAYMENT,
-  //     discountAmount: 0,
-  //   });
-  //   await this.paymentRepository.save(paymentImp);
-
-  //   return paymentImp;
-  // }
+  // 잠시 생각!!
+  async refund({ createPaymentInput }) {
+    const { order, ...payment } = createPaymentInput;
+    const orderResult = await this.orderRepository.save({
+      ...order,
+    });
+    const paymentImp = this.paymentRepository.create({
+      ...payment,
+      status: PAYMENT_STATUS_ENUM.CANCEL,
+      discountAmount: 0,
+      order: orderResult,
+    });
+    return paymentImp;
+  }
 }

@@ -12,5 +12,4 @@ export class CreatePaymentInput {
 
   @Field(() => CreateOrderInput)
   order: CreateOrderInput;
-
 }
