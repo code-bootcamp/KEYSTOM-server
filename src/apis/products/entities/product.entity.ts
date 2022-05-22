@@ -45,6 +45,7 @@ export class Product {
   @JoinTable()
   @ManyToMany(() => ProductTag, (productTags) => productTags.products, {
     onDelete: 'CASCADE',
+    nullable: true,
   })
   @Field(() => [ProductTag])
   productTags: ProductTag[];

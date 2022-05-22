@@ -52,7 +52,8 @@ export class ProductService {
     const { productTags, ...product } = createProductInput;
     //productTags 저장
     const result2 = [];
-    for (let i = 0; productTags.length > i; i++) {
+    const length = productTags ? productTags : 0;
+    for (let i = 0; length > i; i++) {
       const tagname = productTags[i].replace('#', '');
       //이미 등록된 태그인지 확인
       const prevTag = await this.productTagRepository.findOne({

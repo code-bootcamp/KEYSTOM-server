@@ -37,5 +37,6 @@ export class AuthService {
       'Set-Cookie',
       `refreshToken=${refreshToken}; path=/; domain=.antipiebse.shop; SameSite=None; Secure; httpOnly;`,
     );
+    // res.setHeader('Set-Cookie', `refreshToken=${refreshToken}; path=/;`);
   }
 }

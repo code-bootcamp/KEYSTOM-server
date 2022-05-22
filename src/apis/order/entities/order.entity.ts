@@ -24,7 +24,7 @@ export class Order {
 
   @Column()
   @Field(() => String)
-  recieverPhone: string;
+  receiverPhone: string;
 
   @ManyToOne(() => User, {
     onDelete: 'CASCADE',

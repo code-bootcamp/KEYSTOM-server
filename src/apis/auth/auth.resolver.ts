@@ -76,13 +76,10 @@ export class AuthResolver {
   @Mutation(() => String)
   async restoreAccessToken(
     @CurrentUser() currentUser: ICurrentUser,
-    @Context() context: IContext,
+    // @Context() context: IContext,
   ) {
-    const user = currentUser;
-    //context.res.setHeder
-    console.log(user);
-    this.authService.setRefreshToken({ user, res: context.res });
-    const accessToken = this.authService.getAccessToken({ user });
+    // this.authService.setRefreshToken({ user, res: context.res });
+    const accessToken = this.authService.getAccessToken({ user: currentUser });
     return accessToken;
     // return this.authService.getAccessToken({ user: currentUser });
   }

@@ -14,6 +14,6 @@ export class CreateProductInput {
   @Field(() => Int)
   like: number;
 
-  @Field(() => [String])
+  @Field(() => [String], { nullable: true })
   productTags: string[];
 }

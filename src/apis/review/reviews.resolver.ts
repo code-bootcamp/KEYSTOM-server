@@ -18,7 +18,10 @@ export class ReviewResolver {
   }
 
   @Query(() => [Review])
-  fetchReviews(@Args('page') page: number) {
+  fetchReviews(
+    @Args('page', { nullable: true }) page: number, //
+  ) {
+    if (!page) page = 1;
     return this.reviewService.findAll({ page });
   }
 
