@@ -11,8 +11,8 @@ export class CustomResolver {
     return this.customService.findAll();
   }
   @Query(() => Custom)
-  fetchCustom(@Args('customId') customId: string) {
-    return this.customService.findOne({ customId });
+  fetchCustom(@Args('productId') productId: string) {
+    return this.customService.findOne({ productId });
   }
   @Mutation(() => Custom)
   createCustom(

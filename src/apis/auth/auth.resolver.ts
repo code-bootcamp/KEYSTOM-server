@@ -133,7 +133,7 @@ export class AuthResolver {
 
   @UseGuards(GqlAuthAccessGuard)
   @Query(() => User)
-  async fetchUserLoggedIn(
+  async fetchUserLoggedIn( 
     @CurrentUser() currentUser: ICurrentUser
   ) {
     const email = currentUser.email

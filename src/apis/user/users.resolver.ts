@@ -22,13 +22,6 @@ export class UserResolver {
   ) {
     return this.userService.findOne({ email });
   }
-  //로그인된 사람의 정보를 가져다주는 api
-  //restapi면 AuthGuard면 되는데 graphql이 가로 막고 있어서 더 필요함
-  @UseGuards(GqlAuthAccessGuard)
-  @Query(() => String)
-  fetchUser111() {
-    return '인증 통과!!';
-  }
   @Mutation(() => User)
   async createUser(@Args('createUserInput') createUserInput: CreateUserInput) {
     const hashedPassword = await bcrypt.hash(createUserInput.password, 10);
@@ -41,8 +34,8 @@ export class UserResolver {
     });
   }
   @Mutation(() => String)
-  deleteUser(@Args('nickName') nickName: string) {
-    return this.userService.delete({ nickName });
+  deleteUser(@Args('email') email: string) {
+    return this.userService.delete({ email });
   }
 
   @Mutation(() => User)

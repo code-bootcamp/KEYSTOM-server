@@ -15,11 +15,15 @@ export class CustomService {
 
   async findAll() {
     return await this.customRepository.find({
-      relations:["product"],
+      relations: ['product'],
     });
   }
-  async findOne({ customId }) {
-    return await this.customRepository.findOne({ where: { id: customId }, relations:["product"]});
+  async findOne({ productId }) {
+    const product = await this.productRepository.findOne({ id: productId });
+    return await this.customRepository.findOne({
+      where: { product: product },
+      relations: ['product'],
+    });
   }
   async create({ createCustomInput }) {
     const { productId, ...custom } = createCustomInput;

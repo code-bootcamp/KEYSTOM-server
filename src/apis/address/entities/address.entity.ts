@@ -1,5 +1,4 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { Order } from 'src/apis/order/entities/order.entity';
 import { Product } from 'src/apis/products/entities/product.entity';
 import { User } from 'src/apis/user/entities/user.entity';
 import {
@@ -13,39 +12,31 @@ import {
 
 @Entity()
 @ObjectType()
-export class Review {
+export class Address {
   @PrimaryGeneratedColumn('uuid')
   @Field(() => String)
   id: string;
 
   @Column()
   @Field(() => String)
-  reviewTitle: string;
+  address: string;
 
   @Column()
   @Field(() => String)
-  reviewContent: string;
+  addressDetail: string;
 
-  @Column({ default: 0 })
-  @Field(() => Int)
-  like: number;
+  @Column()
+  @Field(() => String)
+  zipCode: string;
 
   @CreateDateColumn()
   @Field(() => String)
   createdAt: Date;
 
-  // @DeleteDateColumn()
-  // deletedAt: Date;
-
-  @ManyToOne(() => Product, { onDelete: 'CASCADE' })
-  @Field(() => Product)
-  product: Product;
+  @DeleteDateColumn()
+  deletedAt: Date;
 
   @ManyToOne(() => User, { onDelete: 'CASCADE' })
   @Field(() => User)
   user: User;
-
-  @ManyToOne(() => Order, { onDelete: 'CASCADE' })
-  @Field(() => Order)
-  order: Order;
 }
