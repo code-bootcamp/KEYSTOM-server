@@ -28,6 +28,7 @@ export class PaymentService {
     return paymentImp;
   }
 
+  // 잠시 생각!!
   async refund({ createPaymentInput }) {
     const { order, ...payment } = createPaymentInput;
     const orderResult = await this.orderRepository.save({
