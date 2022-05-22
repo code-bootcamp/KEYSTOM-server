@@ -1,6 +1,6 @@
 import { Field, Int, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { Order } from 'src/apis/order/entities/order.entity';
-import { Product } from 'src/apis/products/entities/product.entity';
+import { User } from 'src/apis/user/entities/user.entity';
 import {
   Entity,
   Column,
@@ -8,7 +8,7 @@ import {
   ManyToOne,
   CreateDateColumn,
   JoinColumn,
-  OneToOne
+  OneToOne,
 } from 'typeorm';
 
 export enum PAYMENT_STATUS_ENUM {
@@ -31,13 +31,9 @@ export class Payment {
   @Field(() => Int)
   price: number;
 
-  // @Column()
-  // @Field(() => String)
-  // coupon: string;
-
   @Column()
   @Field(() => Int)
-  discountAmount: number;
+  discount: number;
 
   @Column()
   @Field(() => String)
@@ -47,12 +43,16 @@ export class Payment {
   @Field(() => PAYMENT_STATUS_ENUM)
   status: PAYMENT_STATUS_ENUM;
 
-  @CreateDateColumn()
-  @Field(() => Date)
-  paymentDate: Date;
-
   @JoinColumn()
   @OneToOne(() => Order, { onDelete: 'CASCADE' })
   @Field(() => Order)
   order: Order;
+
+  @ManyToOne(() => User)
+  @Field(() => User)
+  user: User;
+
+  @CreateDateColumn()
+  @Field(() => Date)
+  createdAt: Date;
 }
