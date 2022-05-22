@@ -1,8 +1,11 @@
 import { Args, Mutation, Query, Resolver, Int } from '@nestjs/graphql';
-import { QueryBuilder } from 'typeorm';
+import { UpdateReviewInput } from './dto/updateReview.input';
 import { CreateReviewInput } from './dto/createReview.input';
 import { Review } from './entities/review.entity';
 import { ReviewService } from './reviews.service';
+import { CurrentUser, ICurrentUser } from 'src/commons/auth/gql-user.param';
+import { UseGuards } from '@nestjs/common';
+import { GqlAuthAccessGuard } from 'src/commons/auth/gql-auth.guard';
 
 @Resolver()
 export class ReviewResolver {
@@ -39,13 +42,25 @@ export class ReviewResolver {
     return this.reviewService.findUserReview({ email });
   }
 
+  @UseGuards(GqlAuthAccessGuard)
   @Mutation(() => Review)
   createReview(
     @Args('createReviewInput') createReviewInput: CreateReviewInput,
+    @CurrentUser() currentUser: ICurrentUser,
   ) {
-    return this.reviewService.create({ createReviewInput });
+    return this.reviewService.create({ ...createReviewInput }, currentUser);
   }
 
+  @UseGuards(GqlAuthAccessGuard)
+  @Mutation(() => Review)
+  updateReview(
+    @Args('updateReviewInput') updateReviewInput: UpdateReviewInput,
+    @CurrentUser() currentUser: ICurrentUser,
+  ) {
+    return this.reviewService.update({ ...updateReviewInput }, currentUser);
+  }
+
+  @UseGuards(GqlAuthAccessGuard)
   @Mutation(() => String)
   deleteReview(@Args('reviewId') reviewId: string) {
     return this.reviewService.delete({ reviewId });

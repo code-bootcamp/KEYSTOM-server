@@ -11,12 +11,12 @@ export class ProductImage {
 
   @Column()
   @Field(() => String)
-  productImageUrl: string;
+  url: string;
 
-  @Column()
+  @Column({ default: false })
   @Field(() => Boolean)
   isThumbnail: boolean;
 
-  @ManyToOne(() => Product, { onDelete: 'CASCADE' })
+  @ManyToOne(() => Product)
   product: Product;
 }
