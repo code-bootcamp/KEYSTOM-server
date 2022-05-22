@@ -44,7 +44,7 @@ export class ProductResolver {
   createProduct(
     @Args('createProductInput') createProductInput: CreateProductInput,
   ) {
-    return this.productService.create({ createProductInput });
+    return this.productService.create({ ...createProductInput });
   }
 
   @Mutation(() => Product)
@@ -52,8 +52,7 @@ export class ProductResolver {
     @Args('productId') productId: string,
     @Args('updateProductInput') updateProductInput: UpdateProductInput,
   ) {
-    this.productService.delete({ productId });
-    return this.productService.update({ updateProductInput });
+    return this.productService.update({ ...updateProductInput }, productId);
   }
 
   @Mutation(() => String)

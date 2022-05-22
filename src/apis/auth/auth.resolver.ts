@@ -1,4 +1,4 @@
-import { Args, Context, Mutation, Resolver,Query } from '@nestjs/graphql';
+import { Args, Context, Mutation, Resolver, Query } from '@nestjs/graphql';
 import { AuthService } from './auth.service';
 import * as bcrypt from 'bcrypt';
 import {
@@ -13,13 +13,9 @@ import {
 } from 'src/commons/auth/gql-auth.guard';
 import { CurrentUser, ICurrentUser } from 'src/commons/auth/gql-user.param';
 import * as jwt from 'jsonwebtoken';
-import { JwtRefreshStrategy } from 'src/commons/auth/jwt-refresh.strategy';
 import { CACHE_MANAGER, Inject } from '@nestjs/common';
 import { Cache } from 'cache-manager';
 import { UserService } from '../user/users.service';
-import jwt_decode from 'jwt-decode';
-import { access } from 'fs';
-import { Any } from 'typeorm';
 import { User } from '../user/entities/user.entity';
 
 @Resolver()
@@ -133,10 +129,8 @@ export class AuthResolver {
 
   @UseGuards(GqlAuthAccessGuard)
   @Query(() => User)
-  async fetchUserLoggedIn( 
-    @CurrentUser() currentUser: ICurrentUser
-  ) {
-    const email = currentUser.email
-    return this.userService.findOne({ email })
+  async fetchUserLoggedIn(@CurrentUser() currentUser: ICurrentUser) {
+    const email = currentUser.email;
+    return this.userService.findOne({ email });
   }
 }

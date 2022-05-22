@@ -1,7 +1,7 @@
 import { Field, InputType } from '@nestjs/graphql';
 
 @InputType()
-export class CreateReviewInput {
+export class UpdateReviewInput {
   @Field(() => String)
   title: string;
 
@@ -16,4 +16,7 @@ export class CreateReviewInput {
 
   @Field(() => String)
   orderId: string;
+
+  @Field(() => String)
+  reviewId: string;
 }

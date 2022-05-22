@@ -20,11 +20,11 @@ export class Review {
 
   @Column()
   @Field(() => String)
-  reviewTitle: string;
+  title: string;
 
   @Column()
   @Field(() => String)
-  reviewContent: string;
+  description: string;
 
   @Column({ default: 0 })
   @Field(() => Int)
@@ -34,8 +34,8 @@ export class Review {
   @Field(() => String)
   createdAt: Date;
 
-  // @DeleteDateColumn()
-  // deletedAt: Date;
+  @DeleteDateColumn()
+  deletedAt: Date;
 
   @ManyToOne(() => Product, { onDelete: 'CASCADE' })
   @Field(() => Product)

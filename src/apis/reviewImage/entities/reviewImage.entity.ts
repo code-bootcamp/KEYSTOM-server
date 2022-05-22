@@ -11,10 +11,12 @@ export class ReviewImage {
 
   @Column()
   @Field(() => String)
-  reviewImageUrl: string;
+  url: string;
 
-  @ManyToOne(() => Review, {
-    onDelete: 'CASCADE',
-  })
+  @Column({ default: false })
+  @Field(() => Boolean)
+  isThumbnail: boolean;
+
+  @ManyToOne(() => Review)
   review: Review;
 }
