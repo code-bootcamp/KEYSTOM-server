@@ -1,4 +1,5 @@
 import { InputType, Field, Int } from '@nestjs/graphql';
+import { CreateCartProdcutInput } from 'src/apis/cart/dto/createCartProduct.input';
 
 @InputType()
 export class CreateUserInput {
@@ -12,9 +13,10 @@ export class CreateUserInput {
   name: string;
 
   @Field(() => String)
-  address: string;
+  nickName: string;
 
+  @Field(() => CreateCartProdcutInput)
+  cartProdudt: CreateCartProdcutInput;
   // @Field(()=>[String])
   // coupons: string[]
-  
 }

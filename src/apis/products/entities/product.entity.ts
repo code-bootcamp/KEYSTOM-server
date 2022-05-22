@@ -35,14 +35,6 @@ export class Product {
   @Field(() => Int)
   like: number;
 
-  @Column()
-  @Field(() => String)
-  image: string;
-
-  @Column()
-  @Field(() => String)
-  thumbnailImage: string;
-
   @CreateDateColumn()
   @Field(() => String)
   createdAt: Date;

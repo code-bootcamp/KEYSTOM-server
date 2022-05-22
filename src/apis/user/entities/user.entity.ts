@@ -6,17 +6,13 @@ import {
   Entity,
   JoinTable,
   ManyToMany,
-  PrimaryGeneratedColumn,
+  PrimaryColumn,
 } from 'typeorm';
 
 @Entity()
 @ObjectType()
 export class User {
-  @PrimaryGeneratedColumn('uuid')
-  @Field(() => String)
-  nickName: string;
-
-  @Column()
+  @PrimaryColumn()
   @Field(() => String)
   email: string;
 
@@ -27,6 +23,10 @@ export class User {
   @Field(() => String)
   name: string;
 
+  @Column()
+  @Field(() => String)
+  nickName: string;
+
   @Column({ default: '' })
   @Field(() => String)
   profileImage: string;
@@ -35,12 +35,8 @@ export class User {
   @Field(() => Boolean)
   isAdmin: boolean;
 
-  @Column()
-  @Field(() => String)
-  address: string;
-
-  @DeleteDateColumn()
-  deletedAt: Date;
+  // @DeleteDateColumn()
+  // deletedAt: Date;
 
   // @JoinTable()
   // @ManyToMany(() => Coupon, (coupon) => coupon.users, {

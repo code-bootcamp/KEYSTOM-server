@@ -18,8 +18,13 @@ export class ProductImageResolver {
   @Mutation(() => ProductImage)
   createProductImage(
     @Args('productImageUrl') productImageUrl: string,
+    @Args('isThumbnail') isThumbnail: boolean,
     @Args('productId') productId: string,
   ) {
-    return this.productImageService.create({ productImageUrl, productId });
+    return this.productImageService.create({
+      productImageUrl,
+      productId,
+      isThumbnail,
+    });
   }
 }

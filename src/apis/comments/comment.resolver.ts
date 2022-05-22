@@ -15,14 +15,15 @@ export class CommentResolver {
     return this.commentService.findOne({ commentId });
   }
 
-  @Query(()=>[Comment])
-  fetchReviewComments(
-    @Args('reviewId') reviewId: string
-  ){
-    return this.commentService.find({reviewId})
+  @Query(() => [Comment])
+  fetchReviewComments(@Args('reviewId') reviewId: string) {
+    return this.commentService.findReviewComments({ reviewId });
   }
 
-  
+  @Query(() => [Comment])
+  fetchUserComments(@Args('email') email: string) {
+    return this.commentService.findUserComments({ email });
+  }
 
   @Mutation(() => Comment)
   createComment(
@@ -31,23 +32,8 @@ export class CommentResolver {
     return this.commentService.create({ createCommentInput });
   }
 
-  @Mutation(()=> String)
-  async deleteComment(
-    @Args('reviewId') reviewId:string ,
-    @Args('commentId') commentId: string
-  ){
-    await this.commentService.delete({reviewId,commentId})
-    return '성공!!'
+  @Mutation(() => String)
+  deleteComment(@Args('commentId') commentId: number) {
+    return this.commentService.delete({ commentId });
   }
-
-
-  // @Mutation(()=>Comment)
-  // createReComment(
-  //   @Args('parentId') parentId: string ,
-  //   @Args('createCommentInput') createCommentInput: CreateCommentInput
-  // ){
-    
-  // }
-
-
 }

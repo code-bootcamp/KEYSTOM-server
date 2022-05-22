@@ -14,12 +14,6 @@ export class CreateProductInput {
   @Field(() => Int)
   like: number;
 
-  @Field(() => String)
-  image: string;
-
-  @Field(() => String)
-  thumbnailImage: string;
-
   @Field(() => [String])
   productTags: string[];
 }

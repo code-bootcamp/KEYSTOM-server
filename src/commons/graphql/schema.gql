@@ -8,8 +8,6 @@ type Product {
   description: String!
   price: Int!
   like: Int!
-  image: String!
-  thumbnailImage: String!
   createdAt: String!
   productTags: [ProductTag!]!
 }
@@ -28,12 +26,19 @@ type Custom {
 }
 
 type User {
-  nickName: String!
   email: String!
   name: String!
+  nickName: String!
   profileImage: String!
   isAdmin: Boolean!
-  address: String!
+}
+
+type Order {
+  id: String!
+  count: Int!
+  price: Int!
+  recieverName: String!
+  recieverPhone: String!
 }
 
 type Review {
@@ -44,15 +49,13 @@ type Review {
   createdAt: String!
   product: Product!
   user: User!
+  order: Order!
 }
 
-type Order {
+type CartProduct {
   id: String!
   count: Int!
-  price: Int!
-  address: String!
-  recieverName: String!
-  recieverPhone: String!
+  priceAll: Int!
 }
 
 type Payment {
@@ -78,6 +81,7 @@ scalar DateTime
 type ProductImage {
   id: String!
   productImageUrl: String!
+  isThumbnail: Boolean!
 }
 
 type ReviewImage {
@@ -86,16 +90,10 @@ type ReviewImage {
 }
 
 type Comment {
-  id: String!
+  id: Int!
   commentContent: String!
   ParentId: String!
   createdAt: String!
-}
-
-type CartProduct {
-  id: String!
-  count: Int!
-  priceAll: Int!
 }
 
 type Coupon {
@@ -104,42 +102,30 @@ type Coupon {
   couponName: String!
 }
 
-type UsedProductTag {
+type Address {
   id: String!
-  tag: String!
-  usedProducts: [UsedProduct!]!
-}
-
-type UsedProduct {
-  id: String!
-  sellTitle: String!
-  hopePrice: Int!
-  method: String!
-  description: String!
+  address: String!
+  addressDetail: String!
+  zipCode: String!
   createdAt: String!
-  seller: String!
-  usedProductTags: [UsedProductTag!]!
-}
-
-type UsedProductImage {
-  id: String!
-  usedProductImageUrl: String!
-  isThumbnail: Boolean!
+  user: User!
 }
 
 type Query {
+  fetchUserAddress(email: String!): Address!
+  fetchAddresses: [Address!]!
   fetchUserLoggedIn: User!
   fetchCartProducts: [CartProduct!]!
   fetchCartProduct(cartProductId: String!): CartProduct!
   fetchComments: [Comment!]!
   fetchComment(commentId: String!): Comment!
   fetchReviewComments(reviewId: String!): [Comment!]!
+  fetchUserComments(email: String!): [Comment!]!
   fetchCoupons: [Coupon!]!
   fetchCoupon(couponId: String!): Coupon!
   fetchCustoms: [Custom!]!
-  fetchCustom(customId: String!): Custom!
-  fetchOrders: [Order!]!
-  fetchOrder(id: String!): String!
+  fetchCustom(productId: String!): Custom!
+  fetchUserOrder: [Order!]!
   fetchProductImages: [ProductImage!]!
   fetchProductImage(productImageId: String!): ProductImage!
   fetchProducts(page: Float!): [Product!]!
@@ -150,33 +136,30 @@ type Query {
   fetchBestReview: [Review!]!
   fetchReviews(page: Float!): [Review!]!
   fetchReviewRowCount: Int!
+  fetchProductReview(productId: String!): [Review!]!
+  fetchUserReview(email: String!): [Review!]!
   fetchReviewImages: [ReviewImage!]!
-  fetchReviewImage(reviewImageId: String!): ReviewImage!
-  fetchUsedProductImages: [UsedProductImage!]!
-  fetchUsedProductImage(usedProductImageId: String!): UsedProductImage!
-  fetchUsedProducts: [UsedProduct!]!
-  fetchUsedProduct(usedProductId: String!): UsedProduct!
-  fetchBestUsedProduct: [UsedProduct!]!
-  fetchUsedRowCount: Int!
+  fetchReviewImage(reviewId: String!): ReviewImage!
   fetchUsers: [User!]!
   fetchUser(email: String!): User!
-  fetchUser111: String!
 }
 
 type Mutation {
+  createAddress(createAddressInput: CreateAddressInput!): Address!
+  deleteAddress(addressId: String!): String!
   login(email: String!, password: String!): String!
   logintest(email: String!, password: String!): String!
   restoreAccessToken: String!
   logout: String!
   createCartProduct(createCartProductInput: CreateCartProdcutInput!): CartProduct!
   createComment(createCommentInput: CreateCommentInput!): Comment!
-  deleteComment(reviewId: String!, commentId: String!): String!
+  deleteComment(commentId: Float!): String!
   createCoupon(createCouponInput: CreateCouponInput!): Coupon!
   createCustom(createCustomInput: CreateCustomInput!): Custom!
   uploadFile(file: Upload!): String!
   createOrder(createOrderInput: CreateOrderInput!): Order!
   Payment(createPaymentInput: CreatePaymentInput!): Payment!
-  createProductImage(productImageUrl: String!, productId: String!): ProductImage!
+  createProductImage(productImageUrl: String!, isThumbnail: Boolean!, productId: String!): ProductImage!
   createProduct(createProductInput: CreateProductInput!): Product!
   updateProduct(productId: String!, updateProductInput: UpdateProductInput!): Product!
   deleteProduct(productId: String!): String!
@@ -186,22 +169,29 @@ type Mutation {
   sendToken(phone: String!): String!
   checkToken(token: String!): String!
   checkEmail(email: String!): Boolean!
-  createUsedProductImage(usedProductImageUrl: String!, usedProductId: String!, isThumbnail: Boolean!): UsedProductImage!
-  createUsedProduct(createUsedProductInput: CreateUsedProductInput!): UsedProduct!
-  deleteUsedProduct(usedProductId: String!): String!
   createUser(createUserInput: CreateUserInput!): User!
-  deleteUser(nickName: String!): String!
+  deleteUser(email: String!): String!
   updateUser(email: String!, updateUserInput: UpdateUserInput!): User!
+}
+
+input CreateAddressInput {
+  address: String!
+  addressDetail: String!
+  zipCode: String!
+  email: String!
 }
 
 input CreateCartProdcutInput {
   count: Int!
   priceAll: Int!
   productId: String!
+  orderId: String!
+  userId: String!
 }
 
 input CreateCommentInput {
   commentContent: String!
+  email: String!
   reviewId: String!
 }
 
@@ -226,6 +216,7 @@ input CreateOrderInput {
   recieverName: String!
   recieverPhone: String!
   email: String!
+  productId: String!
 }
 
 input CreatePaymentInput {
@@ -239,8 +230,6 @@ input CreateProductInput {
   description: String!
   price: Int!
   like: Int!
-  image: String!
-  thumbnailImage: String!
   productTags: [String!]!
 }
 
@@ -259,26 +248,18 @@ input CreateReviewInput {
   reviewContent: String!
   productId: String!
   email: String!
-}
-
-input CreateUsedProductInput {
-  sellTitle: String!
-  hopePrice: Int!
-  method: String!
-  description: String!
-  seller: String!
-  usedProductTags: [String!]!
+  orderId: String!
 }
 
 input CreateUserInput {
   email: String!
   password: String!
   name: String!
-  address: String!
+  nickName: String!
+  cartProdudt: CreateCartProdcutInput!
 }
 
 input UpdateUserInput {
   name: String!
-  profileImage: String!
-  address: String!
+  nickName: String!
 }

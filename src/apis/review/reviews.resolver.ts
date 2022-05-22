@@ -27,6 +27,15 @@ export class ReviewResolver {
     return this.reviewService.findCount();
   }
 
+  @Query(() => [Review])
+  fetchProductReview(@Args('productId') productId: string) {
+    return this.reviewService.findProductReview({ productId });
+  }
+  @Query(() => [Review])
+  fetchUserReview(@Args('email') email: string) {
+    return this.reviewService.findUserReview({ email });
+  }
+
   @Mutation(() => Review)
   createReview(
     @Args('createReviewInput') createReviewInput: CreateReviewInput,

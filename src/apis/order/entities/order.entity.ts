@@ -20,16 +20,19 @@ export class Order {
 
   @Column()
   @Field(() => String)
-  address: string;
-
-  @Column()
-  @Field(() => String)
   recieverName: string;
 
   @Column()
   @Field(() => String)
   recieverPhone: string;
 
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, {
+    onDelete: 'CASCADE',
+  })
   user: User;
+
+  @ManyToOne(() => Product, {
+    onDelete: 'CASCADE',
+  })
+  product: Product;
 }

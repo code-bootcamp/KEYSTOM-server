@@ -6,5 +6,8 @@ export class CreateCommentInput {
   commentContent: string;
 
   @Field(() => String)
+  email: string;
+
+  @Field(() => String)
   reviewId: string;
 }

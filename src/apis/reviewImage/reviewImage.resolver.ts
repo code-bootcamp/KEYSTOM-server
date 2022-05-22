@@ -12,8 +12,8 @@ export class ReivewImageResolver {
   }
 
   @Query(() => ReviewImage)
-  fetchReviewImage(@Args('reviewImageId') reviewImageId: string) {
-    return this.reviewImageService.findOne({ reviewImageId });
+  fetchReviewImage(@Args('reviewId') reviewId: string) {
+    return this.reviewImageService.findOne({ reviewId });
   }
 
   @Mutation(() => ReviewImage)

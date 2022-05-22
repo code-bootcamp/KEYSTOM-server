@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { Order } from '../order/entities/order.entity';
 import { Product } from '../products/entities/product.entity';
 import { User } from '../user/entities/user.entity';
 import { Review } from './entities/review.entity';
@@ -14,6 +15,8 @@ export class ReviewService {
     private readonly productRepository: Repository<Product>,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    @InjectRepository(Order)
+    private readonly orderRepository: Repository<Order>,
   ) {}
 
   async findOne({ reviewId }) {
@@ -47,23 +50,40 @@ export class ReviewService {
     return this.productRepository.count();
   }
 
+  async findProductReview({ productId }) {
+    const product = await this.productRepository.findOne({
+      id: productId,
+    });
+    return await this.reviewRepository.find({ where: { product: product } });
+  }
+  async findUserReview({ email }) {
+    const user = await this.userRepository.findOne({
+      email: email,
+    });
+    return await this.reviewRepository.find({ where: { user: user } });
+  }
+
   async create({ createReviewInput }) {
-    const { productId, email, ...review } = createReviewInput;
+    const { productId, email, orderId, ...review } = createReviewInput;
     const result1 = await this.productRepository.findOne({
       id: productId,
     });
-    const result3 = await this.userRepository.findOne({
+    const result2 = await this.userRepository.findOne({
       email: email,
     });
-    const result2 = await this.reviewRepository.save({
+    const result3 = await this.orderRepository.findOne({
+      id: orderId,
+    });
+    const result4 = await this.reviewRepository.save({
       ...review,
       product: result1,
-      user: result3,
+      user: result2,
+      order: result3,
     });
-    return result2;
+    return result4;
   }
   async delete({ reviewId }) {
-    const result = await this.reviewRepository.softDelete({ id: reviewId });
+    const result = await this.reviewRepository.delete({ id: reviewId });
     return result.affected ? true : false;
   }
 }

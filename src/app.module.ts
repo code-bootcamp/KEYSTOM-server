@@ -24,11 +24,12 @@ import { UserCoupon } from './apis/UserCoupon/entities/userCoupon.entity';
 import { Coupon } from './apis/coupon/entities/coupon.entity';
 import { CouponModule } from './apis/coupon/coupon.module';
 import { FileModule } from './apis/file/file.module';
-import { UsedProductImageModule } from './apis/usedProductImage/usedproductImage.module';
-import { UsedProductModule } from './apis/usedProducts/usedProduct.module';
+
+import { AddressModule } from './apis/address/address.module';
 
 @Module({
   imports: [
+    AddressModule,
     AuthModule,
     CartProductModule,
     CommentModule,
@@ -42,8 +43,6 @@ import { UsedProductModule } from './apis/usedProducts/usedProduct.module';
     ReviewModule,
     ReviewImageModule,
     SignUpModule,
-    UsedProductImageModule,
-    UsedProductModule,
     UserModule,
     UserCoupon,
     GraphQLModule.forRoot<ApolloDriverConfig>({
@@ -57,13 +56,13 @@ import { UsedProductModule } from './apis/usedProducts/usedProduct.module';
     }),
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: '10.51.1.3',
-      // host: 'my-database',
+      // host: '10.51.1.3',
+      host: 'my-database',
       port: 3306,
       username: 'root',
       password: 'root',
-      database: 'team-f12-light-db',
-      // database: 'mydocker02',
+      // database: 'team-f12-light-db',
+      database: 'mydocker02',
       entities: [__dirname + '/apis/**/*.entity.*'],
       synchronize: true,
       logging: true,

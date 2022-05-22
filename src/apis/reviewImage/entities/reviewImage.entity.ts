@@ -1,5 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { Column, Entity, PrimaryGeneratedColumn,ManyToOne  } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 import { Review } from 'src/apis/review/entities/review.entity';
 
 @Entity()
@@ -13,6 +13,8 @@ export class ReviewImage {
   @Field(() => String)
   reviewImageUrl: string;
 
-  @ManyToOne(() => Review)
+  @ManyToOne(() => Review, {
+    onDelete: 'CASCADE',
+  })
   review: Review;
 }

@@ -23,12 +23,13 @@ export class ProductImageService {
     });
   }
 
-  async create({ productImageUrl, productId }) {
+  async create({ productImageUrl, productId, isThumbnail }) {
     const result1 = await this.productRepository.findOne({
       id: productId,
     });
     const result2 = await this.productImageRepository.save({
       productImageUrl: productImageUrl,
+      isThumbnail: isThumbnail,
       product: result1,
     });
     return result2;

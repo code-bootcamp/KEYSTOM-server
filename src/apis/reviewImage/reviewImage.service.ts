@@ -17,9 +17,10 @@ export class ReviewImageService {
     return await this.reviewImageRepository.find();
   }
 
-  async findOne({ reviewImageId }) {
+  async findOne({ reviewId }) {
+    const review = this.reviewRepository.findOne({ id: reviewId });
     return await this.reviewImageRepository.findOne({
-      where: { id: reviewImageId },
+      where: { review: review },
     });
   }
 

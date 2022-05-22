@@ -5,10 +5,7 @@ export class UpdateUserInput {
   @Field(() => String)
   name: string;
 
-  @Field(()=> String)
-  profileImage: string;
-
   @Field(() => String)
-  address: string;
+  nickName: string;
 
 }

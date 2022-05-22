@@ -17,7 +17,7 @@ export class Custom {
   @Field(() => String)
   color: string;
 
-  @ManyToOne(() => Product)
-  @Field(()=>Product)
+  @ManyToOne(() => Product, { onDelete: 'CASCADE' })
+  @Field(() => Product)
   product: Product;
 }
