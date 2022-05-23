@@ -24,7 +24,7 @@ export class Comment {
 
   @Column({ default: null })
   @Field(() => String)
-  ParentId: string;
+  parentId: string;
 
   @ManyToOne(() => User, { onDelete: 'CASCADE' })
   user: User;

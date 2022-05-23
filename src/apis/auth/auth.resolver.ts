@@ -1,4 +1,4 @@
-import { Args, Context, Mutation, Resolver,Query } from '@nestjs/graphql';
+import { Args, Context, Mutation, Resolver, Query } from '@nestjs/graphql';
 import { AuthService } from './auth.service';
 import * as bcrypt from 'bcrypt';
 import {
@@ -133,10 +133,8 @@ export class AuthResolver {
 
   @UseGuards(GqlAuthAccessGuard)
   @Query(() => User)
-  async fetchUserLoggedIn( 
-    @CurrentUser() currentUser: ICurrentUser
-  ) {
-    const email = currentUser.email
-    return this.userService.findOne({ email })
+  async fetchUserLoggedIn(@CurrentUser() currentUser: ICurrentUser) {
+    const email = currentUser.email;
+    return this.userService.findOne({ email });
   }
 }
