@@ -7,5 +7,4 @@ export class UpdateUserInput {
 
   @Field(() => String)
   nickName: string;
-
 }

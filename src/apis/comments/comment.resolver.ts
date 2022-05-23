@@ -16,13 +16,20 @@ export class CommentResolver {
   }
 
   @Query(() => [Comment])
-  fetchReviewComments(@Args('reviewId') reviewId: string) {
-    return this.commentService.findReviewComments({ reviewId });
+  fetchReComments(
+    @Args('reviewId') reviewId: string,
+    @Args('commentId') commentId: number,
+  ) {
+    return this.commentService.findReComments({ reviewId, commentId });
   }
 
   @Query(() => [Comment])
   fetchUserComments(@Args('email') email: string) {
     return this.commentService.findUserComments({ email });
+  }
+  @Query(() => [Comment])
+  fetchReviewComments(@Args('reviewId') reviewId: string) {
+    return this.commentService.findReviewComments({ reviewId });
   }
 
   @Mutation(() => Comment)
@@ -30,6 +37,17 @@ export class CommentResolver {
     @Args('createCommentInput') createCommentInput: CreateCommentInput,
   ) {
     return this.commentService.create({ createCommentInput });
+  }
+
+  @Mutation(() => Comment)
+  createReComment(
+    @Args('commentId') commentId: number,
+    @Args('createCommentInput') createCommentInput: CreateCommentInput,
+  ) {
+    return this.commentService.createReComment({
+      commentId,
+      createCommentInput,
+    });
   }
 
   @Mutation(() => String)

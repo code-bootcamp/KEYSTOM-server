@@ -15,8 +15,8 @@ export class CreateUserInput {
   @Field(() => String)
   nickName: string;
 
-  @Field(() => CreateCartProdcutInput)
-  cartProdudt: CreateCartProdcutInput;
+  // @Field(() => CreateCartProdcutInput)
+  // cartProdudt: CreateCartProdcutInput;
   // @Field(()=>[String])
   // coupons: string[]
 }

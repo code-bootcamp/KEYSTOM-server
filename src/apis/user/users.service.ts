@@ -25,16 +25,16 @@ export class UserService {
     return await this.userRepository.findOne({ where: { email: email } });
   }
   async create({ bcryptUser }) {
-    const { cartProduct, password, ...user } = bcryptUser;
+    // const { cartProduct, password, ...user } = bcryptUser;
+    const { password, ...user } = bcryptUser;
     const user1 = await this.userRepository.findOne({ email: user.email });
-    const result1 = await this.cartProductRepository.save({
-      ...cartProduct,
-    });
+    // const result1 = await this.cartProductRepository.save({
+    //   ...cartProduct,
+    // });
     if (user1) throw new ConflictException('이미 등록된 이메일 입니다');
     const result = await this.userRepository.save({
       ...user,
       password,
-      cartProduct: result1,
     });
     return result;
   }
