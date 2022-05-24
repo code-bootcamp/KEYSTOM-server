@@ -11,21 +11,17 @@ import { UserService } from '../user/users.service';
 
 @Resolver()
 export class OrderResolver {
-  constructor(
-    private readonly orderService: OrderService,
-    private readonly userService: UserService,
-  ) {}
-
-  // @Query(() => [Order])
-  // fetchOrders() {
-  //   return this.orderService.findAll({ email, page });
-  // }
+  constructor(private readonly orderService: OrderService) {}
 
   @UseGuards(GqlAuthAccessGuard)
   @Query(() => [Order]) //본인이 산 목록
-  async fetchUserOrder(@CurrentUser() currentUser: ICurrentUser) {
+  async fetchUserOrder(
+    @CurrentUser() currentUser: ICurrentUser,
+    @Args('page', { nullable: true }) page: number, //
+  ) {
     const email = currentUser.email;
-    const order = await this.orderService.findUserOder({ email });
+    if (!page) page = 1;
+    const order = await this.orderService.find({ email, page });
     return order;
   }
 

@@ -1,13 +1,5 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
-import { ProductTag } from 'src/apis/productsTag/entities/productTag.entity';
-import {
-  Column,
-  DeleteDateColumn,
-  Entity,
-  JoinTable,
-  ManyToMany,
-  PrimaryColumn,
-} from 'typeorm';
+import { Column, Entity, PrimaryColumn } from 'typeorm';
 
 @Entity()
 @ObjectType()
@@ -27,7 +19,7 @@ export class User {
   @Field(() => String)
   nickName: string;
 
-  @Column({ default: '' })
+  @Column({ default: null })
   @Field(() => String)
   profileImage: string;
 

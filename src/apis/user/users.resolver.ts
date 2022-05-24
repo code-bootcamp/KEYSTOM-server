@@ -33,6 +33,7 @@ export class UserResolver {
       bcryptUser,
     });
   }
+
   @Mutation(() => String)
   deleteUser(@Args('email') email: string) {
     return this.userService.delete({ email });
