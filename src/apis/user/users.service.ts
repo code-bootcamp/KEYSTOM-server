@@ -7,6 +7,8 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { AddressService } from '../address/address.service';
+import { Address } from '../address/entities/address.entity';
 import { CartProduct } from '../cart/entities/cartProduct.entity';
 import { User } from './entities/user.entity';
 
@@ -17,6 +19,10 @@ export class UserService {
     private readonly userRepository: Repository<User>,
     @InjectRepository(CartProduct)
     private readonly cartProductRepository: Repository<CartProduct>,
+    @InjectRepository(Address)
+    private readonly addressRepository: Repository<Address>,
+
+    private readonly addressService: AddressService, //
   ) {}
   async findAll() {
     return await this.userRepository.find();
@@ -26,7 +32,8 @@ export class UserService {
   }
   async create({ bcryptUser }) {
     // const { cartProduct, password, ...user } = bcryptUser;
-    const { password, ...user } = bcryptUser;
+    const { password, address, ...user } = bcryptUser;
+    const createAddressInput = { ...address, email: user.email };
     const user1 = await this.userRepository.findOne({ email: user.email });
     // const result1 = await this.cartProductRepository.save({
     //   ...cartProduct,
@@ -36,6 +43,8 @@ export class UserService {
       ...user,
       password,
     });
+    //주소도 저장하기
+    const address1 = await this.addressService.create({ createAddressInput });
     return result;
   }
   async update({ email, updateUserInput }) {

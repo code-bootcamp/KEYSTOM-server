@@ -45,7 +45,7 @@ import { AddressModule } from './apis/address/address.module';
       autoSchemaFile: 'src/commons/graphql/schema.gql',
       context: ({ req, res }) => ({ req, res }), //이게 있어야 setheader가능하다
       cors: {
-        origin: ' http://localhost:3000',
+        origin: 'http://localhost:3000',
         credential: true,
       },
     }),
