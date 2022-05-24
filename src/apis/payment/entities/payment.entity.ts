@@ -32,11 +32,7 @@ export class Payment {
   price: number;
 
   @Column()
-  @Field(() => Int)
-  discount: number;
-
-  @Column()
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   impUid: string;
 
   @Column({ type: 'enum', enum: PAYMENT_STATUS_ENUM })

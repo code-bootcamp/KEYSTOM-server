@@ -1,9 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ReadPreference, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { Product } from '../products/entities/product.entity';
-import { User } from '../user/entities/user.entity';
 import { Order } from './entities/order.entity';
+import { User } from 'src/apis/user/entities/user.entity';
 @Injectable()
 export class OrderService {
   constructor(
@@ -15,14 +15,15 @@ export class OrderService {
     private readonly productRepository: Repository<Product>,
   ) {}
 
-  async findUserOder({ email }) {
-    const user = await this.userRepository.findOne({ email: email });
-    return await this.orderRepository.find({ where: { user: user } });
-  }
+  // async findUserOder({ email }) {
+  //   const user = await this.userRepository.findOne({ email: email });
+  //   return await this.orderRepository.find({ where: { user: user } });
+  // }
 
-  async findAll({ email, page }) {
+  async find({ email, page }) {
     return await this.orderRepository
       .createQueryBuilder('order')
+      .where('order.user = :user', { user: email })
       .orderBy('order.createdAt', 'DESC')
       .skip(0 + Number((page - 1) * 3))
       .take(3)
@@ -31,17 +32,23 @@ export class OrderService {
 
   async create({ createOrderInput }) {
     const { productId, email, ...order } = createOrderInput;
-    const result1 = await this.userRepository.findOne({
-      email: email,
+
+    const user = await this.userRepository.findOne({
+      email,
     });
-    const result2 = await this.productRepository.findOne({
+    if (!user) throw new BadRequestException('유저가 존재하지 않습니다.');
+
+    const product = await this.productRepository.findOne({
       id: productId,
     });
-    const result3 = await this.orderRepository.save({
+    if (!product) throw new BadRequestException('상품이 존재하지 않습니다.');
+
+    const result = await this.orderRepository.save({
       ...order,
-      user: result1,
-      product: result2,
+      user: user,
+      product: product,
     });
-    return result3;
+
+    return result;
   }
 }

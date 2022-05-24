@@ -20,13 +20,13 @@ export class Product {
 
   @Column()
   @Field(() => String)
-  name: string;
+  title: string;
 
   @Column()
   @Field(() => String)
   description: string;
 
-  @Column({ default: 0 })
+  @Column()
   @Field(() => Int)
   price: number;
 
