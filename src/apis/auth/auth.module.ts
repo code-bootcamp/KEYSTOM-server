@@ -5,6 +5,9 @@ import { JwtRefreshStrategy } from 'src/commons/auth/jwt-refresh.strategy';
 import { JwtGoogleStrategy } from 'src/commons/auth/jwt-social-google.strategy';
 import { JwtKakaoStrategy } from 'src/commons/auth/jwt-social-kakao.strategy';
 import { JwtNaverStrategy } from 'src/commons/auth/jwt-social-naver.strategy';
+import { AddressModule } from '../address/address.module';
+import { AddressService } from '../address/address.service';
+import { Address } from '../address/entities/address.entity';
 import { CartProduct } from '../cart/entities/cartProduct.entity';
 import { User } from '../user/entities/user.entity';
 import { UserService } from '../user/users.service';
@@ -15,12 +18,13 @@ import { AuthService } from './auth.service';
 @Module({
   imports: [
     JwtModule.register({}), //
-    TypeOrmModule.forFeature([User, CartProduct]),
+    TypeOrmModule.forFeature([User, CartProduct, Address]),
   ],
   providers: [
     AuthResolver, //
     AuthService,
     UserService,
+    AddressService,
     JwtRefreshStrategy,
     JwtGoogleStrategy,
     JwtNaverStrategy,

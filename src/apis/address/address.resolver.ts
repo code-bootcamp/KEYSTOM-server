@@ -25,6 +25,14 @@ export class AddressResolver {
     return this.addressService.create({ createAddressInput });
   }
 
+  // @Mutation(()=>Address)
+  // updateAddress(
+  //   @Args('updateA')
+  //   @Args('userId')
+  // ){
+  //   return ""
+  // }
+
   @Mutation(() => String)
   deleteAddress(@Args('addressId') addressId: string) {
     return this.addressService.delete({ addressId });
