@@ -19,7 +19,7 @@
         const myAmount = Number(document.getElementById('amount').value);
 
         const IMP = window.IMP; // 생략 가능
-        IMP.init('imp61795344'); // Example: imp00000000
+        IMP.init(''); // Example: imp00000000
         IMP.request_pay(
           {
             // param
@@ -41,7 +41,7 @@
               console.log(rsp);
 
               const data = await axios.post(
-                'http://localhost:15500/graphql',
+                'http://localhost:3000/graphql',
                 {
                   query: `
                       mutation {
