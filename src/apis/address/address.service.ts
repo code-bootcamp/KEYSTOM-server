@@ -8,7 +8,7 @@ import { Address } from './entities/address.entity';
 export class AddressService {
   constructor(
     @InjectRepository(Address)
-    private readonly reviewRepository: Repository<Address>,
+    private readonly addressRepository: Repository<Address>,
 
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
@@ -18,14 +18,14 @@ export class AddressService {
     const user = await this.userRepository.findOne({
       where: { email: email },
     });
-    return await this.reviewRepository.findOne({
+    return await this.addressRepository.findOne({
       where: { user: user },
       relations: ['user'],
     });
   }
 
   async findAll() {
-    return await this.reviewRepository.find();
+    return await this.addressRepository.find();
   }
 
   async create({ createAddressInput }) {
@@ -33,14 +33,15 @@ export class AddressService {
     const result1 = await this.userRepository.findOne({
       email: email,
     });
-    const result2 = await this.reviewRepository.save({
+    console.log('result1', result1);
+    const result2 = await this.addressRepository.save({
       ...address,
       user: result1,
     });
     return result2;
   }
   async delete({ addressId }) {
-    const result = await this.reviewRepository.softDelete({ id: addressId });
+    const result = await this.addressRepository.softDelete({ id: addressId });
     return result.affected ? true : false;
   }
 }
