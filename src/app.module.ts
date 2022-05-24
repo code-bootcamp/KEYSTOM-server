@@ -45,7 +45,7 @@ import { AddressModule } from './apis/address/address.module';
       autoSchemaFile: 'src/commons/graphql/schema.gql',
       context: ({ req, res }) => ({ req, res }), //이게 있어야 setheader가능하다
       cors: {
-        origin: ' http://localhost:3000',
+        origin: 'http://localhost:3000',
         credential: true,
       },
     }),
@@ -56,8 +56,8 @@ import { AddressModule } from './apis/address/address.module';
       port: 3306,
       username: 'root',
       password: 'root',
-      database: 'team-f12-light-db',
-      // database: 'mydocker02',
+      // database: 'team-f12-light-db',
+      database: 'mydocker02',
       entities: [__dirname + '/apis/**/*.entity.*'],
       synchronize: true,
       logging: true,

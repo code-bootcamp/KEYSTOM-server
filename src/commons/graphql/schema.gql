@@ -4,7 +4,7 @@
 
 type Product {
   id: String!
-  name: String!
+  title: String!
   description: String!
   price: Int!
   like: Int!
@@ -43,8 +43,8 @@ type Order {
 
 type Review {
   id: String!
-  reviewTitle: String!
-  reviewContent: String!
+  title: String!
+  description: String!
   like: Int!
   createdAt: String!
   product: Product!
@@ -61,8 +61,7 @@ type CartProduct {
 type Payment {
   id: String!
   price: Int!
-  discount: Int!
-  impUid: String!
+  impUid: String
   status: PAYMENT_STATUS_ENUM!
   order: Order!
   user: User!
@@ -78,17 +77,6 @@ enum PAYMENT_STATUS_ENUM {
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
 scalar DateTime
-
-type ProductImage {
-  id: String!
-  productImageUrl: String!
-  isThumbnail: Boolean!
-}
-
-type ReviewImage {
-  id: String!
-  reviewImageUrl: String!
-}
 
 type Comment {
   id: Int!
@@ -127,9 +115,7 @@ type Query {
   fetchCoupon(couponId: String!): Coupon!
   fetchCustoms: [Custom!]!
   fetchCustom(productId: String!): Custom!
-  fetchUserOrder: [Order!]!
-  fetchProductImages: [ProductImage!]!
-  fetchProductImage(productImageId: String!): ProductImage!
+  fetchUserOrder(page: Float): [Order!]!
   fetchProducts(page: Float): [Product!]!
   fetchProduct(productId: String!): Product!
   fetchBestProduct: [Product!]!
@@ -140,8 +126,6 @@ type Query {
   fetchReviewRowCount: Int!
   fetchProductReview(productId: String!): [Review!]!
   fetchUserReview(email: String!): [Review!]!
-  fetchReviewImages: [ReviewImage!]!
-  fetchReviewImage(reviewId: String!): ReviewImage!
   fetchUsers: [User!]!
   fetchUser(email: String!): User!
 }
@@ -161,15 +145,14 @@ type Mutation {
   createCustom(createCustomInput: CreateCustomInput!): Custom!
   uploadFile(files: [Upload!]!): [String!]!
   createOrder(createOrderInput: CreateOrderInput!): Order!
-  Payment(createPaymentInput: CreatePaymentInput!): Payment!
-  Refund(createPaymentInput: CreatePaymentInput!): Payment!
-  createProductImage(productImageUrl: String!, isThumbnail: Boolean!, productId: String!): ProductImage!
+  payment(createPaymentInput: CreatePaymentInput!): Payment!
+  refund(createPaymentInput: CreatePaymentInput!): Payment!
   createProduct(createProductInput: CreateProductInput!): Product!
   updateProduct(productId: String!, updateProductInput: UpdateProductInput!): Product!
   deleteProduct(productId: String!): String!
   createReview(createReviewInput: CreateReviewInput!): Review!
+  updateReview(updateReviewInput: UpdateReviewInput!): Review!
   deleteReview(reviewId: String!): String!
-  createReivewImage(reviewImageUrl: String!, reviewId: String!): ReviewImage!
   sendToken(phone: String!): String!
   checkToken(token: String!): String!
   checkEmail(email: String!): Boolean!
@@ -230,10 +213,10 @@ input CreatePaymentInput {
 }
 
 input CreateProductInput {
-  name: String!
+  title: String!
   description: String!
   price: Int!
-  like: Int!
+  imageUrls: [String!]!
   productTags: [String!]
 }
 
@@ -241,18 +224,25 @@ input UpdateProductInput {
   name: String!
   description: String!
   price: Int!
-  like: Int!
-  image: String!
-  thumbnailImage: String!
-  productTags: [String!]!
+  imageUrls: [String!]!
+  productTags: [String!]
 }
 
 input CreateReviewInput {
-  reviewTitle: String!
-  reviewContent: String!
+  title: String!
+  description: String!
+  imageUrls: [String!]!
   productId: String!
-  email: String!
   orderId: String!
+}
+
+input UpdateReviewInput {
+  title: String!
+  description: String!
+  imageUrls: [String!]!
+  productId: String!
+  orderId: String!
+  reviewId: String!
 }
 
 input CreateUserInput {
