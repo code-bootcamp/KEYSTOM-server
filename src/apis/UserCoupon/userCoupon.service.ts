@@ -16,26 +16,18 @@ export class UserCouponService {
     private readonly couponRepository: Repository<Coupon>,
   ) {}
 
-  async findAll() {
-    return await this.userCouponRepository.find();
-  }
-  async findOne({ userCouponId }) {
-    return await this.userCouponRepository.findOne({
-      where: { id: userCouponId },
-    });
-  }
   async create({ createUserCouponInput }) {
     const { email, couponId, ...userCoupon } = createUserCouponInput;
-    const result1 = await this.userRepository.findOne({
+    const user = await this.userRepository.findOne({
       email: email,
     });
-    const result3 = await this.couponRepository.findOne({
+    const coupon = await this.couponRepository.findOne({
       id: couponId,
     });
     const result2 = await this.userCouponRepository.save({
       ...userCoupon,
-      user: result1,
-      coupon: result3,
+      user: user,
+      coupon: coupon,
     });
     return result2;
   }
