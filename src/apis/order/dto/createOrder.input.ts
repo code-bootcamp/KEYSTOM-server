@@ -17,8 +17,8 @@ export class CreateOrderInput {
   @Field(() => String)
   receiverPhone: string;
 
-  @Field(() => String)
-  email: string;
+  // @Field(() => String)
+  // email: string;
 
   @Field(() => String)
   productId: string;

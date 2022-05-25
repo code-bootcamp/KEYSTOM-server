@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, Connection } from 'typeorm';
 import { Order } from '../order/entities/order.entity';
@@ -17,6 +17,9 @@ export class ReviewService {
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
 
+    @InjectRepository(ReviewImage)
+    private readonly reviewImageRepository: Repository<ReviewImage>,
+
     private readonly connection: Connection,
   ) {}
 
@@ -33,6 +36,13 @@ export class ReviewService {
         like: 'DESC',
       },
       take: 3,
+    });
+  }
+
+  async findImage({ reviewId }) {
+    return await this.reviewImageRepository.find({
+      where: { review: reviewId },
+      relations: ['review'],
     });
   }
 
@@ -70,6 +80,7 @@ export class ReviewService {
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
+      // 어떠한 상품을 누가 구매했는지 불러오기
       const product = await queryRunner.manager.findOne(Product, {
         id: productId,
       });
@@ -80,24 +91,36 @@ export class ReviewService {
         id: orderId,
       });
 
-      const result = await queryRunner.manager.save(Review, {
+      // 리뷰 저장
+      const result = this.reviewRepository.create({
         ...rest,
         product: product,
+        thumbnail: imageUrls[0],
         user: user,
         order: order,
       });
 
+      // 리뷰 이미지 저장
       for (let i = 0; i < imageUrls.length; i++) {
+        //썸네일 저장
         if (i === 0) {
-          await queryRunner.manager.save(ReviewImage, {
+          const reviewImage = this.reviewImageRepository.create({
             url: imageUrls[i],
             isThumbnail: true,
-            product: result,
+            review: result,
           });
-        } else {
           await queryRunner.manager.save(ReviewImage, {
+            ...reviewImage,
+          });
+        }
+        // 이미지 저장
+        else {
+          const reviewImage = this.reviewImageRepository.create({
             url: imageUrls[i],
-            product: result,
+            review: result,
+          });
+          await queryRunner.manager.save(ReviewImage, {
+            ...reviewImage,
           });
         }
       }
@@ -115,47 +138,57 @@ export class ReviewService {
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
-      const review = await queryRunner.manager.findOne(Review, {
+      // 업데이트 할 리뷰가 존재하는 지 확인
+      const target = await queryRunner.manager.findOne(Review, {
         id: reviewId,
       });
+      if (!target)
+        throw new BadRequestException('업데이트할 리뷰가 존재하지 않습니다.');
 
+      // 상품, 유저, 주문 내역 찾아오기
       const product = await queryRunner.manager.findOne(Product, {
         id: productId,
       });
-
+      if (!product)
+        throw new BadRequestException('상품 정보가 존재하지 않습니다.');
       const user = await queryRunner.manager.findOne(User, {
         email: currentUser.email,
       });
+      if (!user)
+        throw new BadRequestException('유저 정보가 존재하지 않습니다.');
 
       const order = await queryRunner.manager.findOne(Order, {
         id: orderId,
       });
+      if (!order)
+        throw new BadRequestException('주문 내역이 존재하지 않습니다.');
 
       //업데이트 된 상품과 연관된 이미지 삭제!!
       const result = await queryRunner.manager.save(Review, {
-        ...review,
+        ...target,
         ...rest,
         product: product,
         user: user,
         order: order,
       });
+      await queryRunner.manager.save(Review, { ...result });
 
-      await queryRunner.manager.delete(ReviewImage, {
-        review: result,
-      });
+      await queryRunner.manager.delete(ReviewImage, { review: target });
 
       for (let i = 0; i < imageUrls.length; i++) {
         if (i === 0) {
-          await queryRunner.manager.save(ReviewImage, {
+          const image = this.reviewImageRepository.create({
             url: imageUrls[i],
             isThumbnail: true,
-            product: result,
+            review: result,
           });
+          await queryRunner.manager.save(ReviewImage, { ...image });
         } else {
-          await queryRunner.manager.save(ReviewImage, {
+          const image = this.reviewImageRepository.create({
             url: imageUrls[i],
             review: result,
           });
+          await queryRunner.manager.save(ReviewImage, { ...image });
         }
       }
       await queryRunner.commitTransaction();

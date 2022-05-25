@@ -1,7 +1,13 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { Product } from 'src/apis/products/entities/product.entity';
 import { User } from 'src/apis/user/entities/user.entity';
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  CreateDateColumn,
+} from 'typeorm';
 
 @Entity()
 @ObjectType()
@@ -35,4 +41,8 @@ export class Order {
     onDelete: 'CASCADE',
   })
   product: Product;
+
+  @CreateDateColumn()
+  @Field(() => Date)
+  createdAt: Date;
 }
