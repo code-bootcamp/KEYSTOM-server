@@ -17,12 +17,15 @@ import { CACHE_MANAGER, Inject } from '@nestjs/common';
 import { Cache } from 'cache-manager';
 import { UserService } from '../user/users.service';
 import { User } from '../user/entities/user.entity';
+import { Address } from '../address/entities/address.entity';
+import { AddressService } from '../address/address.service';
 
 @Resolver()
 export class AuthResolver {
   constructor(
     private readonly authService: AuthService,
     private readonly userService: UserService,
+    private readonly addressService: AddressService,
     @Inject(CACHE_MANAGER)
     private readonly cacheManager: Cache,
   ) {}
@@ -128,9 +131,10 @@ export class AuthResolver {
   }
 
   @UseGuards(GqlAuthAccessGuard)
-  @Query(() => User)
+  @Query(() => Address)
   async fetchUserLoggedIn(@CurrentUser() currentUser: ICurrentUser) {
     const email = currentUser.email;
-    return this.userService.findOne({ email });
+    const user = await this.addressService.findOne({ email });
+    return user;
   }
 }
