@@ -6,6 +6,7 @@ import { ReviewService } from './reviews.service';
 import { CurrentUser, ICurrentUser } from 'src/commons/auth/gql-user.param';
 import { UseGuards } from '@nestjs/common';
 import { GqlAuthAccessGuard } from 'src/commons/auth/gql-auth.guard';
+import { ReviewImage } from '../reviewImage/entities/reviewImage.entity';
 
 @Resolver()
 export class ReviewResolver {
@@ -26,6 +27,11 @@ export class ReviewResolver {
   ) {
     if (!page) page = 1;
     return this.reviewService.findAll({ page });
+  }
+
+  @Query(() => [ReviewImage])
+  fetchReviewImages(@Args('reviewId') reviewId: string) {
+    return this.reviewService.findImage({ reviewId });
   }
 
   @Query(() => Int)

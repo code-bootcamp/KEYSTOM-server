@@ -88,25 +88,28 @@ export class ProductService {
           tags.push(newTag);
         }
       }
-      const result = await queryRunner.manager.save(Product, {
+      const result = this.productRepository.create({
         ...product,
         thumbnail: imageUrls[0],
         productTags: tags,
       });
+      await queryRunner.manager.save(Product, { ...result });
 
       // 이미지 등록!
       for (let i = 0; i < imageUrls.length; i++) {
         if (i === 0) {
-          await queryRunner.manager.save(ProductImage, {
+          const image = this.productImageRepository.create({
             url: imageUrls[i],
             isThumbnail: true,
             product: result,
           });
+          await queryRunner.manager.save(ProductImage, { ...image });
         } else {
-          await queryRunner.manager.save(ProductImage, {
+          const image = this.productImageRepository.create({
             url: imageUrls[i],
             product: result,
           });
+          await queryRunner.manager.save(ProductImage, { ...image });
         }
       }
       return result;
@@ -140,9 +143,10 @@ export class ProductService {
         }
         //기존에 태그가 없었다면
         else {
-          const newTag = await queryRunner.manager.save(ProductTag, {
+          const tag = await this.productTagRepository.create({
             tag: tagname,
           });
+          const newTag = await queryRunner.manager.save(ProductTag, { ...tag });
           tags.push(newTag);
         }
       }
@@ -150,28 +154,31 @@ export class ProductService {
         id: productId,
       });
 
-      const result = await queryRunner.manager.save(Product, {
+      const result = this.productRepository.create({
         ...target,
         ...product,
         thumbnail: imageUrls[0],
         productTags: tags,
       });
+      await queryRunner.manager.save(Product, { ...result });
 
       queryRunner.manager.delete(ProductImage, { product: target });
 
       // 이미지 등록!
       for (let i = 0; i < imageUrls.length; i++) {
         if (i === 0) {
-          await queryRunner.manager.save(ProductImage, {
+          const image = await this.productImageRepository.create({
             url: imageUrls[i],
             isThumbnail: true,
             product: result,
           });
+          await queryRunner.manager.save(ProductImage, { ...image });
         } else {
-          await queryRunner.manager.save(ProductImage, {
+          const image = await this.productImageRepository.create({
             url: imageUrls[i],
             product: result,
           });
+          await queryRunner.manager.save(ProductImage, { ...image });
         }
       }
       await queryRunner.commitTransaction();

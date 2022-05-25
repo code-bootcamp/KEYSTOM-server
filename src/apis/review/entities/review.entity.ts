@@ -30,6 +30,10 @@ export class Review {
   @Field(() => Int)
   like: number;
 
+  @Column()
+  @Field(() => String, { nullable: true })
+  thumbnail: string;
+
   @CreateDateColumn()
   @Field(() => String)
   createdAt: Date;

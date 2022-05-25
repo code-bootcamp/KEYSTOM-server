@@ -25,8 +25,15 @@ export class OrderResolver {
     return order;
   }
 
+  @UseGuards(GqlAuthAccessGuard)
   @Mutation(() => Order)
-  createOrder(@Args('createOrderInput') createOrderInput: CreateOrderInput) {
-    return this.orderService.create({ createOrderInput });
+  createOrder(
+    @Args('createOrderInput') createOrderInput: CreateOrderInput,
+    @CurrentUser() currentUser: ICurrentUser,
+  ) {
+    return this.orderService.create({
+      createOrderInput,
+      email: currentUser.email,
+    });
   }
 }

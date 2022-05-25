@@ -23,6 +23,7 @@ import { CouponModule } from './apis/coupon/coupon.module';
 import { FileModule } from './apis/file/file.module';
 
 import { AddressModule } from './apis/address/address.module';
+import { ElasticsearchModule } from '@nestjs/elasticsearch';
 
 @Module({
   imports: [
@@ -51,8 +52,8 @@ import { AddressModule } from './apis/address/address.module';
     }),
     TypeOrmModule.forRoot({
       type: 'mysql',
-      // host: '10.51.1.3',
-      host: 'my-database',
+      host: '10.51.1.3',
+      // host: 'my-database',
       port: 3306,
       username: 'root',
       password: 'root',
@@ -68,6 +69,9 @@ import { AddressModule } from './apis/address/address.module';
       url: 'redis://my-redis:6379',
       isGlobal: true,
     }),
+    // ElasticsearchModule.register({
+    //   node: 'http://elasticsearch:9200',
+    // }),
     ConfigModule.forRoot({
       envFilePath: '.env',
       ignoreEnvFile: true,
