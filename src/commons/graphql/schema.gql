@@ -14,10 +14,16 @@ type Product {
   description: String!
   price: Int!
   like: Int!
-  createdAt: String!
+  createdAt: DateTime!
+  deletedAt: DateTime!
   thumbnail: String
   productTags: [ProductTag!]!
 }
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
 
 type ProductTag {
   id: String!
@@ -40,19 +46,26 @@ type User {
   isAdmin: Boolean!
 }
 
+type Address {
+  id: String!
+  address: String!
+  addressDetail: String!
+  zipCode: String!
+  createdAt: String!
+  user: User!
+}
+
 type Order {
   id: String!
   count: Int!
   price: Int!
   receiverName: String!
   receiverPhone: String!
+  address: Address!
+  user: User!
+  product: Product!
   createdAt: DateTime!
 }
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
 
 type Review {
   id: String!
@@ -72,19 +85,14 @@ type ReviewImage {
   isThumbnail: Boolean!
 }
 
-type Address {
+type Coupon {
   id: String!
-  address: String!
-  addressDetail: String!
-  zipCode: String!
-  createdAt: String!
-  user: User!
+  discountPrice: Int!
+  couponName: String!
 }
 
-type CartProduct {
+type UserCoupon {
   id: String!
-  count: Int!
-  priceAll: Int!
 }
 
 type Payment {
@@ -109,18 +117,10 @@ type Comment {
   createdAt: String!
 }
 
-type Coupon {
-  id: String!
-  discountPrice: Int!
-  couponName: String!
-}
-
 type Query {
   fetchUserAddress(email: String!): Address!
   fetchAddresses: [Address!]!
   fetchUserLoggedIn: Address!
-  fetchCartProducts: [CartProduct!]!
-  fetchCartProduct(cartProductId: String!): CartProduct!
   fetchComments: [Comment!]!
   fetchComment(commentId: String!): Comment!
   fetchReComments(reviewId: String!, commentId: Float!): [Comment!]!
@@ -130,7 +130,7 @@ type Query {
   fetchCoupon(couponId: String!): Coupon!
   fetchCustoms: [Custom!]!
   fetchCustom(productId: String!): Custom!
-  fetchUserOrder(page: Float): [Order!]!
+  fetchOrders(page: Float): [Order!]!
   fetchProducts(page: Float): [Product!]!
   fetchProduct(productId: String!): Product!
   fetchProductImages(productId: String!): [ProductImage!]!
@@ -145,20 +145,22 @@ type Query {
   fetchUserReview(email: String!): [Review!]!
   fetchUsers: [User!]!
   fetchUser(email: String!): User!
+  fetchUserCoupons(email: String!): [UserCoupon!]!
 }
 
 type Mutation {
   createAddress(createAddressInput: CreateAddressInput!): Address!
+  updateAddress(updateAddressInput: UpdateAddressInput!): Address!
   deleteAddress(addressId: String!): String!
   login(email: String!, password: String!): String!
   logintest(email: String!, password: String!): String!
   restoreAccessToken: String!
   logout: String!
-  createCartProduct(createCartProductInput: CreateCartProdcutInput!): CartProduct!
   createComment(createCommentInput: CreateCommentInput!): Comment!
   createReComment(commentId: Float!, createCommentInput: CreateCommentInput!): Comment!
   deleteComment(commentId: Float!): String!
   createCoupon(createCouponInput: CreateCouponInput!): Coupon!
+  deleteCoupon(couponId: String!): String!
   createCustom(createCustomInput: CreateCustomInput!): Custom!
   uploadFile(files: [Upload!]!): [String!]!
   createOrder(createOrderInput: CreateOrderInput!): Order!
@@ -177,6 +179,7 @@ type Mutation {
   createUser(createUserInput: CreateUserInput!): User!
   deleteUser(email: String!): String!
   updateUser(email: String!, updateUserInput: UpdateUserInput!): User!
+  createUserCoupon(createUserCouponInput: CreateUserCouponInput!): UserCoupon!
 }
 
 input CreateAddressInput {
@@ -186,12 +189,11 @@ input CreateAddressInput {
   email: String!
 }
 
-input CreateCartProdcutInput {
-  count: Int!
-  priceAll: Int!
-  productId: String!
-  orderId: String!
-  userId: String!
+input UpdateAddressInput {
+  address: String!
+  addressDetail: String!
+  zipCode: String!
+  email: String!
 }
 
 input CreateCommentInput {
@@ -217,7 +219,7 @@ scalar Upload
 input CreateOrderInput {
   count: Int!
   price: Int!
-  address: String!
+  address: CreateAddressInput!
   receiverName: String!
   receiverPhone: String!
   productId: String!
@@ -279,4 +281,9 @@ input CreateUserAddressInput {
 input UpdateUserInput {
   name: String!
   nickName: String!
+}
+
+input CreateUserCouponInput {
+  email: String!
+  couponId: String!
 }

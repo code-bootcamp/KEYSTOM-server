@@ -17,12 +17,12 @@ import { ConfigModule } from '@nestjs/config';
 // import { AppService } from './app.service';
 import 'dotenv/config';
 import { CommentModule } from './apis/comments/comment.module';
-import { UserCoupon } from './apis/UserCoupon/entities/userCoupon.entity';
 import { CouponModule } from './apis/coupon/coupon.module';
 import { FileModule } from './apis/file/file.module';
 import { AddressModule } from './apis/address/address.module';
 import { ReviewLikeModule } from './apis/reviewLike/reviewLike.module';
 import { ElasticsearchModule } from '@nestjs/elasticsearch';
+import { UserCouponModule } from './apis/UserCoupon/userCoupon.module';
 
 @Module({
   imports: [
@@ -39,7 +39,7 @@ import { ElasticsearchModule } from '@nestjs/elasticsearch';
     ReviewLikeModule,
     SignUpModule,
     UserModule,
-    UserCoupon,
+    UserCouponModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: 'src/commons/graphql/schema.gql',
@@ -51,13 +51,13 @@ import { ElasticsearchModule } from '@nestjs/elasticsearch';
     }),
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: '10.51.1.3',
-      // host: 'my-database',
+      // host: '10.51.1.3',
+      host: 'my-database',
       port: 3306,
       username: 'root',
       password: 'root',
-      database: 'team-f12-light-db',
-      // database: 'mydocker02',
+      // database: 'team-f12-light-db',
+      database: 'mydocker02',
       entities: [__dirname + '/apis/**/*.entity.*'],
       synchronize: true,
       logging: true,
