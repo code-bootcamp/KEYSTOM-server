@@ -1,0 +1,273 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type ProductImage {
+  id: String!
+  url: String!
+  isThumbnail: Boolean!
+}
+
+type Product {
+  id: String!
+  title: String!
+  description: String!
+  price: Int!
+  like: Int!
+  createdAt: String!
+  thumbnail: String
+  productTags: [ProductTag!]!
+}
+
+type ProductTag {
+  id: String!
+  tag: String!
+  products: [Product!]!
+}
+
+type Custom {
+  id: String!
+  key: String!
+  color: String!
+  product: Product!
+}
+
+type User {
+  email: String!
+  name: String!
+  nickName: String!
+  profileImage: String!
+  isAdmin: Boolean!
+}
+
+type Order {
+  id: String!
+  count: Int!
+  price: Int!
+  receiverName: String!
+  receiverPhone: String!
+}
+
+type Review {
+  id: String!
+  title: String!
+  description: String!
+  like: Int!
+  createdAt: String!
+  product: Product!
+  user: User!
+  order: Order!
+}
+
+type Address {
+  id: String!
+  address: String!
+  addressDetail: String!
+  zipCode: String!
+  createdAt: String!
+  user: User!
+}
+
+type CartProduct {
+  id: String!
+  count: Int!
+  priceAll: Int!
+}
+
+type Payment {
+  id: String!
+  price: Int!
+  impUid: String
+  status: PAYMENT_STATUS_ENUM!
+  order: Order!
+  user: User!
+  createdAt: DateTime!
+}
+
+enum PAYMENT_STATUS_ENUM {
+  PAYMENT
+  CANCEL
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Comment {
+  id: Int!
+  commentContent: String!
+  parentId: String!
+  createdAt: String!
+}
+
+type Coupon {
+  id: String!
+  discountPrice: Int!
+  couponName: String!
+}
+
+type Query {
+  fetchUserAddress(email: String!): Address!
+  fetchAddresses: [Address!]!
+  fetchUserLoggedIn: User!
+  fetchCartProducts: [CartProduct!]!
+  fetchCartProduct(cartProductId: String!): CartProduct!
+  fetchComments: [Comment!]!
+  fetchComment(commentId: String!): Comment!
+  fetchReComments(reviewId: String!, commentId: Float!): [Comment!]!
+  fetchUserComments(email: String!): [Comment!]!
+  fetchReviewComments(reviewId: String!): [Comment!]!
+  fetchCoupons: [Coupon!]!
+  fetchCoupon(couponId: String!): Coupon!
+  fetchCustoms: [Custom!]!
+  fetchCustom(productId: String!): Custom!
+  fetchUserOrder(page: Float): [Order!]!
+  fetchProducts(page: Float): [Product!]!
+  fetchProduct(productId: String!): Product!
+  fetchProductImages(productId: String!): [ProductImage!]!
+  fetchBestProduct: [Product!]!
+  fetchProductRowCount: Int!
+  fetchReview(reviewId: String!): Review!
+  fetchBestReview: [Review!]!
+  fetchReviews(page: Float): [Review!]!
+  fetchReviewRowCount: Int!
+  fetchProductReview(productId: String!): [Review!]!
+  fetchUserReview(email: String!): [Review!]!
+  fetchUsers: [User!]!
+  fetchUser(email: String!): User!
+}
+
+type Mutation {
+  createAddress(createAddressInput: CreateAddressInput!): Address!
+  deleteAddress(addressId: String!): String!
+  login(email: String!, password: String!): String!
+  logintest(email: String!, password: String!): String!
+  restoreAccessToken: String!
+  logout: String!
+  createCartProduct(createCartProductInput: CreateCartProdcutInput!): CartProduct!
+  createComment(createCommentInput: CreateCommentInput!): Comment!
+  createReComment(commentId: Float!, createCommentInput: CreateCommentInput!): Comment!
+  deleteComment(commentId: Float!): String!
+  createCoupon(createCouponInput: CreateCouponInput!): Coupon!
+  createCustom(createCustomInput: CreateCustomInput!): Custom!
+  uploadFile(files: [Upload!]!): [String!]!
+  createOrder(createOrderInput: CreateOrderInput!): Order!
+  payment(createPaymentInput: CreatePaymentInput!): Payment!
+  refund(createPaymentInput: CreatePaymentInput!): Payment!
+  createProduct(createProductInput: CreateProductInput!): Product!
+  updateProduct(productId: String!, updateProductInput: UpdateProductInput!): Product!
+  deleteProduct(productId: String!): String!
+  createReview(createReviewInput: CreateReviewInput!): Review!
+  updateReview(updateReviewInput: UpdateReviewInput!): Review!
+  deleteReview(reviewId: String!): String!
+  sendToken(phone: String!): String!
+  checkToken(token: String!): String!
+  checkEmail(email: String!): Boolean!
+  createUser(createUserInput: CreateUserInput!): User!
+  deleteUser(email: String!): String!
+  updateUser(email: String!, updateUserInput: UpdateUserInput!): User!
+}
+
+input CreateAddressInput {
+  address: String!
+  addressDetail: String!
+  zipCode: String!
+  email: String!
+}
+
+input CreateCartProdcutInput {
+  count: Int!
+  priceAll: Int!
+  productId: String!
+  orderId: String!
+  userId: String!
+}
+
+input CreateCommentInput {
+  commentContent: String!
+  email: String!
+  reviewId: String!
+}
+
+input CreateCouponInput {
+  discountPrice: Int!
+  couponName: String!
+}
+
+input CreateCustomInput {
+  key: String!
+  color: String!
+  productId: String!
+}
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
+
+input CreateOrderInput {
+  count: Int!
+  price: Int!
+  address: String!
+  receiverName: String!
+  receiverPhone: String!
+  email: String!
+  productId: String!
+}
+
+input CreatePaymentInput {
+  price: Int!
+  impUid: String!
+  order: CreateOrderInput!
+}
+
+input CreateProductInput {
+  title: String!
+  description: String!
+  price: Int!
+  imageUrls: [String!]!
+  productTags: [String!]
+}
+
+input UpdateProductInput {
+  title: String!
+  description: String!
+  price: Int!
+  imageUrls: [String!]!
+  productTags: [String!]
+}
+
+input CreateReviewInput {
+  title: String!
+  description: String!
+  imageUrls: [String!]!
+  productId: String!
+  orderId: String!
+}
+
+input UpdateReviewInput {
+  title: String!
+  description: String!
+  imageUrls: [String!]!
+  productId: String!
+  orderId: String!
+  reviewId: String!
+}
+
+input CreateUserInput {
+  email: String!
+  password: String!
+  name: String!
+  nickName: String!
+  address: CreateUserAddressInput!
+}
+
+input CreateUserAddressInput {
+  address: String!
+  addressDetail: String!
+  zipCode: String!
+}
+
+input UpdateUserInput {
+  name: String!
+  nickName: String!
+}
