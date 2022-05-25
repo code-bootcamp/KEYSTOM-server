@@ -46,13 +46,13 @@ import { AddressModule } from './apis/address/address.module';
       context: ({ req, res }) => ({ req, res }), //이게 있어야 setheader가능하다
       cors: {
         origin: 'http://localhost:3000',
-        credential: true,
+        credentials: true,
       },
     }),
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: '10.51.1.3',
-      // host: 'my-database',
+      // host: '10.51.1.3',
+      host: 'my-database',
       port: 3306,
       username: 'root',
       password: 'root',
