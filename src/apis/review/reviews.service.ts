@@ -99,7 +99,9 @@ export class ReviewService {
         user: user,
         order: order,
       });
-
+      const flag = queryRunner.manager.save(Review, {
+        ...result,
+      });
       // 리뷰 이미지 저장
       for (let i = 0; i < imageUrls.length; i++) {
         //썸네일 저장
@@ -109,9 +111,9 @@ export class ReviewService {
             isThumbnail: true,
             review: result,
           });
-          await queryRunner.manager.save(ReviewImage, {
-            ...reviewImage,
-          });
+          // await queryRunner.manager.save(ReviewImage, {
+          //   ...reviewImage,
+          // });
         }
         // 이미지 저장
         else {
@@ -119,12 +121,12 @@ export class ReviewService {
             url: imageUrls[i],
             review: result,
           });
-          await queryRunner.manager.save(ReviewImage, {
-            ...reviewImage,
-          });
+          // await queryRunner.manager.save(ReviewImage, {
+          //   ...reviewImage,
+          // });
         }
       }
-      return result;
+      return flag;
     } catch {
     } finally {
     }
@@ -171,7 +173,7 @@ export class ReviewService {
         user: user,
         order: order,
       });
-      await queryRunner.manager.save(Review, { ...result });
+      const flag = await queryRunner.manager.save(Review, { ...result });
 
       await queryRunner.manager.delete(ReviewImage, { review: target });
 
@@ -182,17 +184,17 @@ export class ReviewService {
             isThumbnail: true,
             review: result,
           });
-          await queryRunner.manager.save(ReviewImage, { ...image });
+          // await queryRunner.manager.save(ReviewImage, { ...image });
         } else {
           const image = this.reviewImageRepository.create({
             url: imageUrls[i],
             review: result,
           });
-          await queryRunner.manager.save(ReviewImage, { ...image });
+          // await queryRunner.manager.save(ReviewImage, { ...image });
         }
       }
       await queryRunner.commitTransaction();
-      return result;
+      return flag;
     } catch (error) {
       await queryRunner.rollbackTransaction();
       throw '리뷰 업데이트 중:' + error;
