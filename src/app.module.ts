@@ -17,7 +17,6 @@ import { ConfigModule } from '@nestjs/config';
 // import { AppService } from './app.service';
 import 'dotenv/config';
 import { CommentModule } from './apis/comments/comment.module';
-import { CartProductModule } from './apis/cart/cartProduct.module';
 import { UserCoupon } from './apis/UserCoupon/entities/userCoupon.entity';
 import { CouponModule } from './apis/coupon/coupon.module';
 import { FileModule } from './apis/file/file.module';
@@ -29,7 +28,6 @@ import { ElasticsearchModule } from '@nestjs/elasticsearch';
   imports: [
     AddressModule,
     AuthModule,
-    CartProductModule,
     CommentModule,
     CouponModule,
     CustomModule,
