@@ -13,6 +13,8 @@ export class ProductService {
     @InjectRepository(ProductTag)
     private readonly productTagRepository: Repository<ProductTag>,
 
+    @InjectRepository(ProductImage)
+    private readonly productImageRepository: Repository<ProductImage>,
     private readonly connection: Connection,
   ) {}
   // async findAll() {
@@ -31,6 +33,13 @@ export class ProductService {
       .skip(0 + Number((page - 1) * 10))
       .take(10)
       .getMany();
+  }
+
+  async findImage({ productId }) {
+    return await this.productImageRepository.find({
+      where: { product: productId },
+      relations: ['product'],
+    });
   }
 
   async findOne({ productId }) {
@@ -59,7 +68,7 @@ export class ProductService {
       const { productTags, ...product } = rest;
       //productTags 저장
       const tags = [];
-      const Tagslength = productTags ? productTags : 0;
+      const Tagslength = productTags ? productTags.length : 0;
       for (let i = 0; Tagslength > i; i++) {
         const tagname = productTags[i].replace('#', '');
         //이미 등록된 태그인지 확인
@@ -72,14 +81,16 @@ export class ProductService {
         }
         //기존에 태그가 없었다면
         else {
-          const newTag = await queryRunner.manager.save(ProductTag, {
+          const newTag = await this.productTagRepository.create({
             tag: tagname,
           });
+          await queryRunner.manager.save(newTag);
           tags.push(newTag);
         }
       }
       const result = await queryRunner.manager.save(Product, {
         ...product,
+        thumbnail: imageUrls[0],
         productTags: tags,
       });
 
@@ -142,6 +153,7 @@ export class ProductService {
       const result = await queryRunner.manager.save(Product, {
         ...target,
         ...product,
+        thumbnail: imageUrls[0],
         productTags: tags,
       });
 
@@ -173,7 +185,8 @@ export class ProductService {
   }
 
   async delete({ productId }) {
-    const result = await this.productRepository.softDelete({ id: productId });
+    await this.productImageRepository.delete({ product: productId });
+    const result = await this.productRepository.delete({ id: productId });
     return result.affected ? true : false;
   }
 }

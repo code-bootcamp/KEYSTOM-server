@@ -2,8 +2,6 @@ import { InputType, Field, Int } from '@nestjs/graphql';
 import { CreateAddressInput } from 'src/apis/address/dto/createAddress.input';
 import { CreateUserAddressInput } from 'src/apis/address/dto/createUserAddress.input';
 
-
-
 @InputType()
 export class CreateUserInput {
   @Field(() => String)

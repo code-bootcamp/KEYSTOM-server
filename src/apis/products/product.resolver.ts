@@ -5,6 +5,7 @@ import { ProductService } from './product.service';
 import { CACHE_MANAGER, Inject } from '@nestjs/common';
 import { Cache } from 'cache-manager';
 import { UpdateProductInput } from './dto/updateProduct.input';
+import { ProductImage } from 'src/apis/productImage/entities/productImage.entity';
 
 @Resolver()
 export class ProductResolver {
@@ -28,6 +29,11 @@ export class ProductResolver {
     @Args('productId') productId: string, //
   ) {
     return this.productService.findOne({ productId });
+  }
+
+  @Query(() => [ProductImage])
+  async fetchProductImages(@Args('productId') productId: string) {
+    return this.productService.findImage({ productId });
   }
 
   @Query(() => [Product])
