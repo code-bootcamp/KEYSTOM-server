@@ -6,6 +6,7 @@ import { ReviewImage } from '../reviewImage/entities/reviewImage.entity';
 import { User } from '../user/entities/user.entity';
 import { Review } from './entities/review.entity';
 import { ReviewResolver } from './reviews.resolver';
+import { ReviewImage } from '../reviewImage/entities/reviewImage.entity';
 import { ReviewService } from './reviews.service';
 @Module({
   imports: [

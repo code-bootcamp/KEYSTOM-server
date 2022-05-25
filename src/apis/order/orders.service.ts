@@ -30,8 +30,8 @@ export class OrderService {
       .getMany();
   }
 
-  async create({ createOrderInput }) {
-    const { productId, email, ...order } = createOrderInput;
+  async create({ createOrderInput, email }) {
+    const { productId, ...order } = createOrderInput;
 
     const user = await this.userRepository.findOne({
       email,
