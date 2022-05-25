@@ -20,7 +20,7 @@ export class ProductResolver {
   fetchProducts(
     @Args('page', { nullable: true }) page: number, //
   ) {
-    if (!page) page = 1;
+    if (!page || page <= 0) page = 1;
     return this.productService.findAll({ page });
   }
 

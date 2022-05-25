@@ -7,7 +7,10 @@ import {
   PrimaryGeneratedColumn,
   ManyToOne,
   CreateDateColumn,
+  JoinColumn,
+  OneToOne,
 } from 'typeorm';
+import { Address } from '../../address/entities/address.entity';
 
 @Entity()
 @ObjectType()
@@ -32,14 +35,21 @@ export class Order {
   @Field(() => String)
   receiverPhone: string;
 
+  @JoinColumn()
+  @OneToOne(() => Address)
+  @Field(() => Address)
+  address: Address;
+
   @ManyToOne(() => User, {
     onDelete: 'CASCADE',
   })
+  @Field(() => User)
   user: User;
 
   @ManyToOne(() => Product, {
     onDelete: 'CASCADE',
   })
+  @Field(() => Product)
   product: Product;
 
   @CreateDateColumn()

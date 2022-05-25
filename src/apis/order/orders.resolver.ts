@@ -15,7 +15,7 @@ export class OrderResolver {
 
   @UseGuards(GqlAuthAccessGuard)
   @Query(() => [Order]) //본인이 산 목록
-  async fetchUserOrder(
+  async fetchOrders(
     @CurrentUser() currentUser: ICurrentUser,
     @Args('page', { nullable: true }) page: number, //
   ) {

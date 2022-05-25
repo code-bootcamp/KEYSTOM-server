@@ -25,9 +25,10 @@ export class CouponResolver {
   ) {
     return this.couponService.create({ createCouponInput });
   }
-
-  // @Mutation(() => String)
-  // deleteProduct(@Args('productId') productId: string) {
-  //   return this.productService.delete({ productId });
-  // }
+  @Mutation(() => String)
+  async deleteCoupon(
+    @Args('couponId') couponId: string, //
+  ) {
+    return this.couponService.delete({ couponId });
+  }
 }

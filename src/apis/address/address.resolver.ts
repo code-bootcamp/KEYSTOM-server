@@ -3,6 +3,7 @@ import { QueryBuilder } from 'typeorm';
 import { AddressService } from './address.service';
 import { CreateAddressInput } from './dto/createAddress.input';
 import { Address } from './entities/address.entity';
+import { UpdateAddressInput } from './dto/updateAddress.input';
 
 @Resolver()
 export class AddressResolver {
@@ -25,13 +26,12 @@ export class AddressResolver {
     return this.addressService.create({ createAddressInput });
   }
 
-  // @Mutation(()=>Address)
-  // updateAddress(
-  //   @Args('updateA')
-  //   @Args('userId')
-  // ){
-  //   return ""
-  // }
+  @Mutation(() => Address)
+  updateAddress(
+    @Args('updateAddressInput') updateAddressInput: UpdateAddressInput,
+  ) {
+    return this.addressService.update({ updateAddressInput });
+  }
 
   @Mutation(() => String)
   deleteAddress(@Args('addressId') addressId: string) {

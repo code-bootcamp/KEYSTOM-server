@@ -17,17 +17,16 @@ export class Coupon {
   id: string;
 
   @Column()
-  @Field(()=>Int)
-  discountPrice: number
+  @Field(() => Int)
+  discountPrice: number;
 
   @Column()
-  @Field(()=>String)
-  couponName: string
+  @Field(() => String)
+  couponName: string;
 
   @DeleteDateColumn()
   deletedAt: Date;
 
-  // @ManyToOne(() => ProductImage, { onDelete: 'CASCADE' })
-  // @Field(() => ProductImage)
-  // productImage: ProductImage;
+  @CreateDateColumn()
+  createdAt: Date;
 }

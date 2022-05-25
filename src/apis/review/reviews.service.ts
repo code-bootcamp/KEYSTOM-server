@@ -16,11 +16,11 @@ export class ReviewService {
     private readonly productRepository: Repository<Product>,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    @InjectRepository(Order)
+    private readonly orderRepository: Repository<Order>,
 
     @InjectRepository(ReviewImage)
     private readonly reviewImageRepository: Repository<ReviewImage>,
-
-    private readonly connection: Connection,
   ) {}
 
   async findOne({ reviewId }) {
@@ -76,131 +76,93 @@ export class ReviewService {
   }
 
   async create({ imageUrls, productId, orderId, ...rest }, currentUser) {
-    const queryRunner = this.connection.createQueryRunner();
-    await queryRunner.connect();
-    await queryRunner.startTransaction();
-    try {
-      // 어떠한 상품을 누가 구매했는지 불러오기
-      const product = await queryRunner.manager.findOne(Product, {
-        id: productId,
-      });
-      const user = await queryRunner.manager.findOne(User, {
-        email: currentUser.email,
-      });
-      const order = await queryRunner.manager.findOne(Order, {
-        id: orderId,
-      });
+    // 어떠한 상품을 누가 구매했는지 불러오기
+    const product = await this.productRepository.findOne({ id: productId });
+    const user = await this.userRepository.findOne({
+      email: currentUser.email,
+    });
+    const order = await this.orderRepository.findOne({ id: orderId });
 
-      // 리뷰 저장
-      const result = this.reviewRepository.create({
-        ...rest,
-        product: product,
-        thumbnail: imageUrls[0],
-        user: user,
-        order: order,
-      });
-      const flag = queryRunner.manager.save(Review, {
-        ...result,
-      });
-      // 리뷰 이미지 저장
-      for (let i = 0; i < imageUrls.length; i++) {
-        //썸네일 저장
-        if (i === 0) {
-          const reviewImage = this.reviewImageRepository.create({
-            url: imageUrls[i],
-            isThumbnail: true,
-            review: result,
-          });
-          // await queryRunner.manager.save(ReviewImage, {
-          //   ...reviewImage,
-          // });
-        }
-        // 이미지 저장
-        else {
-          const reviewImage = this.reviewImageRepository.create({
-            url: imageUrls[i],
-            review: result,
-          });
-          // await queryRunner.manager.save(ReviewImage, {
-          //   ...reviewImage,
-          // });
-        }
+    // 리뷰 저장
+    const result = this.reviewRepository.create({
+      ...rest,
+      product: product,
+      thumbnail: imageUrls[0],
+      user: user,
+      order: order,
+    });
+    // 리뷰 이미지 저장
+    for (let i = 0; i < imageUrls.length; i++) {
+      //썸네일 저장
+      if (i === 0) {
+        this.reviewImageRepository.create({
+          url: imageUrls[i],
+          isThumbnail: true,
+          review: result,
+        });
       }
-      return flag;
-    } catch {
-    } finally {
+      // 이미지 저장
+      else {
+        this.reviewImageRepository.create({
+          url: imageUrls[i],
+          review: result,
+        });
+      }
     }
+    return result;
   }
 
   async update(
     { imageUrls, productId, orderId, reviewId, ...rest },
     currentUser,
   ) {
-    const queryRunner = this.connection.createQueryRunner();
-    await queryRunner.connect();
-    await queryRunner.startTransaction();
-    try {
-      // 업데이트 할 리뷰가 존재하는 지 확인
-      const target = await queryRunner.manager.findOne(Review, {
-        id: reviewId,
-      });
-      if (!target)
-        throw new BadRequestException('업데이트할 리뷰가 존재하지 않습니다.');
+    // 업데이트 할 리뷰가 존재하는 지 확인
+    const target = await this.reviewRepository.findOne({ id: reviewId });
+    if (!target)
+      throw new BadRequestException('업데이트할 리뷰가 존재하지 않습니다.');
 
-      // 상품, 유저, 주문 내역 찾아오기
-      const product = await queryRunner.manager.findOne(Product, {
-        id: productId,
-      });
-      if (!product)
-        throw new BadRequestException('상품 정보가 존재하지 않습니다.');
-      const user = await queryRunner.manager.findOne(User, {
-        email: currentUser.email,
-      });
-      if (!user)
-        throw new BadRequestException('유저 정보가 존재하지 않습니다.');
+    // 상품, 유저, 주문 내역 찾아오기
+    const product = await this.productRepository.findOne({ id: productId });
+    if (!product)
+      throw new BadRequestException('상품 정보가 존재하지 않습니다.');
+    const user = await this.userRepository.findOne({
+      email: currentUser.email,
+    });
+    if (!user) throw new BadRequestException('유저 정보가 존재하지 않습니다.');
 
-      const order = await queryRunner.manager.findOne(Order, {
-        id: orderId,
-      });
-      if (!order)
-        throw new BadRequestException('주문 내역이 존재하지 않습니다.');
+    const order = await this.orderRepository.findOne({
+      id: orderId,
+    });
+    if (!order) throw new BadRequestException('주문 내역이 존재하지 않습니다.');
 
-      //업데이트 된 상품과 연관된 이미지 삭제!!
-      const result = await queryRunner.manager.save(Review, {
-        ...target,
-        ...rest,
-        product: product,
-        user: user,
-        order: order,
-      });
-      const flag = await queryRunner.manager.save(Review, { ...result });
+    //업데이트 된 상품과 연관된 이미지 삭제!!
+    const result = await this.reviewRepository.save({
+      ...target,
+      ...rest,
+      product: product,
+      user: user,
+      order: order,
+    });
 
-      await queryRunner.manager.delete(ReviewImage, { review: target });
+    await this.reviewImageRepository.delete({ review: result });
 
-      for (let i = 0; i < imageUrls.length; i++) {
-        if (i === 0) {
-          const image = this.reviewImageRepository.create({
-            url: imageUrls[i],
-            isThumbnail: true,
-            review: result,
-          });
-          // await queryRunner.manager.save(ReviewImage, { ...image });
-        } else {
-          const image = this.reviewImageRepository.create({
-            url: imageUrls[i],
-            review: result,
-          });
-          // await queryRunner.manager.save(ReviewImage, { ...image });
-        }
+    for (let i = 0; i < imageUrls.length; i++) {
+      if (i === 0) {
+        this.reviewImageRepository.create({
+          url: imageUrls[i],
+          isThumbnail: true,
+          review: result,
+        });
+        // await queryRunner.manager.save(ReviewImage, { ...image });
+      } else {
+        this.reviewImageRepository.create({
+          url: imageUrls[i],
+          review: result,
+        });
+        // await queryRunner.manager.save(ReviewImage, { ...image });
       }
-      await queryRunner.commitTransaction();
-      return flag;
-    } catch (error) {
-      await queryRunner.rollbackTransaction();
-      throw '리뷰 업데이트 중:' + error;
-    } finally {
-      await queryRunner.release();
     }
+    return result;
   }
   async delete({ reviewId }) {
     const result = await this.reviewRepository.delete({ id: reviewId });

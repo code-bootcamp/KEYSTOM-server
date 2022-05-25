@@ -1,5 +1,5 @@
-import { ObjectType, Field, Int } from '@nestjs/graphql';
-import { Column, Entity, PrimaryColumn } from 'typeorm';
+import { ObjectType, Field } from '@nestjs/graphql';
+import { Column, DeleteDateColumn, Entity, PrimaryColumn } from 'typeorm';
 
 @Entity()
 @ObjectType()
@@ -27,12 +27,6 @@ export class User {
   @Field(() => Boolean)
   isAdmin: boolean;
 
-  // @DeleteDateColumn()
-  // deletedAt: Date;
-
-  // @JoinTable()
-  // @ManyToMany(() => Coupon, (coupon) => coupon.users, {
-  //   onDelete: 'CASCADE',
-  // })
-  // coupon: Coupon[]
+  @DeleteDateColumn()
+  deletedAt: Date;
 }
