@@ -23,6 +23,7 @@ import { CouponModule } from './apis/coupon/coupon.module';
 import { FileModule } from './apis/file/file.module';
 
 import { AddressModule } from './apis/address/address.module';
+import { ReviewLikeModule } from './apis/reviewLike/reviewLike.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { AddressModule } from './apis/address/address.module';
     PaymentModule,
     ProductModule,
     ReviewModule,
+    ReviewLikeModule,
     SignUpModule,
     UserModule,
     UserCoupon,
@@ -51,8 +53,8 @@ import { AddressModule } from './apis/address/address.module';
     }),
     TypeOrmModule.forRoot({
       type: 'mysql',
-      // host: '10.51.1.3',
-      host: 'my-database',
+      host: '10.51.1.3',
+      // host: 'my-database',
       port: 3306,
       username: 'root',
       password: 'root',
