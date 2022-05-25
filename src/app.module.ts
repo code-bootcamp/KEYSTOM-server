@@ -21,8 +21,8 @@ import { CartProductModule } from './apis/cart/cartProduct.module';
 import { UserCoupon } from './apis/UserCoupon/entities/userCoupon.entity';
 import { CouponModule } from './apis/coupon/coupon.module';
 import { FileModule } from './apis/file/file.module';
-
 import { AddressModule } from './apis/address/address.module';
+import { ReviewLikeModule } from './apis/reviewLike/reviewLike.module';
 import { ElasticsearchModule } from '@nestjs/elasticsearch';
 
 @Module({
@@ -38,6 +38,7 @@ import { ElasticsearchModule } from '@nestjs/elasticsearch';
     PaymentModule,
     ProductModule,
     ReviewModule,
+    ReviewLikeModule,
     SignUpModule,
     UserModule,
     UserCoupon,
