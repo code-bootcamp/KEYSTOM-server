@@ -3,17 +3,13 @@ import { CreateUserInput } from './dto/createUser.input';
 import { User } from './entities/user.entity';
 import { UserService } from './users.service';
 import * as bcrypt from 'bcrypt';
-import { UseGuards } from '@nestjs/common';
-import { GqlAuthAccessGuard } from 'src/commons/auth/gql-auth.guard';
 import { UpdateUserInput } from './dto/updateUserInput';
 import { UserCoupon } from '../UserCoupon/entities/userCoupon.entity';
-import { UserCouponService } from '../UserCoupon/userCoupon.service';
 
 @Resolver()
 export class UserResolver {
   constructor(
     private readonly userService: UserService, //
-    private readonly userCouponService: UserCouponService,
   ) {}
   @Query(() => [User])
   fetchUsers() {

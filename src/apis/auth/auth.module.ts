@@ -12,11 +12,12 @@ import { UserService } from '../user/users.service';
 import { AuthController } from './auth.controller';
 import { AuthResolver } from './auth.resolver';
 import { AuthService } from './auth.service';
+import { UserCoupon } from '../UserCoupon/entities/userCoupon.entity';
 
 @Module({
   imports: [
     JwtModule.register({}), //
-    TypeOrmModule.forFeature([User, Address]),
+    TypeOrmModule.forFeature([User, Address, UserCoupon]),
   ],
   providers: [
     AuthResolver, //
