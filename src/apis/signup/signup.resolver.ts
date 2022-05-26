@@ -4,6 +4,7 @@ import { UnprocessableEntityException } from '@nestjs/common';
 import { CACHE_MANAGER, Inject } from '@nestjs/common';
 import { Cache } from 'cache-manager';
 import { UserService } from '../user/users.service';
+import { Any } from 'typeorm';
 
 @Resolver()
 export class SignUpResolver {
@@ -25,7 +26,7 @@ export class SignUpResolver {
       //토큰 레디스에 저장
       const tokenCache = await this.cacheManager.get(`token:${token}`);
       if (tokenCache) return tokenCache;
-      await this.cacheManager.set(`token:${token}`, token, { ttl: 300 });
+      await this.cacheManager.set(`token:${token}`, token, { ttl: 60 });
       //핸드폰번호에 토큰 전송하기
       return this.singUpService.sendTokenToSMS({ phoneNum, token });
     }
@@ -33,18 +34,22 @@ export class SignUpResolver {
   @Mutation(() => String)
   async checkToken(@Args('token') token: string) {
     const tokenCache = await this.cacheManager.get(`token:${token}`);
-    return tokenCache ? '인증이 완료 되었습니다!' : '잘못된 토큰 정보입니다';
+    if (tokenCache) {
+      return true;
+    } else {
+      throw new UnprocessableEntityException('잘못된 토큰 정보입니다');
+    }
   }
 
-  @Mutation(() => Boolean)
+  @Mutation(() => String)
   async checkEmail(@Args('email') email: string) {
     const isValid = this.singUpService.checkValidationEmail({ email });
     if (isValid) {
       const user = await this.userService.findOne({ email });
       if (user) {
-        return true;
+        throw new UnprocessableEntityException('존재하는 이메일 입니다!!!!');
       } else {
-        return false;
+        return true;
       }
     } else {
       throw new UnprocessableEntityException(

@@ -22,7 +22,7 @@ export class SignUpService {
     await axios.post(
       `https://api-sms.cloud.toast.com/sms/v3.0/appKeys/${appKey}/sender/sms`,
       {
-        body: `안녕하세요. 인증번호는 [${token}]입니다.`,
+        body: `안녕하세요. KEYSTUM입니다 ^오^b 인증번호는 [${token}]입니다.`,
         sendNo: sender,
         recipientList: [{ internationalRecipientNo: phoneNum }],
       },

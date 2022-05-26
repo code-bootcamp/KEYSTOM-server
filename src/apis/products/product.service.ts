@@ -76,11 +76,11 @@ export class ProductService {
       }
       //기존에 태그가 없었다면
       else {
-        this.productTagRepository.create({ tag: tagname });
+        this.productTagRepository.save({ tag: tagname });
       }
     }
 
-    const result = this.productRepository.create({
+    const result = this.productRepository.save({
       ...product,
       thumbnail: imageUrls[0],
       productTags: tags,
@@ -90,13 +90,13 @@ export class ProductService {
     const imagelength = productTags ? productTags.length : 0;
     for (let i = 0; i < imagelength; i++) {
       if (i === 0) {
-        this.productImageRepository.create({
+        this.productImageRepository.save({
           url: imageUrls[i],
           isThumbnail: true,
           product: result,
         });
       } else {
-        this.productImageRepository.create({
+        this.productImageRepository.save({
           url: imageUrls[i],
           product: result,
         });
@@ -130,7 +130,7 @@ export class ProductService {
     }
     const target = await this.productRepository.findOne({ id: productId });
 
-    const result = this.productRepository.create({
+    const result = this.productRepository.save({
       ...target,
       ...product,
       thumbnail: imageUrls[0],
@@ -143,13 +143,13 @@ export class ProductService {
     // 이미지 등록!
     for (let i = 0; i < imageUrls.length; i++) {
       if (i === 0) {
-        this.productImageRepository.create({
+        this.productImageRepository.save({
           url: imageUrls[i],
           isThumbnail: true,
           product: result,
         });
       } else {
-        this.productImageRepository.create({
+        this.productImageRepository.save({
           url: imageUrls[i],
           product: result,
         });
