@@ -38,6 +38,20 @@ type Custom {
   product: Product!
 }
 
+type Coupon {
+  id: String!
+  discountPrice: Int!
+  couponName: String!
+}
+
+type UserCoupon {
+  id: String!
+  email: User!
+  coupon: Coupon!
+  isEvent: Boolean!
+  createdAt: DateTime!
+}
+
 type User {
   email: String!
   name: String!
@@ -83,16 +97,6 @@ type ReviewImage {
   id: String!
   url: String!
   isThumbnail: Boolean!
-}
-
-type Coupon {
-  id: String!
-  discountPrice: Int!
-  couponName: String!
-}
-
-type UserCoupon {
-  id: String!
 }
 
 type Payment {
@@ -146,7 +150,7 @@ type Query {
   fetchUserReview(email: String!): [Review!]!
   fetchUsers: [User!]!
   fetchUser(email: String!): User!
-  fetchUserCoupons(email: String!): [UserCoupon!]!
+  fetchUserHaveCoupons: [UserCoupon!]!
 }
 
 type Mutation {
@@ -180,7 +184,9 @@ type Mutation {
   createUser(createUserInput: CreateUserInput!): User!
   deleteUser(email: String!): String!
   updateUser(email: String!, updateUserInput: UpdateUserInput!): User!
+  createEventCoupon: UserCoupon!
   createUserCoupon(createUserCouponInput: CreateUserCouponInput!): UserCoupon!
+  useCoupon(couponId: String!): String!
 }
 
 input CreateAddressInput {

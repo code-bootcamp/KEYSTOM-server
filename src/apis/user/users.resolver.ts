@@ -4,7 +4,6 @@ import { User } from './entities/user.entity';
 import { UserService } from './users.service';
 import * as bcrypt from 'bcrypt';
 import { UpdateUserInput } from './dto/updateUserInput';
-import { UserCoupon } from '../UserCoupon/entities/userCoupon.entity';
 
 @Resolver()
 export class UserResolver {
@@ -20,13 +19,6 @@ export class UserResolver {
     @Args('email') email: string, //
   ) {
     return this.userService.findOne({ email });
-  }
-
-  @Query(() => [UserCoupon])
-  fetchUserCoupons(
-    @Args('email') email: string, //
-  ) {
-    return this.userService.findCoupons({ email });
   }
 
   @Mutation(() => User)
