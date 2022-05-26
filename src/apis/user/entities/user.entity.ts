@@ -1,5 +1,12 @@
 import { ObjectType, Field } from '@nestjs/graphql';
-import { Column, DeleteDateColumn, Entity, PrimaryColumn } from 'typeorm';
+import { UserCoupon } from 'src/apis/UserCoupon/entities/userCoupon.entity';
+import {
+  Column,
+  DeleteDateColumn,
+  Entity,
+  OneToMany,
+  PrimaryColumn,
+} from 'typeorm';
 
 @Entity()
 @ObjectType()
@@ -29,4 +36,7 @@ export class User {
 
   @DeleteDateColumn()
   deletedAt: Date;
+
+  @OneToMany(() => UserCoupon, (userCoupon) => userCoupon.email)
+  userCoupons: UserCoupon;
 }

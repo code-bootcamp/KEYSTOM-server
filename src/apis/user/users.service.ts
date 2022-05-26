@@ -12,19 +12,12 @@ export class UserService {
     private readonly userRepository: Repository<User>,
     @InjectRepository(Address)
     private readonly addressRepository: Repository<Address>,
-    @InjectRepository(UserCoupon)
-    private readonly userCouponRepository: Repository<UserCoupon>,
   ) {}
   async findAll() {
     return await this.userRepository.find();
   }
   async findOne({ email }) {
     return await this.userRepository.findOne({ where: { email: email } });
-  }
-
-  async findCoupons({ email }) {
-    const user = this.userRepository.findOne({ where: { email } });
-    return await this.userCouponRepository.find({ where: { user } });
   }
 
   async create({ bcryptUser }) {
