@@ -32,9 +32,12 @@ export class ProductResolver {
     console.log(JSON.stringify(result.hits.hits, null, '  ')); //null," "=> 깔끔하게 보기 위한거
   }
   @Query(() => [Product])
-  async fetchProducts(@Args('page', { nullable: true }) page: number) {
-    if (!page) page = 1;
-    return this.productService.findAll({ page });
+  async fetchProducts(
+    @Args('page', { nullable: true }) page: number, //
+  ) {
+    if (!page || page <= 0) page = 1;
+
+    return await this.productService.findAll({ page });
   }
 
   @Query(() => Product)

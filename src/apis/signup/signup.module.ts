@@ -4,16 +4,16 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtRefreshStrategy } from 'src/commons/auth/jwt-refresh.strategy';
 import { AddressService } from '../address/address.service';
 import { Address } from '../address/entities/address.entity';
-import { CartProduct } from '../cart/entities/cartProduct.entity';
 import { User } from '../user/entities/user.entity';
 import { UserService } from '../user/users.service';
 import { SignUpResolver } from './signup.resolver';
 import { SignUpService } from './signup.service';
+import { UserCoupon } from '../UserCoupon/entities/userCoupon.entity';
 
 @Module({
   imports: [
     JwtModule.register({}), //
-    TypeOrmModule.forFeature([User, CartProduct, Address]),
+    TypeOrmModule.forFeature([User, Address, UserCoupon]),
   ],
   providers: [
     SignUpResolver, //

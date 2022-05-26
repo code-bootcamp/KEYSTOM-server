@@ -1,4 +1,6 @@
 import { Field, InputType, Int } from '@nestjs/graphql';
+import { CreateAddressInput } from '../../address/dto/createAddress.input';
+import { Address } from '../../address/entities/address.entity';
 
 @InputType()
 export class CreateOrderInput {
@@ -8,17 +10,14 @@ export class CreateOrderInput {
   @Field(() => Int)
   price: number;
 
-  @Field(() => String)
-  address: string;
+  @Field(() => CreateAddressInput)
+  address: CreateAddressInput;
 
   @Field(() => String)
   receiverName: string;
 
   @Field(() => String)
   receiverPhone: string;
-
-  // @Field(() => String)
-  // email: string;
 
   @Field(() => String)
   productId: string;

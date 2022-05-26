@@ -66,7 +66,7 @@ export class PaymentService {
         impUid: impUid,
         status: PAYMENT_STATUS_ENUM.PAYMENT,
         user: currentUser.email,
-        order: order,
+        order: order.id,
       });
 
       await queryRunner.manager.save(paymentImp);
@@ -131,7 +131,7 @@ export class PaymentService {
         impUid: impUid,
         status: PAYMENT_STATUS_ENUM.CANCEL,
         user: currentUser.email,
-        order: order,
+        order: order.id,
       });
 
       await queryRunner.manager.save(paymentImp);

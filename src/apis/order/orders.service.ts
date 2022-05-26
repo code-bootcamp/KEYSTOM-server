@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { Product } from '../products/entities/product.entity';
 import { Order } from './entities/order.entity';
 import { User } from 'src/apis/user/entities/user.entity';
+import { Address } from '../address/entities/address.entity';
 @Injectable()
 export class OrderService {
   constructor(
@@ -13,6 +14,8 @@ export class OrderService {
     private readonly userRepository: Repository<User>,
     @InjectRepository(Product)
     private readonly productRepository: Repository<Product>,
+    @InjectRepository(Address)
+    private readonly addressRepository: Repository<Address>,
   ) {}
 
   // async findUserOder({ email }) {
@@ -31,7 +34,7 @@ export class OrderService {
   }
 
   async create({ createOrderInput, email }) {
-    const { productId, ...order } = createOrderInput;
+    const { productId, address, ...order } = createOrderInput;
 
     const user = await this.userRepository.findOne({
       email,
@@ -43,9 +46,13 @@ export class OrderService {
     });
     if (!product) throw new BadRequestException('상품이 존재하지 않습니다.');
 
+    const receiveAddress = this.addressRepository.create({ ...address });
+
+    console.log('배송 주소', receiveAddress);
     const result = await this.orderRepository.save({
       ...order,
       user: user,
+      address: receiveAddress['id'],
       product: product,
     });
 

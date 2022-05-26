@@ -22,9 +22,8 @@ export class CouponService {
       ...createCouponInput,
     });
   }
-
-  // async delete({ productId }) {
-  //   const result = await this.productRepository.softDelete({ id: productId });
-  //   return result.affected ? true : false;
-  // }
+  async delete({ couponId }) {
+    const result = await this.couponRepository.softDelete({ id: couponId });
+    return result.affected ? true : false;
+  }
 }

@@ -15,7 +15,6 @@ export class ProductService {
 
     @InjectRepository(ProductImage)
     private readonly productImageRepository: Repository<ProductImage>,
-    private readonly connection: Connection,
   ) {}
   // async findAll() {
   //   return await this.productRepository.find({
@@ -60,128 +59,103 @@ export class ProductService {
   }
 
   async create({ imageUrls, ...rest }) {
-    const queryRunner = this.connection.createQueryRunner();
-    await queryRunner.connect();
-    await queryRunner.startTransaction();
-    try {
-      // 상품을 데이터베이스에 저장
-      const { productTags, ...product } = rest;
-      //productTags 저장
-      const tags = [];
-      const Tagslength = productTags ? productTags.length : 0;
-      for (let i = 0; Tagslength > i; i++) {
-        const tagname = productTags[i].replace('#', '');
-        //이미 등록된 태그인지 확인
-        const prevTag = await queryRunner.manager.findOne(ProductTag, {
-          tag: tagname,
-        });
-        //기존에 존재
-        if (prevTag) {
-          tags.push(prevTag);
-        }
-        //기존에 태그가 없었다면
-        else {
-          const newTag = await this.productTagRepository.create({
-            tag: tagname,
-          });
-          await queryRunner.manager.save(newTag);
-          tags.push(newTag);
-        }
-      }
-      const result = await queryRunner.manager.save(Product, {
-        ...product,
-        thumbnail: imageUrls[0],
-        productTags: tags,
-      });
+    // 상품을 데이터베이스에 저장
+    const { productTags, ...product } = rest;
 
-      // 이미지 등록!
-      for (let i = 0; i < imageUrls.length; i++) {
-        if (i === 0) {
-          await queryRunner.manager.save(ProductImage, {
-            url: imageUrls[i],
-            isThumbnail: true,
-            product: result,
-          });
-        } else {
-          await queryRunner.manager.save(ProductImage, {
-            url: imageUrls[i],
-            product: result,
-          });
-        }
+    //productTags 저장
+    const tags = [];
+    const Tagslength = productTags ? productTags.length : 0;
+    for (let i = 0; Tagslength > i; i++) {
+      const tagname = productTags[i].replace('#', '');
+      //이미 등록된 태그인지 확인
+      const prevTag = await this.productTagRepository.findOne({ tag: tagname });
+
+      //기존에 존재
+      if (prevTag) {
+        tags.push(prevTag);
       }
-      return result;
-    } catch (error) {
-      await queryRunner.rollbackTransaction();
-      throw '상품 생성 중:' + error;
-    } finally {
-      await queryRunner.release();
+      //기존에 태그가 없었다면
+      else {
+        this.productTagRepository.save({ tag: tagname });
+      }
     }
+
+    const result = this.productRepository.save({
+      ...product,
+      thumbnail: imageUrls[0],
+      productTags: tags,
+    });
+
+    // 이미지 등록!
+    const imagelength = productTags ? productTags.length : 0;
+    for (let i = 0; i < imagelength; i++) {
+      if (i === 0) {
+        this.productImageRepository.save({
+          url: imageUrls[i],
+          isThumbnail: true,
+          product: result,
+        });
+      } else {
+        this.productImageRepository.save({
+          url: imageUrls[i],
+          product: result,
+        });
+      }
+    }
+    return result;
   }
 
   async update({ imageUrls, ...rest }, productId) {
-    const queryRunner = this.connection.createQueryRunner();
-    await queryRunner.connect();
-    await queryRunner.startTransaction();
-    try {
-      // 상품을 데이터베이스에 저장
-      const { productTags, ...product } = rest;
-      //productTags 저장
-      const tags = [];
-      const Tagslength = productTags ? productTags : 0;
-      for (let i = 0; Tagslength > i; i++) {
-        const tagname = productTags[i].replace('#', '');
-        //이미 등록된 태그인지 확인
-        const prevTag = await queryRunner.manager.findOne(ProductTag, {
+    // 상품을 데이터베이스에 저장
+    const { productTags, ...product } = rest;
+    //productTags 저장
+    const tags = [];
+    const Tagslength = productTags ? productTags : 0;
+    for (let i = 0; Tagslength > i; i++) {
+      const tagname = productTags[i].replace('#', '');
+      //이미 등록된 태그인지 확인
+      const prevTag = await this.productTagRepository.findOne({ tag: tagname });
+
+      //기존에 존재
+      if (prevTag) {
+        tags.push(prevTag);
+      }
+      //기존에 태그가 없었다면
+      else {
+        const tag = this.productTagRepository.create({
           tag: tagname,
         });
-        //기존에 존재
-        if (prevTag) {
-          tags.push(prevTag);
-        }
-        //기존에 태그가 없었다면
-        else {
-          const newTag = await queryRunner.manager.save(ProductTag, {
-            tag: tagname,
-          });
-          tags.push(newTag);
-        }
+        tags.push(tag);
       }
-      const target = await queryRunner.manager.findOne(Product, {
-        id: productId,
-      });
-
-      const result = await queryRunner.manager.save(Product, {
-        ...target,
-        ...product,
-        thumbnail: imageUrls[0],
-        productTags: tags,
-      });
-
-      queryRunner.manager.delete(ProductImage, { product: target });
-
-      // 이미지 등록!
-      for (let i = 0; i < imageUrls.length; i++) {
-        if (i === 0) {
-          await queryRunner.manager.save(ProductImage, {
-            url: imageUrls[i],
-            isThumbnail: true,
-            product: result,
-          });
-        } else {
-          await queryRunner.manager.save(ProductImage, {
-            url: imageUrls[i],
-            product: result,
-          });
-        }
-      }
-      await queryRunner.commitTransaction();
-      return result;
-    } catch (error) {
-      await queryRunner.rollbackTransaction();
-      throw '상품 생성 중:' + error;
-    } finally {
-      await queryRunner.release();
     }
+    const target = await this.productRepository.findOne({ id: productId });
+
+    const result = this.productRepository.save({
+      ...target,
+      ...product,
+      thumbnail: imageUrls[0],
+      productTags: tags,
+    });
+
+    // 기존에 저장된 이미지 삭제
+    this.productImageRepository.delete({ product: target });
+
+    // 이미지 등록!
+    for (let i = 0; i < imageUrls.length; i++) {
+      if (i === 0) {
+        this.productImageRepository.save({
+          url: imageUrls[i],
+          isThumbnail: true,
+          product: result,
+        });
+      } else {
+        this.productImageRepository.save({
+          url: imageUrls[i],
+          product: result,
+        });
+      }
+    }
+    return result;
   }
 
   async delete({ productId }) {

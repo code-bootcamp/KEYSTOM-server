@@ -3,9 +3,8 @@ import { CreateUserInput } from './dto/createUser.input';
 import { User } from './entities/user.entity';
 import { UserService } from './users.service';
 import * as bcrypt from 'bcrypt';
-import { UseGuards } from '@nestjs/common';
-import { GqlAuthAccessGuard } from 'src/commons/auth/gql-auth.guard';
 import { UpdateUserInput } from './dto/updateUserInput';
+import { UserCoupon } from '../UserCoupon/entities/userCoupon.entity';
 
 @Resolver()
 export class UserResolver {
@@ -22,6 +21,14 @@ export class UserResolver {
   ) {
     return this.userService.findOne({ email });
   }
+
+  @Query(() => [UserCoupon])
+  fetchUserCoupons(
+    @Args('email') email: string, //
+  ) {
+    return this.userService.findCoupons({ email });
+  }
+
   @Mutation(() => User)
   async createUser(@Args('createUserInput') createUserInput: CreateUserInput) {
     const hashedPassword = await bcrypt.hash(createUserInput.password, 10);

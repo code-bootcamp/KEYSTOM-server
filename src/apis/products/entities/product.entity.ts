@@ -37,10 +37,11 @@ export class Product {
   like: number;
 
   @CreateDateColumn()
-  @Field(() => String)
+  @Field(() => Date)
   createdAt: Date;
 
   @DeleteDateColumn()
+  @Field(() => Date)
   deletedAt: Date;
 
   @Column()

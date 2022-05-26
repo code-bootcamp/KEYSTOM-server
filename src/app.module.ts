@@ -17,19 +17,17 @@ import { ConfigModule } from '@nestjs/config';
 // import { AppService } from './app.service';
 import 'dotenv/config';
 import { CommentModule } from './apis/comments/comment.module';
-import { CartProductModule } from './apis/cart/cartProduct.module';
-import { UserCoupon } from './apis/UserCoupon/entities/userCoupon.entity';
 import { CouponModule } from './apis/coupon/coupon.module';
 import { FileModule } from './apis/file/file.module';
 import { AddressModule } from './apis/address/address.module';
 import { ReviewLikeModule } from './apis/reviewLike/reviewLike.module';
 import { ElasticsearchModule } from '@nestjs/elasticsearch';
+import { UserCouponModule } from './apis/UserCoupon/userCoupon.module';
 
 @Module({
   imports: [
     AddressModule,
     AuthModule,
-    CartProductModule,
     CommentModule,
     CouponModule,
     CustomModule,
@@ -41,7 +39,7 @@ import { ElasticsearchModule } from '@nestjs/elasticsearch';
     ReviewLikeModule,
     SignUpModule,
     UserModule,
-    UserCoupon,
+    UserCouponModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: 'src/commons/graphql/schema.gql',
