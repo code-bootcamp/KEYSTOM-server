@@ -80,23 +80,26 @@ export class ProductService {
       }
     }
 
-    const result = this.productRepository.save({
+    const result = this.productRepository.create({
       ...product,
       thumbnail: imageUrls[0],
       productTags: tags,
+    });
+    await this.productRepository.save({
+      ...result,
     });
 
     // 이미지 등록!
     const imagelength = productTags ? productTags.length : 0;
     for (let i = 0; i < imagelength; i++) {
       if (i === 0) {
-        this.productImageRepository.save({
+        await this.productImageRepository.save({
           url: imageUrls[i],
           isThumbnail: true,
           product: result,
         });
       } else {
-        this.productImageRepository.save({
+        await this.productImageRepository.save({
           url: imageUrls[i],
           product: result,
         });
@@ -130,11 +133,14 @@ export class ProductService {
     }
     const target = await this.productRepository.findOne({ id: productId });
 
-    const result = this.productRepository.save({
+    const result = this.productRepository.create({
       ...target,
       ...product,
       thumbnail: imageUrls[0],
       productTags: tags,
+    });
+    await this.productRepository.save({
+      ...result,
     });
 
     // 기존에 저장된 이미지 삭제
