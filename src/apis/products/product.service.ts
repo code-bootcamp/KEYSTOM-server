@@ -88,36 +88,28 @@ export class ProductService {
           tags.push(newTag);
         }
       }
-
-      const result = this.productRepository.create({
+      const result = await queryRunner.manager.save(Product, {
         ...product,
         thumbnail: imageUrls[0],
         productTags: tags,
       });
 
-      const flag = await queryRunner.manager.save(Product, { ...result });
-
       // 이미지 등록!
-      const imagelength = productTags ? productTags.length : 0;
-      for (let i = 0; i < imagelength; i++) {
-        console.log('이미지 등록');
+      for (let i = 0; i < imageUrls.length; i++) {
         if (i === 0) {
-          const image = this.productImageRepository.create({
+          await queryRunner.manager.save(ProductImage, {
             url: imageUrls[i],
             isThumbnail: true,
             product: result,
           });
         } else {
-          const image = this.productImageRepository.create({
+          await queryRunner.manager.save(ProductImage, {
             url: imageUrls[i],
-            isThumbnail: false,
             product: result,
           });
-          // await queryRunner.manager.save(ProductImage, { ...image });
         }
       }
-      console.log('결과', result);
-      return flag;
+      return result;
     } catch (error) {
       await queryRunner.rollbackTransaction();
       throw '상품 생성 중:' + error;
@@ -148,10 +140,9 @@ export class ProductService {
         }
         //기존에 태그가 없었다면
         else {
-          const tag = await this.productTagRepository.create({
+          const newTag = await queryRunner.manager.save(ProductTag, {
             tag: tagname,
           });
-          const newTag = await queryRunner.manager.save(ProductTag, { ...tag });
           tags.push(newTag);
         }
       }
@@ -159,35 +150,32 @@ export class ProductService {
         id: productId,
       });
 
-      const result = this.productRepository.create({
+      const result = await queryRunner.manager.save(Product, {
         ...target,
         ...product,
         thumbnail: imageUrls[0],
         productTags: tags,
       });
-      const flag = await queryRunner.manager.save(Product, { ...result });
 
       queryRunner.manager.delete(ProductImage, { product: target });
 
       // 이미지 등록!
       for (let i = 0; i < imageUrls.length; i++) {
         if (i === 0) {
-          const image = await this.productImageRepository.create({
+          await queryRunner.manager.save(ProductImage, {
             url: imageUrls[i],
             isThumbnail: true,
             product: result,
           });
-          // await queryRunner.manager.save(ProductImage, { ...image });
         } else {
-          const image = await this.productImageRepository.create({
+          await queryRunner.manager.save(ProductImage, {
             url: imageUrls[i],
             product: result,
           });
-          // await queryRunner.manager.save(ProductImage, { ...image });
         }
       }
       await queryRunner.commitTransaction();
-      return flag;
+      return result;
     } catch (error) {
       await queryRunner.rollbackTransaction();
       throw '상품 생성 중:' + error;

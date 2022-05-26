@@ -10,6 +10,7 @@ import {
   ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 @Entity()
@@ -55,4 +56,7 @@ export class Product {
 
   @OneToMany(() => ProductImage, (productImage) => productImage.product)
   productImages: ProductImage[];
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 }

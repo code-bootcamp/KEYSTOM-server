@@ -51,7 +51,7 @@ export class ReviewLikeService {
     const review = await this.reviewRepository.findOne({ id: reviewId });
     const count = await this.reviewLikeRepository.count({
       where: { review: review },
-    });
+    });  
     return count;
   }
 }

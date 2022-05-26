@@ -6,20 +6,33 @@ import { CACHE_MANAGER, Inject } from '@nestjs/common';
 import { Cache } from 'cache-manager';
 import { UpdateProductInput } from './dto/updateProduct.input';
 import { ProductImage } from 'src/apis/productImage/entities/productImage.entity';
+import { ElasticsearchService } from '@nestjs/elasticsearch';
 
 @Resolver()
 export class ProductResolver {
   constructor(
     private readonly productService: ProductService, //
+    private readonly elasticsearchService: ElasticsearchService,
 
     @Inject(CACHE_MANAGER)
     private readonly cacheManager: Cache,
   ) {}
 
   @Query(() => [Product])
-  fetchProducts(
-    @Args('page', { nullable: true }) page: number, //
-  ) {
+  async searchProducts(@Args('search') search: string) {
+    const result = await this.elasticsearchService.search({
+      index: 'myproduct',
+      query: {
+        match: {
+          //myproduct안에 모든것 가지고 오기
+          description: `${search}`,
+        },
+      },
+    });
+    console.log(JSON.stringify(result.hits.hits, null, '  ')); //null," "=> 깔끔하게 보기 위한거
+  }
+  @Query(() => [Product])
+  async fetchProducts(@Args('page', { nullable: true }) page: number) {
     if (!page) page = 1;
     return this.productService.findAll({ page });
   }

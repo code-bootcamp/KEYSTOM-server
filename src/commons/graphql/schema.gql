@@ -131,6 +131,7 @@ type Query {
   fetchCustoms: [Custom!]!
   fetchCustom(productId: String!): Custom!
   fetchUserOrder(page: Float): [Order!]!
+  searchProducts(search: String!): [Product!]!
   fetchProducts(page: Float): [Product!]!
   fetchProduct(productId: String!): Product!
   fetchProductImages(productId: String!): [ProductImage!]!
@@ -173,7 +174,7 @@ type Mutation {
   likeUp(reviewId: String!): Int!
   sendToken(phone: String!): String!
   checkToken(token: String!): String!
-  checkEmail(email: String!): Boolean!
+  checkEmail(email: String!): String!
   createUser(createUserInput: CreateUserInput!): User!
   deleteUser(email: String!): String!
   updateUser(email: String!, updateUserInput: UpdateUserInput!): User!

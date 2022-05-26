@@ -100,13 +100,14 @@ export class AuthResolver {
       ),
     );
     //refreshToken
-    const refreshToken = context.req.rawHeaders[
-      context.req.rawHeaders.length - 1
-    ].replace('refreshToken=', '');
+    const refreshToken = context.req.headers.cookie.replace(
+      'refreshToken=',
+      '',
+    );
     // //토큰 검증
     try {
       const decoded1 = jwt.verify(accessToken, process.env.ACCESS_SECRET_KEY);
-      const decoded2 = jwt.verify(refreshToken, process.env.R);
+      const decoded2 = jwt.verify(refreshToken, process.env.REFRESH_SECRET_KEY);
       console.log(decoded1, decoded2);
     } catch (err) {
       throw new UnauthorizedException('토큰 검증 실패!!');
@@ -126,7 +127,8 @@ export class AuthResolver {
     } catch (err) {
       throw new UnauthorizedException('레디스 저장 실패');
     }
-
+    // const res = context.res;
+    // res.setHeader('Set-Cookie', `refreshToken=${0}; path=/;`);
     return '로그아웃 성공!!';
   }
 
