@@ -92,9 +92,9 @@ export class AuthResolver {
 
       if (!accessToken) throw new BadRequestException('잘못된 요청');
       if (!refreshToken) throw new BadRequestException('잘못된 요청');
-      context.res.clearCookie('refreshToken', {
-        maxAge: 0,
-      });
+      // context.res.clearCookie('refreshToken', {
+      //   maxAge: 0,
+      // });
       context.res.clearCookie('refreshToken', {
         path: '/',
         domain: '.antipiebse.shop',
