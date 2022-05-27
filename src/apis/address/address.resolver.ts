@@ -1,9 +1,11 @@
-import { Args, Mutation, Query, Resolver, Int } from '@nestjs/graphql';
-import { QueryBuilder } from 'typeorm';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { AddressService } from './address.service';
 import { CreateAddressInput } from './dto/createAddress.input';
 import { Address } from './entities/address.entity';
 import { UpdateAddressInput } from './dto/updateAddress.input';
+import { UseGuards } from '@nestjs/common';
+import { GqlAuthAccessGuard } from 'src/commons/auth/gql-auth.guard';
+import { CurrentUser, ICurrentUser } from 'src/commons/auth/gql-user.param';
 
 @Resolver()
 export class AddressResolver {
@@ -19,11 +21,13 @@ export class AddressResolver {
     return this.addressService.findAll();
   }
 
+  @UseGuards(GqlAuthAccessGuard)
   @Mutation(() => Address)
   createAddress(
+    @CurrentUser() currentUser: ICurrentUser,
     @Args('createAddressInput') createAddressInput: CreateAddressInput,
   ) {
-    return this.addressService.create({ createAddressInput });
+    return this.addressService.create({ createAddressInput, currentUser });
   }
 
   @Mutation(() => Address)

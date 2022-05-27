@@ -1,6 +1,5 @@
-import { InputType, Field, Int } from '@nestjs/graphql';
+import { InputType, Field } from '@nestjs/graphql';
 import { CreateAddressInput } from 'src/apis/address/dto/createAddress.input';
-import { CreateUserAddressInput } from 'src/apis/address/dto/createUserAddress.input';
 
 @InputType()
 export class CreateUserInput {
@@ -16,8 +15,8 @@ export class CreateUserInput {
   @Field(() => String)
   nickName: string;
 
-  @Field(() => CreateUserAddressInput)
-  address: CreateUserAddressInput;
+  @Field(() => CreateAddressInput)
+  address: CreateAddressInput;
   // @Field(()=>[String])
   // coupons: string[]
 }

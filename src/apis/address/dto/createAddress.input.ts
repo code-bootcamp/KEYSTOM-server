@@ -10,7 +10,4 @@ export class CreateAddressInput {
 
   @Field(() => String)
   zipCode: string;
-
-  @Field(() => String)
-  email: string;
 }

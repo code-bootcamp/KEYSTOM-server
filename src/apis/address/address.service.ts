@@ -29,16 +29,16 @@ export class AddressService {
     return await this.addressRepository.find();
   }
 
-  async create({ createAddressInput }) {
-    const { email, ...address } = createAddressInput;
+  async create({ createAddressInput, currentUser }) {
+    const address = createAddressInput;
     const user = await this.userRepository.findOne({
-      email,
+      email: currentUser.email,
     });
-    const result2 = await this.addressRepository.save({
+    const result = await this.addressRepository.save({
       ...address,
       user,
     });
-    return result2;
+    return result;
   }
 
   async update({ updateAddressInput }) {
