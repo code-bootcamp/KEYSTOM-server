@@ -1,5 +1,11 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { Entity, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  CreateDateColumn,
+  Column,
+} from 'typeorm';
 import { User } from 'src/apis/user/entities/user.entity';
 import { Coupon } from 'src/apis/coupon/entities/coupon.entity';
 
@@ -10,9 +16,19 @@ export class UserCoupon {
   @Field(() => String)
   id: string;
 
-  @ManyToOne(() => User)
-  user: User;
+  @ManyToOne(() => User, (user) => user.userCoupons)
+  @Field(() => User)
+  email: User;
 
-  @ManyToOne(() => Coupon)
+  @ManyToOne(() => Coupon, (coupon) => coupon.userCoupons)
+  @Field(() => Coupon)
   coupon: Coupon;
+
+  @Column({ default: false })
+  @Field(() => Boolean)
+  isEvent: boolean;
+
+  @CreateDateColumn()
+  @Field(() => Date)
+  createdAt: Date;
 }

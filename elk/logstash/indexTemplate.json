@@ -1,42 +1,45 @@
 {
-    "template": "*",
-    "settings": {
-      "analysis":{
-        "analyzer":{
-          "my_ngram_analyzer": {
-            "type": "custom",
-            "tokenizer": "my_ngram_tokenizer"
-          }
-        },
-        "tokenizer":{
-          "my_ngram_tokenizer":{
-            "type": "nGram",
-            "min_gram": "1",
-            "max_gram": "10"
-          }
+  "template": "*",
+  "settings": {
+    "analysis": {
+      "analyzer": {
+        "my_ngram_analyzer": {
+          "type": "custom",
+          "tokenizer": "my_ngram_tokenizer"
         }
       },
-      "max_ngram_diff": "25"
-    },
-    "mappings": {
-      "properties": {
-        "id":{
-            "type":"text"
-        },
-        "title" : {
-          "type": "text",
-          "analyzer": "my_ngram_analyzer"
-        },
-        "description": {
-          "type": "text",
-          "analyzer": "my_ngram_analyzer"
-        },
-        "price":{
-            "type":"long"
-        },
-        "updatedat":{
-            "type":"float"
+      "tokenizer": {
+        "my_ngram_tokenizer": {
+          "type": "nGram",
+          "min_gram": "1",
+          "max_gram": "10"
         }
+      }
+    },
+    "max_ngram_diff": "20"
+  },
+  "mappings": {
+    "properties": {
+      "id": {
+        "type": "text"
+      },
+      "title": {
+        "type": "text",
+        "analyzer": "my_ngram_analyzer"
+      },
+      "description": {
+        "type": "text",
+        "analyzer": "my_ngram_analyzer"
+      },
+      "price": {
+        "type": "long"
+      },
+      "createdat": {
+        "type": "float"
+      },
+      "updatedat": {
+        "type": "float"
       }
     }
   }
+}

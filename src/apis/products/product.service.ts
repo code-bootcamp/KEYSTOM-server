@@ -79,14 +79,10 @@ export class ProductService {
         this.productTagRepository.save({ tag: tagname });
       }
     }
-
-    const result = this.productRepository.create({
+    const result = await this.productRepository.save({
       ...product,
       thumbnail: imageUrls[0],
       productTags: tags,
-    });
-    await this.productRepository.save({
-      ...result,
     });
 
     // 이미지 등록!
@@ -125,7 +121,7 @@ export class ProductService {
       }
       //기존에 태그가 없었다면
       else {
-        const tag = this.productTagRepository.create({
+        const tag = this.productTagRepository.save({
           tag: tagname,
         });
         tags.push(tag);
@@ -133,14 +129,11 @@ export class ProductService {
     }
     const target = await this.productRepository.findOne({ id: productId });
 
-    const result = this.productRepository.create({
+    const result = await this.productRepository.save({
       ...target,
       ...product,
       thumbnail: imageUrls[0],
       productTags: tags,
-    });
-    await this.productRepository.save({
-      ...result,
     });
 
     // 기존에 저장된 이미지 삭제

@@ -12,8 +12,6 @@ export class UserService {
     private readonly userRepository: Repository<User>,
     @InjectRepository(Address)
     private readonly addressRepository: Repository<Address>,
-    @InjectRepository(UserCoupon)
-    private readonly userCouponRepository: Repository<UserCoupon>,
   ) {}
   async findAll() {
     return await this.userRepository.find();
@@ -22,15 +20,9 @@ export class UserService {
     return await this.userRepository.findOne({ where: { email: email } });
   }
 
-  async findCoupons({ email }) {
-    const user = this.userRepository.findOne({ where: { email } });
-    return await this.userCouponRepository.find({ where: { user } });
-  }
-
   async create({ bcryptUser }) {
     // const { cartProduct, password, ...user } = bcryptUser;
     const { password, address, ...user } = bcryptUser;
-    const createAddressInput = { ...address, email: user.email };
     const user1 = await this.userRepository.findOne({ email: user.email });
     // const result1 = await this.cartProductRepository.save({
     //   ...cartProduct,
@@ -40,8 +32,11 @@ export class UserService {
       ...user,
       password: password,
     });
+    const createAddressInput = { ...address, user: result };
     //주소도 저장하기
-    this.addressRepository.create({ ...createAddressInput });
+    await this.addressRepository.save({
+      ...createAddressInput,
+    });
     return result;
   }
   async update({ email, updateUserInput }) {

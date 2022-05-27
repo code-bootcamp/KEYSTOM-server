@@ -6,8 +6,10 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { UserCoupon } from '../../UserCoupon/entities/userCoupon.entity';
 
 @Entity()
 @ObjectType()
@@ -29,4 +31,7 @@ export class Coupon {
 
   @CreateDateColumn()
   createdAt: Date;
+
+  @OneToMany(() => UserCoupon, (userCoupon) => userCoupon.coupon)
+  userCoupons: UserCoupon[];
 }
