@@ -95,7 +95,13 @@ export class AuthResolver {
       context.res.clearCookie('refreshToken', {
         maxAge: 0,
       });
-      context.res.clearCookie('refreshToken');
+      context.res.clearCookie('refreshToken', {
+        path: '/',
+        domain: '.antipiebse.shop',
+        sameSite: 'none',
+        secure: true,
+        httpOnly: true,
+      });
 
       jwt.verify(accessToken, process.env.ACCESS_SECRET_KEY);
       jwt.verify(refreshToken, process.env.REFRESH_SECRET_KEY);
