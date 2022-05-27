@@ -22,9 +22,20 @@ export class ProductResolver {
   async searchProducts(@Args('search') search: string) {
     const result = await this.elasticsearchService.search({
       index: 'myproduct',
+      // sort: [{ updatedat: { order: 'desc' } }, _score],
+      size: 8,
+      // query: {
+      //   bool: {
+      //     should: [
+      //       { match: { title: 'best' } },
+      //       { match: { description: '좋은' } },
+      //       { match: { price: 10000 } },
+      //     ],
+      //   },
+      //   //     //myproduct안
+      // },
       query: {
         match: {
-          //myproduct안에 모든것 가지고 오기
           description: `${search}`,
         },
       },
