@@ -26,7 +26,7 @@ export class SignUpResolver {
       //토큰 레디스에 저장
       const tokenCache = await this.cacheManager.get(`token:${token}`);
       if (tokenCache) return tokenCache;
-      await this.cacheManager.set(`token:${token}`, token, { ttl: 60 });
+      await this.cacheManager.set(`token:${token}`, token, { ttl: 180 });
       //핸드폰번호에 토큰 전송하기
       return this.singUpService.sendTokenToSMS({ phoneNum, token });
     }

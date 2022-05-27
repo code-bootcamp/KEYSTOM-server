@@ -6,41 +6,37 @@ import { CACHE_MANAGER, Inject } from '@nestjs/common';
 import { Cache } from 'cache-manager';
 import { UpdateProductInput } from './dto/updateProduct.input';
 import { ProductImage } from 'src/apis/productImage/entities/productImage.entity';
-import { ElasticsearchService } from '@nestjs/elasticsearch';
 
 @Resolver()
 export class ProductResolver {
   constructor(
     private readonly productService: ProductService, //
-    private readonly elasticsearchService: ElasticsearchService,
 
     @Inject(CACHE_MANAGER)
     private readonly cacheManager: Cache,
   ) {}
 
   @Query(() => [Product])
-  async searchProducts(@Args('search') search: string) {
-    const result = await this.elasticsearchService.search({
-      index: 'myproduct',
-      // sort: [{ updatedat: { order: 'desc' } }, _score],
-      size: 8,
-      // query: {
-      //   bool: {
-      //     should: [
-      //       { match: { title: 'best' } },
-      //       { match: { description: '좋은' } },
-      //       { match: { price: 10000 } },
-      //     ],
-      //   },
-      //   //     //myproduct안
-      // },
-      query: {
-        match: {
-          description: `${search}`,
-        },
-      },
-    });
-    console.log(JSON.stringify(result.hits.hits, null, '  ')); //null," "=> 깔끔하게 보기 위한거
+  async searchProducts(
+    @Args('search', { nullable: true }) search: string,
+    @Args('price', { nullable: true }) price: number,
+  ) {
+    //1.레디스에 캐시 되어있는지 확인하기
+
+    //2.레디스에 캐시 되어있지 않다면 엘라스틱서치에서 조화하기(우저가 검색한 검색어로 조회하기)
+    if (price === undefined) {
+      const searchString = await this.productService.findString({ search });
+      return searchString;
+    } else {
+      const searchPrice = await this.productService.findPrice({ price });
+      console.log("-------------")
+      console.log(searchPrice);
+      return searchPrice;
+    }
+
+    //3.엘라스틱에서 조회결과가 있다면 ,레디스에 검색결과 캐싱해놓기
+
+    //4.최종결과 브라우제에 리턴해주기
   }
   @Query(() => [Product])
   async fetchProducts(
@@ -63,10 +59,10 @@ export class ProductResolver {
     return this.productService.findImage({ productId });
   }
 
-  @Query(() => [Product])
-  fetchBestProduct() {
-    return this.productService.findBest();
-  }
+  // @Query(() => [Product])
+  // fetchBestProduct() {
+  //   return this.productService.findBest();
+  // }
 
   @Query(() => Int)
   fetchProductRowCount() {
