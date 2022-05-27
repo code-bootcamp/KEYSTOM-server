@@ -20,6 +20,10 @@ export class Order {
   id: string;
 
   @Column()
+  @Field(() => String)
+  impUid: string;
+
+  @Column()
   @Field(() => Int)
   count: number;
 
@@ -43,8 +47,8 @@ export class Order {
   @ManyToOne(() => User, {
     onDelete: 'CASCADE',
   })
-  @Field(() => User)
-  user: User;
+  @Field(() => String)
+  user: string;
 
   @ManyToOne(() => Product, {
     onDelete: 'CASCADE',
