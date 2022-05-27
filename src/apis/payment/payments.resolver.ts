@@ -5,6 +5,8 @@ import { Payment } from './entities/payment.entity';
 import { PaymentService } from './payments.service';
 import { GqlAuthAccessGuard } from 'src/commons/auth/gql-auth.guard';
 import { CurrentUser, ICurrentUser } from 'src/commons/auth/gql-user.param';
+import { CreateOrderInput } from 'src/apis/order/dto/createOrder.input';
+import { CreateAddressInput } from 'src/apis/address/dto/createAddress.input';
 
 @Resolver()
 export class PaymentResolver {
@@ -13,24 +15,36 @@ export class PaymentResolver {
   @UseGuards(GqlAuthAccessGuard)
   @Mutation(() => Payment)
   async payment(
-    @Args('createPaymentInput') createPaymentInput: CreatePaymentInput,
+    @Args('price') price: number,
+    @Args('impUid') impUid: string,
+    @Args('createAddressInput') createAddressInput: CreateAddressInput,
+    @Args('createOrderInput') createOrderInput: CreateOrderInput,
     @CurrentUser() currentUser: ICurrentUser,
   ) {
     return await this.paymentService.payment({
-      createPaymentInput,
+      price,
+      createAddressInput,
+      createOrderInput,
       currentUser,
+      impUid,
     });
   }
 
   @UseGuards(GqlAuthAccessGuard)
   @Mutation(() => Payment)
   async refund(
-    @Args('createPaymentInput') createPaymentInput: CreatePaymentInput,
+    @Args('impUid') impUid: string,
+    @Args('paymentId') paymentId: string,
+    @Args('createAddressInput') createAddressInput: CreateAddressInput,
+    @Args('createOrderInput') createOrderInput: CreateOrderInput,
     @CurrentUser() currentUser: ICurrentUser,
   ) {
     return await this.paymentService.cancel({
-      createPaymentInput,
+      paymentId,
       currentUser,
+      impUid,
+      createOrderInput,
+      createAddressInput,
     });
   }
 }
