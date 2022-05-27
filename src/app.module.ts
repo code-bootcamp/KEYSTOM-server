@@ -52,7 +52,7 @@ import { UserCouponModule } from './apis/UserCoupon/userCoupon.module';
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: '10.51.1.8',
-      // host: 'my-database',
+      host: 'my-database',
       port: 3306,
       username: 'root',
       password: 'root',

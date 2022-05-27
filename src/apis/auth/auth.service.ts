@@ -26,17 +26,17 @@ export class AuthService {
       { secret: process.env.REFRESH_SECRET_KEY, expiresIn: '2w' }, //비밀번호
     );
     // console.log('리프레시토큰은?', refreshToken);
-    // res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
-    // res.setHeader('Access-Control-Allow-Credentials', 'true');
-    // res.setHeader('Access-Control-Allow-Methods', 'GET,HEAD,OPTIONS,POST,PUT');
-    // res.setHeader(
-    //   'Access-Control-Allow-Headers',
-    //   'Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers',
-    // );
-    // res.setHeader(
-    //   'Set-Cookie',
-    //   `refreshToken=${refreshToken}; path=/; domain=.antipiebse.shop; SameSite=None; Secure; httpOnly;`,
-    // );
-    res.setHeader('Set-Cookie', `refreshToken=${refreshToken}; path=/;`);
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,HEAD,OPTIONS,POST,PUT');
+    res.setHeader(
+      'Access-Control-Allow-Headers',
+      'Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers',
+    );
+    res.setHeader(
+      'Set-Cookie',
+      `refreshToken=${refreshToken}; path=/; domain=.antipiebse.shop; SameSite=None; Secure; httpOnly;`,
+    );
+    // res.setHeader('Set-Cookie', `refreshToken=${refreshToken}; path=/;`);
   }
 }
