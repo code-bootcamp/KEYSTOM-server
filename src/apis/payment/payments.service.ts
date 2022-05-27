@@ -54,14 +54,14 @@ export class PaymentService {
         throw new ConflictException('이미 처리된 결제 요청입니다.');
 
       // 3. 주문 내역 생성
-      const orderResult = this.orderRepository.save({
+      const orderResult = await this.orderRepository.save({
         ...order,
       });
 
       await queryRunner.manager.save(orderResult);
 
       // 4. 결제 내역 생성
-      const paymentImp = this.paymentRepository.save({
+      const paymentImp = await this.paymentRepository.save({
         price: price,
         impUid: impUid,
         status: PAYMENT_STATUS_ENUM.PAYMENT,
