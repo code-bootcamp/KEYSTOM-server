@@ -16,7 +16,7 @@
           }
         }
       },
-      "max_ngram_diff": "10"
+      "max_ngram_diff": "25"
     },
     "mappings": {
       "properties": {
