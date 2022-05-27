@@ -26,7 +26,11 @@ export class User {
   @Field(() => String)
   nickName: string;
 
-  @Column({ default: null })
+  @Column({
+    default:
+      'https://images.mypetlife.co.kr/content/uploads/2021/10/22152410/IMG_2087-scaled-e1634883900174.jpg',
+    nullable: true,
+  })
   @Field(() => String)
   profileImage: string;
 
