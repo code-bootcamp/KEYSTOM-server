@@ -13,10 +13,9 @@ import {
 } from 'src/commons/auth/gql-auth.guard';
 import { CurrentUser, ICurrentUser } from 'src/commons/auth/gql-user.param';
 import * as jwt from 'jsonwebtoken';
-import { CACHE_MANAGER, Inject } from '@nestjs/common';
+import { CACHE_MANAGER, Inject, BadRequestException } from '@nestjs/common';
 import { Cache } from 'cache-manager';
 import { UserService } from '../user/users.service';
-import { User } from '../user/entities/user.entity';
 import { Address } from '../address/entities/address.entity';
 import { AddressService } from '../address/address.service';
 
@@ -86,51 +85,107 @@ export class AuthResolver {
   @UseGuards(GqlAuthAccessGuard)
   @Mutation(() => String)
   async logout(@Context() context: IContext) {
-    console.log(
-      'accesstoken는',
-      context.req.rawHeaders[13].replace('Bearer ', ''),
-    );
-    //accessToken
-    const accessToken = context.req.rawHeaders[13].replace('Bearer ', '');
-    console.log(
-      'refreshtoken는',
-      context.req.rawHeaders[context.req.rawHeaders.length - 1].replace(
-        'refreshToken=',
-        '',
-      ),
-    );
-    //refreshToken
-    const refreshToken = context.req.headers.cookie.replace(
-      'refreshToken=',
-      '',
-    );
-    // //토큰 검증
+    //토큰 검증
     try {
-      const decoded1 = jwt.verify(accessToken, process.env.ACCESS_SECRET_KEY);
-      const decoded2 = jwt.verify(refreshToken, process.env.REFRESH_SECRET_KEY);
-      console.log(decoded1, decoded2);
-    } catch (err) {
-      throw new UnauthorizedException('토큰 검증 실패!!');
-    }
-    //레디스에 저장
-    try {
-      await this.cacheManager.set(`accessToken:${accessToken}`, 'accessToken', {
-        ttl: 300,
+      const accessToken = context.req.headers.authorization.split(' ')[1];
+      const refreshToken = context.req.headers.cookie.split('refreshToken=')[1];
+
+      if (!accessToken) throw new BadRequestException('잘못된 요청');
+      if (!refreshToken) throw new BadRequestException('잘못된 요청');
+      context.res.clearCookie('refreshToken', {
+        maxAge: 0,
       });
+
+      jwt.verify(accessToken, process.env.ACCESS_SECRET_KEY);
+      jwt.verify(refreshToken, process.env.REFRESH_SECRET_KEY);
+
       await this.cacheManager.set(
         `refreshToken:${refreshToken}`,
         `refreshToken`,
         {
-          ttl: 300,
+          ttl: 3600,
         },
       );
+      await this.cacheManager.set(`accessToken:${accessToken}`, 'accessToken', {
+        ttl: 300,
+      });
+      return '로그아웃 성공!!';
     } catch (err) {
-      throw new UnauthorizedException('레디스 저장 실패');
+      console.log(err.message, '!!!');
+      throw new UnauthorizedException('로그아웃 실패');
     }
-    // const res = context.res;
-    // res.setHeader('Set-Cookie', `refreshToken=${0}; path=/;`);
-    return '로그아웃 성공!!';
   }
+  // @UseGuards(GqlAuthAccessGuard)
+  // @Mutation(() => String)
+  // async logout(@Context() context: IContext) {
+  //   console.log(
+  //     'accesstoken는',
+  //     context.req.rawHeaders[13].replace('Bearer ', ''),
+  //   );
+  //   //accessToken
+  //   const accessToken = context.req.headers.authorization.split(' ')[1];
+  //   console.log(
+  //     'refreshtoken는',
+  //     context.req.rawHeaders[context.req.rawHeaders.length - 1].replace(
+  //       'refreshToken=',
+  //       '',
+  //     ),
+  //   );
+  //   //refreshToken
+  //   const refreshToken = context.req.headers.cookie.split('refreshToken=')[1];
+  //   // //토큰 검증
+
+  //   console.log(accessToken + '액세스 토큰');
+  //   console.log(refreshToken + '리프레시시ㅣ이이');
+  //   try {
+  //     const decoded1 = jwt.verify(
+  //       accessToken,
+  //       process.env.ACCESS_SECRET_KEY,
+  //       async (error, decode) => {
+  //         if (error) {
+  //           console.error('😀' + error);
+  //           throw error;
+  //         }
+  //         console.log('😡' + decode);
+  //         console.log(decode);
+
+  //         return decode;
+  //       },
+  //     );
+  //     await this.cacheManager.set(`accessToken:${accessToken}`, 'accessToken', {
+  //       ttl: 300,
+  //     });
+  //     const decoded2 = jwt.verify(
+  //       refreshToken,
+  //       process.env.REFRESH_SECRET_KEY,
+  //       async (error, decode) => {
+  //         if (error) {
+  //           console.error('😀선종현 ㄹㅇㄴㄹㅁㄴ' + error);
+  //           throw error;
+  //         }
+  //         console.log('😂' + decode);
+  //         console.log(decode);
+  //         await this.cacheManager.set(
+  //           `refreshToken:${refreshToken}`,
+  //           `refreshToken`,
+  //           {
+  //             ttl: 3600,
+  //           },
+  //         );
+  //         return decode;
+  //       },
+  //     );
+  //     console.log(decoded1, decoded2);
+  //   } catch (err) {
+  //     console.log(err);
+  //     throw new UnauthorizedException('토큰 검증 실패!!');
+  //   }
+
+  //   //레디스에 저장
+  //   // const res = context.res;
+  //   // res.setHeader('Set-Cookie', `refreshToken=${0}; path=/;`);
+  //   return '로그아웃 성공!!';
+  // }
 
   @UseGuards(GqlAuthAccessGuard)
   @Query(() => Address)

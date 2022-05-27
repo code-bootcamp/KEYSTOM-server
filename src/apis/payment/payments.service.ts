@@ -119,14 +119,14 @@ export class PaymentService {
       });
 
       // 3. 주문 내역 생성
-      const orderResult = this.orderRepository.create({
+      const orderResult = this.orderRepository.save({
         ...order,
       });
 
       await queryRunner.manager.save(orderResult);
 
       // 4. 결제 내역 생성
-      const paymentImp = this.paymentRepository.create({
+      const paymentImp = this.paymentRepository.save({
         price: canceldAmount,
         impUid: impUid,
         status: PAYMENT_STATUS_ENUM.CANCEL,
