@@ -31,22 +31,18 @@ export class Payment {
   @Field(() => Int)
   price: number;
 
-  @Column()
-  @Field(() => String, { nullable: true })
-  impUid: string;
-
   @Column({ type: 'enum', enum: PAYMENT_STATUS_ENUM })
   @Field(() => PAYMENT_STATUS_ENUM)
   status: PAYMENT_STATUS_ENUM;
 
   @JoinColumn()
   @OneToOne(() => Order, { onDelete: 'CASCADE' })
-  @Field(() => Order)
-  order: Order;
+  @Field(() => String)
+  order: string;
 
   @ManyToOne(() => User)
-  @Field(() => User)
-  user: User;
+  @Field(() => String)
+  user: string;
 
   @CreateDateColumn()
   @Field(() => Date)

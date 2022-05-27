@@ -66,17 +66,19 @@ type Address {
   addressDetail: String!
   zipCode: String!
   createdAt: String!
+  impUid: String!
   user: User!
 }
 
 type Order {
   id: String!
+  impUid: String!
   count: Int!
   price: Int!
   receiverName: String!
   receiverPhone: String!
   address: Address!
-  user: User!
+  user: String!
   product: Product!
   createdAt: DateTime!
 }
@@ -102,10 +104,9 @@ type ReviewImage {
 type Payment {
   id: String!
   price: Int!
-  impUid: String
   status: PAYMENT_STATUS_ENUM!
-  order: Order!
-  user: User!
+  order: String!
+  user: String!
   createdAt: DateTime!
 }
 
@@ -169,8 +170,8 @@ type Mutation {
   createCustom(createCustomInput: CreateCustomInput!): Custom!
   uploadFile(files: [Upload!]!): [String!]!
   createOrder(createOrderInput: CreateOrderInput!): Order!
-  payment(createPaymentInput: CreatePaymentInput!): Payment!
-  refund(createPaymentInput: CreatePaymentInput!): Payment!
+  payment(price: Float!, impUid: String!, createAddressInput: CreateAddressInput!, createOrderInput: CreateOrderInput!): Payment!
+  refund(impUid: String!, paymentId: String!, createAddressInput: CreateAddressInput!, createOrderInput: CreateOrderInput!): Payment!
   createProduct(createProductInput: CreateProductInput!): Product!
   updateProduct(productId: String!, updateProductInput: UpdateProductInput!): Product!
   deleteProduct(productId: String!): String!
@@ -225,16 +226,9 @@ scalar Upload
 input CreateOrderInput {
   count: Int!
   price: Int!
-  address: CreateAddressInput!
   receiverName: String!
   receiverPhone: String!
   productId: String!
-}
-
-input CreatePaymentInput {
-  price: Int!
-  impUid: String!
-  order: CreateOrderInput!
 }
 
 input CreateProductInput {

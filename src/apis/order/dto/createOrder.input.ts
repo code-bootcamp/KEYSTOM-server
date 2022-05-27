@@ -10,9 +10,6 @@ export class CreateOrderInput {
   @Field(() => Int)
   price: number;
 
-  @Field(() => CreateAddressInput)
-  address: CreateAddressInput;
-
   @Field(() => String)
   receiverName: string;
 

@@ -6,9 +6,6 @@ export class CreatePaymentInput {
   @Field(() => Int)
   price: number;
 
-  @Field(() => String)
-  impUid: string;
-
   @Field(() => CreateOrderInput)
   order: CreateOrderInput;
 }
