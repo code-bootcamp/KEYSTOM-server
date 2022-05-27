@@ -38,7 +38,7 @@ export class AuthController {
     this.authService.setRefreshToken({ user, res });
 
     res.redirect(
-      'http://localhost:5500/f6b2-team6-server/frontend/login/index.html', //forntend live server 주소 복붙 //로그인 끝나면 이 페이지로 돌아와라
+      'http://localhost:3000', //forntend live server 주소 복붙 //로그인 끝나면 이 페이지로 돌아와라
     );
   }
   @Get('/login/naver') //get 할 주소 // api 요청 들어오면 구글 로그인 페이지로 redirect 시켜줘야 한다=>구글 페이지에서 인증 => 그후 다시 api 실행 => passport에 이 기능 라이브러리 있음
@@ -60,7 +60,7 @@ export class AuthController {
     this.authService.setRefreshToken({ user, res });
 
     res.redirect(
-      'http://localhost:5500/f6b2-team6-server/frontend/login/index.html', //forntend live server 주소 복붙 //로그인 끝나면 이 페이지로 돌아와라
+      'http://localhost:3000', //forntend live server 주소 복붙 //로그인 끝나면 이 페이지로 돌아와라
     );
   }
   @Get('/login/kakao') //get 할 주소 // api 요청 들어오면 구글 로그인 페이지로 redirect 시켜줘야 한다=>구글 페이지에서 인증 => 그후 다시 api 실행 => passport에 이 기능 라이브러리 있음
@@ -83,7 +83,7 @@ export class AuthController {
     this.authService.setRefreshToken({ user, res });
 
     res.redirect(
-      'http://localhost:5500/f6b2-team6-server/frontend/login/index.html', //forntend live server 주소 복붙 //로그인 끝나면 이 페이지로 돌아와라
+      'http://localhost:3000', //forntend live server 주소 복붙 //로그인 끝나면 이 페이지로 돌아와라
     );
   }
 }

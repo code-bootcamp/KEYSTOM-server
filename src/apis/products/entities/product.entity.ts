@@ -32,10 +32,6 @@ export class Product {
   @Field(() => Int)
   price: number;
 
-  @Column({ default: 0 })
-  @Field(() => Int)
-  like: number;
-
   @CreateDateColumn()
   @Field(() => Date)
   createdAt: Date;
@@ -44,8 +40,12 @@ export class Product {
   @Field(() => Date)
   deletedAt: Date;
 
-  @Column()
-  @Field(() => String, { nullable: true })
+  @Column({
+    default:
+      'https://images.mypetlife.co.kr/content/uploads/2021/10/22152410/IMG_2087-scaled-e1634883900174.jpg',
+    nullable: true,
+  })
+  @Field(() => String)
   thumbnail: string;
 
   @JoinTable()

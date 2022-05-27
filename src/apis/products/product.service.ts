@@ -4,6 +4,8 @@ import { Connection, Repository } from 'typeorm';
 import { ProductTag } from '../productsTag/entities/productTag.entity';
 import { Product } from './entities/product.entity';
 import { ProductImage } from 'src/apis/productImage/entities/productImage.entity';
+import { User } from '../user/entities/user.entity';
+import { ElasticsearchService } from '@nestjs/elasticsearch';
 
 @Injectable()
 export class ProductService {
@@ -12,6 +14,7 @@ export class ProductService {
     private readonly productRepository: Repository<Product>,
     @InjectRepository(ProductTag)
     private readonly productTagRepository: Repository<ProductTag>,
+    private readonly elasticsearchService: ElasticsearchService,
 
     @InjectRepository(ProductImage)
     private readonly productImageRepository: Repository<ProductImage>,
@@ -24,6 +27,63 @@ export class ProductService {
   //     },
   //   });
   // }
+
+  async findString({ search }) {
+    const result = await this.elasticsearchService.search({
+      index: 'myproduct',
+      sort: 'createdat:desc',
+      size: 8,
+      query: {
+        bool: {
+          should: [
+            { match: { title: `${search}` } },
+            { match: { description: `${search}` } },
+          ],
+        },
+      },
+    });
+    const arr = [];
+    const products = result.hits.hits.map((el: any) => ({
+      id: el._source.id,
+    }));
+    for (let i = 0; products.length > i; i++) {
+      console.log(products[i].id);
+      const product1 = await this.productRepository.findOne({
+        where: { id: products[i].id },
+        relations: ['productTags'],
+      });
+      console.log(product1);
+      arr.push(product1);
+    }
+    return arr;
+  }
+  async findPrice({ price }) {
+    const result = await this.elasticsearchService.search({
+      index: 'myproduct',
+      sort: 'created:desc',
+      size: 8,
+      query: {
+        bool: {
+          should: [{ match: { price: `${price}` } }],
+        },
+      },
+    });
+
+    const arr = [];
+    const products = result.hits.hits.map((el: any) => ({
+      id: el._source.id,
+    }));
+    for (let i = 0; products.length > i; i++) {
+      console.log(products[i].id);
+      const product1 = await this.productRepository.findOne({
+        where: { id: products[i].id },
+        relations: ['productTags'],
+      });
+      console.log(product1);
+      arr.push(product1);
+    }
+    return arr;
+  }
   async findAll({ page }) {
     return await this.productRepository
       .createQueryBuilder('product')
@@ -49,14 +109,14 @@ export class ProductService {
     return await this.productRepository.count();
   }
 
-  async findBest() {
-    return await this.productRepository.find({
-      order: {
-        like: 'DESC',
-      },
-      take: 3,
-    });
-  }
+  // async findBest() {
+  //   return await this.productRepository.find({
+  //     order: {
+  //       like: 'DESC',
+  //     },
+  //     take: 3,
+  //   });
+  // }
 
   async create({ imageUrls, ...rest }) {
     // 상품을 데이터베이스에 저장
