@@ -101,6 +101,7 @@ export class AuthResolver {
         sameSite: 'none',
         secure: true,
         httpOnly: true,
+        maxAge: 0,
       });
 
       jwt.verify(accessToken, process.env.ACCESS_SECRET_KEY);
