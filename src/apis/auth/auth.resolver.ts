@@ -137,6 +137,12 @@ export class AuthResolver {
   async fetchUserLoggedIn(@CurrentUser() currentUser: ICurrentUser) {
     const email = currentUser.email;
     const user = await this.addressService.findOne({ email });
+    console.log('==============');
+    console.log('==============');
+    console.log('==============');
+    console.log('==============');
+    console.log('==============');
+    console.log(user);
     return user;
   }
 }
