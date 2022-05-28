@@ -7,7 +7,9 @@ import {
   ManyToOne,
   CreateDateColumn,
   DeleteDateColumn,
+  OneToOne,
 } from 'typeorm';
+import { Order } from '../../order/entities/order.entity';
 
 @Entity()
 @ObjectType()
@@ -34,6 +36,10 @@ export class Address {
 
   @DeleteDateColumn()
   deletedAt: Date;
+
+  @Column()
+  @Field(() => String)
+  impUid: string;
 
   @ManyToOne(() => User, { onDelete: 'CASCADE' })
   @Field(() => User)

@@ -27,6 +27,9 @@ export class OrderService {
     return await this.orderRepository
       .createQueryBuilder('order')
       .where('order.user = :user', { user: email })
+      .leftJoinAndSelect('order.address', 'address')
+      .leftJoinAndSelect('order.product', 'product')
+      .leftJoinAndSelect('order.user', 'user')
       .orderBy('order.createdAt', 'DESC')
       .skip(0 + Number((page - 1) * 3))
       .take(3)
