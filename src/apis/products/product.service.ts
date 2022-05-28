@@ -31,7 +31,7 @@ export class ProductService {
   async findString({ search }) {
     const result = await this.elasticsearchService.search({
       index: 'myproduct',
-      sort: 'createdat:desc',
+      sort: 'updatedat:asc',
       size: 8,
       query: {
         bool: {
@@ -47,12 +47,10 @@ export class ProductService {
       id: el._source.id,
     }));
     for (let i = 0; products.length > i; i++) {
-      console.log(products[i].id);
       const product1 = await this.productRepository.findOne({
         where: { id: products[i].id },
         relations: ['productTags'],
       });
-      console.log(product1);
       arr.push(product1);
     }
     return arr;
@@ -60,7 +58,7 @@ export class ProductService {
   async findPrice({ price }) {
     const result = await this.elasticsearchService.search({
       index: 'myproduct',
-      sort: 'created:desc',
+      sort: 'updatedat:asc',
       size: 8,
       query: {
         bool: {
@@ -74,12 +72,10 @@ export class ProductService {
       id: el._source.id,
     }));
     for (let i = 0; products.length > i; i++) {
-      console.log(products[i].id);
       const product1 = await this.productRepository.findOne({
         where: { id: products[i].id },
         relations: ['productTags'],
       });
-      console.log(product1);
       arr.push(product1);
     }
     return arr;

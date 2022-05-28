@@ -1,6 +1,6 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { Product } from 'src/apis/products/entities/product.entity';
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, In } from 'typeorm';
 
 @Entity()
 @ObjectType()
@@ -10,12 +10,20 @@ export class Custom {
   id: string;
 
   @Column()
-  @Field(() => String)
-  key: string;
+  @Field(() => Int)
+  space: number;
 
   @Column()
-  @Field(() => String)
-  color: string;
+  @Field(() => Int)
+  enter: number;
+
+  @Column()
+  @Field(() => Int)
+  esc: number;
+
+  @Column()
+  @Field(() => Int)
+  rest: number;
 
   @ManyToOne(() => Product, { onDelete: 'CASCADE' })
   @Field(() => Product)
