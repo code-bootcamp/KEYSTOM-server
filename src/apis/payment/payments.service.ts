@@ -4,7 +4,6 @@ import { Repository, Connection } from 'typeorm';
 import { IamportService } from '../iamport/iamport.service';
 import { Order } from '../order/entities/order.entity';
 import { Payment, PAYMENT_STATUS_ENUM } from './entities/payment.entity';
-import { User } from 'src/apis/user/entities/user.entity';
 import { Address } from '../address/entities/address.entity';
 import { Product } from '../products/entities/product.entity';
 
@@ -45,7 +44,7 @@ export class PaymentService {
       // 2. 이미 결제한 내역인지 확인!
       // 중복 방지를 위해 결제 테이블에 존재하는 지 확인!
       const checkAlreadyPayment = await queryRunner.manager.findOne(
-        Order,
+        Payment,
         {
           impUid,
         },
@@ -62,26 +61,19 @@ export class PaymentService {
       const addressResult = this.addressRepository.create({
         ...createAddressInput,
         user: currentUser.email,
-        impUid,
       });
       await queryRunner.manager.save(addressResult);
-
-      // 2.6 유저 찾아오기
-      // const user = await queryRunner.manager.findOne(User, {
-      //   email: currentUser.email,
-      // });
-      // console.log('유저', user);
 
       // 2.7 상품 찾아오기
       const { productId, ...rest } = createOrderInput;
       const product = await queryRunner.manager.findOne(Product, {
         id: productId,
       });
+
       console.log('상품:', product);
       // 3. 주문 내역 생성
       const order = this.orderRepository.create({
         ...rest,
-        impUid,
         address: addressResult,
         user: currentUser.email,
         product,
@@ -92,6 +84,7 @@ export class PaymentService {
       // 4. 결제 내역 생성
       const paymentImp = this.paymentRepository.create({
         price: price,
+        impUid,
         status: PAYMENT_STATUS_ENUM.PAYMENT,
         user: currentUser.email,
         order: order['id'],
@@ -153,7 +146,6 @@ export class PaymentService {
       const addressResult = this.addressRepository.create({
         ...createAddressInput,
         user: currentUser.email,
-        impUid,
       });
       await queryRunner.manager.save(addressResult);
 
@@ -166,7 +158,6 @@ export class PaymentService {
       // 3. 주문 내역 생성
       const order = this.orderRepository.create({
         ...rest,
-        impUid,
         address: addressResult,
         user: currentUser.email,
         product,
@@ -177,6 +168,7 @@ export class PaymentService {
       // 4. 결제 내역 생성
       const paymentImp = this.paymentRepository.create({
         price: canceldAmount,
+        impUid,
         status: PAYMENT_STATUS_ENUM.CANCEL,
         user: currentUser.email,
         order: order['id'],

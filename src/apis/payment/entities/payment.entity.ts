@@ -35,6 +35,10 @@ export class Payment {
   @Field(() => PAYMENT_STATUS_ENUM)
   status: PAYMENT_STATUS_ENUM;
 
+  @Column()
+  @Field(() => String)
+  impUid: string;
+
   @JoinColumn()
   @OneToOne(() => Order, { onDelete: 'CASCADE' })
   @Field(() => String)
