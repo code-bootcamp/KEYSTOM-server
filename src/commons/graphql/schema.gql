@@ -32,8 +32,10 @@ type ProductTag {
 
 type Custom {
   id: String!
-  key: String!
-  color: String!
+  space: Int!
+  enter: Int!
+  esc: Int!
+  rest: Int!
   product: Product!
 }
 
@@ -212,8 +214,10 @@ input CreateCouponInput {
 }
 
 input CreateCustomInput {
-  key: String!
-  color: String!
+  space: Int!
+  enter: Int!
+  esc: Int!
+  rest: Int!
   productId: String!
 }
 
