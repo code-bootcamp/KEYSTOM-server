@@ -37,10 +37,6 @@ export class Address {
   @DeleteDateColumn()
   deletedAt: Date;
 
-  @Column()
-  @Field(() => String)
-  impUid: string;
-
   @ManyToOne(() => User, { onDelete: 'CASCADE' })
   @Field(() => User)
   user: User;

@@ -20,10 +20,6 @@ export class Order {
   id: string;
 
   @Column()
-  @Field(() => String)
-  impUid: string;
-
-  @Column()
   @Field(() => Int)
   count: number;
 
