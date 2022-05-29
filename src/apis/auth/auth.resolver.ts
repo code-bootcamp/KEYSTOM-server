@@ -97,7 +97,7 @@ export class AuthResolver {
       // });
       context.res.clearCookie('refreshToken', {
         path: '/',
-        domain: '.antipiebse.shop',
+        domain: '.delifarm.site',
         sameSite: 'none',
         secure: true,
         httpOnly: true,
