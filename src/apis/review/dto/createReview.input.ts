@@ -8,7 +8,7 @@ export class CreateReviewInput {
   @Field(() => String)
   description: string;
 
-  @Field(() => [String])
+  @Field(() => [String], { nullable: true })
   imageUrls: string[];
 
   @Field(() => String)

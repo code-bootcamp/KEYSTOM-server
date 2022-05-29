@@ -11,7 +11,7 @@ export class CreateProductInput {
   @Field(() => Int)
   price: number;
 
-  @Field(() => [String])
+  @Field(() => [String], { nullable: true })
   imageUrls: string[];
 
   @Field(() => [String], { nullable: true })
