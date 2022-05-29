@@ -9,7 +9,7 @@ export class ProductImage {
   @Field(() => String)
   id: string;
 
-  @Column()
+  @Column({ default: null })
   @Field(() => String)
   url: string;
 

@@ -41,8 +41,6 @@ export class Product {
   deletedAt: Date;
 
   @Column({
-    default:
-      'https://images.mypetlife.co.kr/content/uploads/2021/10/22152410/IMG_2087-scaled-e1634883900174.jpg',
     nullable: true,
   })
   @Field(() => String)
@@ -55,7 +53,9 @@ export class Product {
   @Field(() => [ProductTag])
   productTags: ProductTag[];
 
-  @OneToMany(() => ProductImage, (productImage) => productImage.product)
+  @OneToMany(() => ProductImage, (productImage) => productImage.product, {
+    nullable: true,
+  })
   productImages: ProductImage[];
 
   @UpdateDateColumn()
