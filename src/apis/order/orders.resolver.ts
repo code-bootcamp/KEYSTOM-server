@@ -21,7 +21,18 @@ export class OrderResolver {
   ) {
     const email = currentUser.email;
     if (!page) page = 1;
-    const order = await this.orderService.find({ email, page });
+    const order = await this.orderService.findall({ email, page });
+    return order;
+  }
+
+  @UseGuards(GqlAuthAccessGuard)
+  @Query(() => Order) //본인이 산 목록
+  async fetchOrder(
+    @CurrentUser() currentUser: ICurrentUser,
+    @Args('orderId') orderId: string,
+  ) {
+    const email = currentUser.email;
+    const order = await this.orderService.findOne({ email, orderId });
     return order;
   }
 
