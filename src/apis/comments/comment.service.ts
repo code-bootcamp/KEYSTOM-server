@@ -41,12 +41,15 @@ export class CommentService {
   }
   async findReviewComments({ reviewId }) {
     const review = await this.reviewRepository.findOne({
-      where: { reviewId },
+      where: { id: reviewId },
     });
-    return await this.commentRepository.find({
+    console.log('리뷰유유유유', review);
+    const result = await this.commentRepository.find({
       where: { review },
       relations: ['user', 'review'],
     });
+    console.log('결과', result);
+    return result;
   }
 
   async findUserComments({ email }) {

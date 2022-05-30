@@ -118,9 +118,10 @@ enum PAYMENT_STATUS_ENUM {
 
 type Comment {
   id: Int!
-  commentContent: String!
-  parentId: String!
-  createdAt: String!
+  content: String!
+  parentId: String
+  user: User!
+  createdAt: DateTime!
 }
 
 type Query {
@@ -204,8 +205,7 @@ input UpdateAddressInput {
 }
 
 input CreateCommentInput {
-  commentContent: String!
-  email: String!
+  content: String!
   reviewId: String!
 }
 

@@ -22,7 +22,7 @@ export class Comment {
   content: string;
 
   @Column({ default: null })
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   parentId: string;
 
   @ManyToOne(() => User, { onDelete: 'CASCADE' })
