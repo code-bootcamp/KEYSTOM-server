@@ -89,7 +89,7 @@ type Review {
   like: Int!
   thumbnail: String
   createdAt: String!
-  product: Product!
+  productId: Product!
   user: User!
   order: Order!
 }
@@ -253,16 +253,13 @@ input CreateReviewInput {
   title: String!
   description: String!
   imageUrls: [String!]
-  productId: String!
   orderId: String!
 }
 
 input UpdateReviewInput {
   title: String!
   description: String!
-  imageUrls: [String!]!
-  productId: String!
-  orderId: String!
+  imageUrls: [String!]
   reviewId: String!
 }
 

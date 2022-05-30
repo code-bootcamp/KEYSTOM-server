@@ -79,8 +79,13 @@ export class ReviewService {
     const user = await this.userRepository.findOne({
       email: currentUser.email,
     });
-    const order = await this.orderRepository.findOne({ id: orderId });
+    const order = await this.orderRepository.findOne({
+      where: { id: orderId },
+      relations: ['product'],
+    });
 
+    console.log('주문 내역', order);
+    console.log(order.product.id);
     // 리뷰 저장
     const result = await this.reviewRepository.save({
       ...rest,
@@ -89,6 +94,7 @@ export class ReviewService {
       order: order,
       productId: order.product.id,
     });
+    console.log('리뷰', result);
     // 리뷰 이미지 저장
     if (imageUrls) {
       for (let i = 0; i < imageUrls.length; i++) {
