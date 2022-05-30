@@ -115,6 +115,14 @@ export class ReviewService {
         }
       }
     }
+
+    // 리뷰를 작성했으므로 상태 변경!
+    await this.orderRepository.save({
+      ...order,
+      isReview: true,
+    });
+
+    //리뷰를 작성하면 주문 내역에 작성 여부 변경
     return result;
   }
 
