@@ -42,6 +42,7 @@ export class OrderService {
     });
     return await this.orderRepository.findOne({
       where: { user: user, id: orderId },
+      relations: ['product', 'address'],
     });
   }
 
