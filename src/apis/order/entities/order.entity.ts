@@ -9,8 +9,10 @@ import {
   CreateDateColumn,
   JoinColumn,
   OneToOne,
+  OneToMany,
 } from 'typeorm';
 import { Address } from '../../address/entities/address.entity';
+import { Review } from '../../review/entities/review.entity';
 
 @Entity()
 @ObjectType()
@@ -55,4 +57,8 @@ export class Order {
   @CreateDateColumn()
   @Field(() => Date)
   createdAt: Date;
+
+  @Column({ default: false })
+  @Field(() => Boolean)
+  isReview: boolean;
 }
