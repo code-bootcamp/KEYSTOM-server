@@ -1,4 +1,8 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  BadRequestException,
+  ConflictException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, Connection } from 'typeorm';
 import { Order } from '../order/entities/order.entity';
@@ -51,7 +55,7 @@ export class ReviewService {
       .createQueryBuilder('review')
       .leftJoinAndSelect('review.product', 'product')
       .leftJoinAndSelect('review.user', 'user')
-      .where('review.product = :product', { id: productId })
+      .where('review.product = :id', { id: productId })
       .orderBy('review.createdAt', 'DESC')
       .skip(0 + Number((page - 1) * 10))
       .take(10)
@@ -81,17 +85,22 @@ export class ReviewService {
 
   async create({ imageUrls, orderId, ...rest }, currentUser) {
     // 어떠한 상품을 누가 구매했는지 불러오기
-    const user = await this.userRepository.findOne({
-      email: currentUser.email,
-    });
     const order = await this.orderRepository.findOne({
       where: { id: orderId },
       relations: ['product'],
     });
 
+    if (order.isReview)
+      throw new ConflictException('이미 리뷰를 작성하였습니다.');
+
     const product = await this.productRepository.findOne({
       id: order.product.id,
     });
+
+    const user = await this.userRepository.findOne({
+      email: currentUser.email,
+    });
+
     console.log('주문 내역', order);
     console.log(order.product.id);
     // 리뷰 저장

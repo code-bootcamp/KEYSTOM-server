@@ -80,6 +80,7 @@ type Order {
   user: String!
   product: Product!
   createdAt: DateTime!
+  isReview: Boolean!
 }
 
 type Review {
@@ -89,7 +90,7 @@ type Review {
   like: Int!
   thumbnail: String
   createdAt: String!
-  productId: Product!
+  product: Product!
   user: User!
   order: Order!
 }
@@ -144,10 +145,9 @@ type Query {
   fetchProductRowCount: Int!
   fetchReview(reviewId: String!): Review!
   fetchBestReview: [Review!]!
-  fetchReviews(page: Float): [Review!]!
+  fetchReviews(page: Float, productId: String!): [Review!]!
   fetchReviewImages(reviewId: String!): [ReviewImage!]!
   fetchReviewRowCount: Int!
-  fetchProductReview(productId: String!): [Review!]!
   fetchUserReview(email: String!): [Review!]!
   fetchUsers: [User!]!
   fetchUser(email: String!): User!
