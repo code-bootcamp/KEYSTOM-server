@@ -37,8 +37,11 @@ export class OrderService {
   }
 
   async findOne({ email, orderId }) {
+    const user = await this.userRepository.findOne({
+      email,
+    });
     return await this.orderRepository.findOne({
-      where: { email: email, id: orderId },
+      where: { user: user, id: orderId },
     });
   }
 
