@@ -42,7 +42,6 @@ export class Review {
   deletedAt: Date;
 
   @ManyToOne(() => Product, { onDelete: 'CASCADE' })
-  @Field(() => String)
   productId: string;
 
   @ManyToOne(() => User, { onDelete: 'CASCADE' })

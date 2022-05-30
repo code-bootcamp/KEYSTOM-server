@@ -49,7 +49,7 @@ export class ReviewService {
   async findProductReview({ page, productId }) {
     return await this.reviewRepository
       .createQueryBuilder('review')
-      .leftJoinAndSelect('review.product', 'product')
+      // .leftJoinAndSelect('review.product', 'product')
       .leftJoinAndSelect('review.user', 'user')
       .where('review.productId = :productId', { id: productId })
       .orderBy('review.createdAt', 'DESC')
