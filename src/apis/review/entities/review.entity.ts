@@ -1,6 +1,5 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { Order } from 'src/apis/order/entities/order.entity';
-import { Product } from 'src/apis/products/entities/product.entity';
 import { User } from 'src/apis/user/entities/user.entity';
 import {
   Entity,
@@ -40,10 +39,6 @@ export class Review {
 
   @DeleteDateColumn()
   deletedAt: Date;
-
-  @ManyToOne(() => Product, { onDelete: 'CASCADE' })
-  @Field(() => Product)
-  product: Product;
 
   @ManyToOne(() => User, { onDelete: 'CASCADE' })
   @Field(() => User)

@@ -75,9 +75,8 @@ export class ReviewService {
     return await this.reviewRepository.find({ where: { user: user } });
   }
 
-  async create({ imageUrls, productId, orderId, ...rest }, currentUser) {
+  async create({ imageUrls, orderId, ...rest }, currentUser) {
     // 어떠한 상품을 누가 구매했는지 불러오기
-    const product = await this.productRepository.findOne({ id: productId });
     const user = await this.userRepository.findOne({
       email: currentUser.email,
     });
@@ -86,7 +85,6 @@ export class ReviewService {
     // 리뷰 저장
     const result = await this.reviewRepository.save({
       ...rest,
-      product: product,
       thumbnail: imageUrls ? imageUrls[0] : ' ',
       user: user,
       order: order,
@@ -114,36 +112,22 @@ export class ReviewService {
     return result;
   }
 
-  async update(
-    { imageUrls, productId, orderId, reviewId, ...rest },
-    currentUser,
-  ) {
+  async update({ imageUrls, reviewId, ...rest }, currentUser) {
     // 업데이트 할 리뷰가 존재하는 지 확인
     const target = await this.reviewRepository.findOne({ id: reviewId });
     if (!target)
       throw new BadRequestException('업데이트할 리뷰가 존재하지 않습니다.');
 
-    // 상품, 유저, 주문 내역 찾아오기
-    const product = await this.productRepository.findOne({ id: productId });
-    if (!product)
-      throw new BadRequestException('상품 정보가 존재하지 않습니다.');
+    // 유저, 주문 내역 찾아오기
     const user = await this.userRepository.findOne({
       email: currentUser.email,
     });
     if (!user) throw new BadRequestException('유저 정보가 존재하지 않습니다.');
 
-    const order = await this.orderRepository.findOne({
-      id: orderId,
-    });
-    if (!order) throw new BadRequestException('주문 내역이 존재하지 않습니다.');
-
     //업데이트 된 상품과 연관된 이미지 삭제!!
     const result = await this.reviewRepository.save({
       ...target,
       ...rest,
-      product: product,
-      user: user,
-      order: order,
     });
 
     await this.reviewImageRepository.delete({ review: result });

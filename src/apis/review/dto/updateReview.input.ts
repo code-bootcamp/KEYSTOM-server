@@ -8,14 +8,8 @@ export class UpdateReviewInput {
   @Field(() => String)
   description: string;
 
-  @Field(() => [String])
+  @Field(() => [String], { nullable: true })
   imageUrls: string[];
-
-  @Field(() => String)
-  productId: string;
-
-  @Field(() => String)
-  orderId: string;
 
   @Field(() => String)
   reviewId: string;

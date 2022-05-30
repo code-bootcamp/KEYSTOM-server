@@ -12,8 +12,5 @@ export class CreateReviewInput {
   imageUrls: string[];
 
   @Field(() => String)
-  productId: string;
-
-  @Field(() => String)
   orderId: string;
 }
