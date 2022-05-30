@@ -23,7 +23,7 @@ export class ReviewResolver {
 
   @Query(() => [Review])
   fetchReviews(
-    @Args('page', { nullable: true, defaultValue: 1 }) page: number, //
+    @Args('page', { nullable: true }) page: number, //
     @Args('productId') productId: string,
   ) {
     if (!page || page <= 0) page = 1;
