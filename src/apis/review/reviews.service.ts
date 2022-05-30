@@ -62,15 +62,14 @@ export class ReviewService {
   }
 
   async findProductReview({ productId }) {
-    const product = await this.productRepository.findOne({
-      id: productId,
+    return await this.reviewRepository.find({
+      where: { productId },
     });
-    return await this.reviewRepository.find({ where: { product: product } });
   }
 
   async findUserReview({ email }) {
     const user = await this.userRepository.findOne({
-      email: email,
+      email,
     });
     return await this.reviewRepository.find({ where: { user: user } });
   }
@@ -88,6 +87,7 @@ export class ReviewService {
       thumbnail: imageUrls ? imageUrls[0] : ' ',
       user: user,
       order: order,
+      productId: order.product.id,
     });
     // 리뷰 이미지 저장
     if (imageUrls) {
