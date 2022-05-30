@@ -49,9 +49,9 @@ export class ReviewService {
   async findProductReview({ page, productId }) {
     return await this.reviewRepository
       .createQueryBuilder('review')
-      // .leftJoinAndSelect('review.product', 'product')
+      .leftJoinAndSelect('review.product', 'product')
       .leftJoinAndSelect('review.user', 'user')
-      .where('review.productId = :productId', { id: productId })
+      .where('review.Product = :Product', { id: productId })
       .orderBy('review.createdAt', 'DESC')
       .skip(0 + Number((page - 1) * 10))
       .take(10)
@@ -89,6 +89,9 @@ export class ReviewService {
       relations: ['product'],
     });
 
+    const product = await this.productRepository.findOne({
+      id: order.product.id,
+    });
     console.log('주문 내역', order);
     console.log(order.product.id);
     // 리뷰 저장
@@ -97,7 +100,7 @@ export class ReviewService {
       thumbnail: imageUrls ? imageUrls[0] : ' ',
       user: user,
       order: order,
-      productId: order.product.id,
+      product: product,
     });
     console.log('리뷰', result);
     // 리뷰 이미지 저장
