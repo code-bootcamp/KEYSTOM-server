@@ -40,7 +40,7 @@ export class CommentService {
   }
   async findReviewComments({ reviewId }) {
     const review = await this.reviewRepository.findOne({
-      where: { reviewId: reviewId },
+      where: { id: reviewId },
     });
     return await this.commentRepository.find({ where: { review: review } });
   }
