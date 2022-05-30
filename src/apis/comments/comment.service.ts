@@ -22,13 +22,14 @@ export class CommentService {
   async findOne({ commentId }) {
     return await this.commentRepository.findOne({
       where: { id: commentId },
-      relations: ['review'],
+      relations: ['review', 'user'],
     });
   }
   async findReComments({ reviewId, commentId }) {
     const comments = await this.commentRepository
       .createQueryBuilder('comment')
       .leftJoinAndSelect('comment.review', 'review')
+      .leftJoinAndSelect('comment.user', 'user')
       .where('review.id = :reviewId AND comment.parentId = :parentId ', {
         reviewId: reviewId,
         parentId: commentId,
@@ -40,51 +41,61 @@ export class CommentService {
   }
   async findReviewComments({ reviewId }) {
     const review = await this.reviewRepository.findOne({
-      where: { id: reviewId },
+      where: { reviewId },
     });
-    return await this.commentRepository.find({ where: { review: review } });
+    return await this.commentRepository.find({
+      where: { review },
+      relations: ['user', 'review'],
+    });
   }
 
   async findUserComments({ email }) {
     const user = await this.userRepository.findOne({
-      where: { email: email },
+      where: { email },
     });
     return await this.commentRepository.find({ where: { user: user } });
   }
-  async create({ createCommentInput }) {
-    const { email, reviewId, ...comment } = createCommentInput;
-    const result1 = await this.reviewRepository.findOne({
+  async create({ createCommentInput, currentUser }) {
+    const { reviewId, ...comment } = createCommentInput;
+    const review = await this.reviewRepository.findOne({
       id: reviewId,
     });
-    const result2 = await this.userRepository.findOne({
-      email: email,
+    const user = await this.userRepository.findOne({
+      email: currentUser.email,
     });
-    const result3 = await this.commentRepository.save({
+    const result = await this.commentRepository.save({
       ...comment,
-      user: result2,
-      review: result1,
+      user,
+      review,
     });
-    return result3;
+    return result;
   }
-  async createReComment({ commentId, createCommentInput }) {
-    const { email, reviewId, ...comment } = createCommentInput;
-    const result1 = await this.reviewRepository.findOne({
+  async createReComment({ commentId, createCommentInput, currentUser }) {
+    const { reviewId, ...comment } = createCommentInput;
+    const review = await this.reviewRepository.findOne({
       id: reviewId,
     });
-    const result2 = await this.userRepository.findOne({
-      email: email,
+    const user = await this.userRepository.findOne({
+      email: currentUser.email,
     });
-    const result3 = await this.commentRepository.save({
+    const result = await this.commentRepository.save({
       ...comment,
       parentId: commentId,
-      user: result2,
-      review: result1,
+      user,
+      review,
     });
-    console.log(result3);
-    return result3;
+    return result;
   }
-  async delete({ commentId }) {
-    const result = await this.commentRepository.softDelete({ id: commentId });
+  async delete({ commentId, currentUser }) {
+    const user = await this.userRepository.findOne({
+      email: currentUser.email,
+    });
+
+    const result = await this.commentRepository.softDelete({
+      id: commentId,
+      user,
+    });
+
     return result.affected ? true : false;
   }
 }
