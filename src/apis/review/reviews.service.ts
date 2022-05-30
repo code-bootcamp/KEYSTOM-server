@@ -84,29 +84,31 @@ export class ReviewService {
     const order = await this.orderRepository.findOne({ id: orderId });
 
     // 리뷰 저장
-    const result = this.reviewRepository.create({
+    const result = await this.reviewRepository.save({
       ...rest,
       product: product,
-      thumbnail: imageUrls[0],
+      thumbnail: imageUrls ? imageUrls[0] : ' ',
       user: user,
       order: order,
     });
     // 리뷰 이미지 저장
-    for (let i = 0; i < imageUrls.length; i++) {
-      //썸네일 저장
-      if (i === 0) {
-        this.reviewImageRepository.create({
-          url: imageUrls[i],
-          isThumbnail: true,
-          review: result,
-        });
-      }
-      // 이미지 저장
-      else {
-        this.reviewImageRepository.create({
-          url: imageUrls[i],
-          review: result,
-        });
+    if (imageUrls) {
+      for (let i = 0; i < imageUrls.length; i++) {
+        //썸네일 저장
+        if (i === 0) {
+          await this.reviewImageRepository.save({
+            url: imageUrls[i],
+            isThumbnail: true,
+            review: result,
+          });
+        }
+        // 이미지 저장
+        else {
+          await this.reviewImageRepository.save({
+            url: imageUrls[i],
+            review: result,
+          });
+        }
       }
     }
     return result;
@@ -145,21 +147,22 @@ export class ReviewService {
     });
 
     await this.reviewImageRepository.delete({ review: result });
-
-    for (let i = 0; i < imageUrls.length; i++) {
-      if (i === 0) {
-        this.reviewImageRepository.create({
-          url: imageUrls[i],
-          isThumbnail: true,
-          review: result,
-        });
-        // await queryRunner.manager.save(ReviewImage, { ...image });
-      } else {
-        this.reviewImageRepository.create({
-          url: imageUrls[i],
-          review: result,
-        });
-        // await queryRunner.manager.save(ReviewImage, { ...image });
+    if (imageUrls) {
+      for (let i = 0; i < imageUrls.length; i++) {
+        if (i === 0) {
+          this.reviewImageRepository.create({
+            url: imageUrls[i],
+            isThumbnail: true,
+            review: result,
+          });
+          // await queryRunner.manager.save(ReviewImage, { ...image });
+        } else {
+          this.reviewImageRepository.create({
+            url: imageUrls[i],
+            review: result,
+          });
+          // await queryRunner.manager.save(ReviewImage, { ...image });
+        }
       }
     }
     return result;

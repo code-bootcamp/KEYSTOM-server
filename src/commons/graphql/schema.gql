@@ -67,13 +67,11 @@ type Address {
   addressDetail: String!
   zipCode: String!
   createdAt: String!
-  impUid: String!
   user: User!
 }
 
 type Order {
   id: String!
-  impUid: String!
   count: Int!
   price: Int!
   receiverName: String!
@@ -106,6 +104,7 @@ type Payment {
   id: String!
   price: Int!
   status: PAYMENT_STATUS_ENUM!
+  impUid: String!
   order: String!
   user: String!
   createdAt: DateTime!
@@ -137,6 +136,7 @@ type Query {
   fetchCustoms: [Custom!]!
   fetchCustom(productId: String!): Custom!
   fetchOrders(page: Float): [Order!]!
+  fetchOrder(orderId: String!): Order!
   searchProducts(search: String, price: Float): [Product!]!
   fetchProducts(page: Float): [Product!]!
   fetchProduct(productId: String!): Product!
@@ -237,7 +237,7 @@ input CreateProductInput {
   title: String!
   description: String!
   price: Int!
-  imageUrls: [String!]!
+  imageUrls: [String!]
   productTags: [String!]
 }
 
@@ -252,7 +252,7 @@ input UpdateProductInput {
 input CreateReviewInput {
   title: String!
   description: String!
-  imageUrls: [String!]!
+  imageUrls: [String!]
   productId: String!
   orderId: String!
 }

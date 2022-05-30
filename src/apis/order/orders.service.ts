@@ -23,7 +23,7 @@ export class OrderService {
   //   return await this.orderRepository.find({ where: { user: user } });
   // }
 
-  async find({ email, page }) {
+  async findall({ email, page }) {
     return await this.orderRepository
       .createQueryBuilder('order')
       .where('order.user = :user', { user: email })
@@ -34,6 +34,15 @@ export class OrderService {
       .skip(0 + Number((page - 1) * 3))
       .take(3)
       .getMany();
+  }
+
+  async findOne({ email, orderId }) {
+    const user = await this.userRepository.findOne({
+      email,
+    });
+    return await this.orderRepository.findOne({
+      where: { user: user, id: orderId },
+    });
   }
 
   async create({ createOrderInput, email }) {
