@@ -46,11 +46,12 @@ export class ReviewService {
     });
   }
 
-  async findAll({ page }) {
+  async findProductReview({ page, productId }) {
     return await this.reviewRepository
       .createQueryBuilder('review')
       .leftJoinAndSelect('review.product', 'product')
       .leftJoinAndSelect('review.user', 'user')
+      .where('review.productId = :productId', { id: productId })
       .orderBy('review.createdAt', 'DESC')
       .skip(0 + Number((page - 1) * 10))
       .take(10)
@@ -61,17 +62,21 @@ export class ReviewService {
     return this.productRepository.count();
   }
 
-  async findProductReview({ productId }) {
-    return await this.reviewRepository.find({
-      where: { productId },
-    });
-  }
+  // async findProductReview({ productId }) {
+  //   return await this.reviewRepository.find({
+  //     where: { productId },
+  //     relations: ['product', 'userId'],
+  //   });
+  // }
 
   async findUserReview({ email }) {
     const user = await this.userRepository.findOne({
       email,
     });
-    return await this.reviewRepository.find({ where: { user: user } });
+    return await this.reviewRepository.find({
+      where: { user: user },
+      relations: ['user, product'],
+    });
   }
 
   async create({ imageUrls, orderId, ...rest }, currentUser) {
