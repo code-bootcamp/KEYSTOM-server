@@ -37,9 +37,6 @@
       "thumbnail": {
         "type": "text"
       },
-      "createdat":{
-        "type":"text"
-      },
       "updatedat": {
         "type": "float"
       }
