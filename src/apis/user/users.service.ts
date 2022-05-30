@@ -3,7 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Address } from '../address/entities/address.entity';
 import { User } from './entities/user.entity';
-import { UserCoupon } from '../UserCoupon/entities/userCoupon.entity';
 
 @Injectable()
 export class UserService {
@@ -39,6 +38,7 @@ export class UserService {
     });
     return result;
   }
+
   async update({ email, updateUserInput }) {
     const user = await this.userRepository.findOne({ email: email });
     const updateUser = await this.userRepository.save({

@@ -1,4 +1,4 @@
-import { ObjectType, Field } from '@nestjs/graphql';
+import { ObjectType, Field, registerEnumType } from '@nestjs/graphql';
 import { UserCoupon } from 'src/apis/UserCoupon/entities/userCoupon.entity';
 import {
   Column,
@@ -7,6 +7,15 @@ import {
   OneToMany,
   PrimaryColumn,
 } from 'typeorm';
+
+// export enum USER_ROLE_ENUM {
+//   USER = 'USER',
+//   ADMIN = 'ADMIN',
+// }
+
+// registerEnumType(USER_ROLE_ENUM, {
+//   name: 'USER_ROLE_ENUM',
+// });
 
 @Entity()
 @ObjectType()
