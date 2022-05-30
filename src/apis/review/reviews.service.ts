@@ -51,7 +51,7 @@ export class ReviewService {
       .createQueryBuilder('review')
       .leftJoinAndSelect('review.product', 'product')
       .leftJoinAndSelect('review.user', 'user')
-      .where('review.Product = :Product', { id: productId })
+      .where('review.product = :product', { id: productId })
       .orderBy('review.createdAt', 'DESC')
       .skip(0 + Number((page - 1) * 10))
       .take(10)
