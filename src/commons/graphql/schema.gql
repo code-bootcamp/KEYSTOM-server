@@ -89,7 +89,7 @@ type Review {
   description: String!
   like: Int!
   thumbnail: String
-  createdAt: String!
+  createdAt: DateTime!
   product: Product!
   user: User!
   order: Order!

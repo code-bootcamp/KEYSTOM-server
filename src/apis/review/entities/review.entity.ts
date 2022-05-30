@@ -35,7 +35,7 @@ export class Review {
   thumbnail: string;
 
   @CreateDateColumn()
-  @Field(() => String)
+  @Field(() => Date)
   createdAt: Date;
 
   @DeleteDateColumn()
