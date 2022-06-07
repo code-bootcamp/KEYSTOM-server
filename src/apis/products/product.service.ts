@@ -28,58 +28,58 @@ export class ProductService {
   //   });
   // }
 
-  async findString({ search }) {
-    const result = await this.elasticsearchService.search({
-      index: 'myproduct',
-      sort: 'updatedat:asc',
-      size: 8,
-      query: {
-        bool: {
-          should: [
-            { match: { title: `${search}` } },
-            { match: { description: `${search}` } },
-          ],
-        },
-      },
-    });
-    const arr = [];
-    const products = result.hits.hits.map((el: any) => ({
-      id: el._source.id,
-    }));
-    for (let i = 0; products.length > i; i++) {
-      const product1 = await this.productRepository.findOne({
-        where: { id: products[i].id },
-        relations: ['productTags'],
-      });
-      arr.push(product1);
-    }
-    return arr;
-  }
-  async findPrice({ price }) {
-    const result = await this.elasticsearchService.search({
-      index: 'myproduct',
-      sort: 'updatedat:asc',
-      size: 8,
-      query: {
-        bool: {
-          should: [{ match: { price: `${price}` } }],
-        },
-      },
-    });
+  // async findString({ search }) {
+  //   const result = await this.elasticsearchService.search({
+  //     index: 'myproduct',
+  //     sort: 'updatedat:asc',
+  //     size: 8,
+  //     query: {
+  //       bool: {
+  //         should: [
+  //           { match: { title: `${search}` } },
+  //           { match: { description: `${search}` } },
+  //         ],
+  //       },
+  //     },
+  //   });
+  //   const arr = [];
+  //   const products = result.hits.hits.map((el: any) => ({
+  //     id: el._source.id,
+  //   }));
+  //   for (let i = 0; products.length > i; i++) {
+  //     const product1 = await this.productRepository.findOne({
+  //       where: { id: products[i].id },
+  //       relations: ['productTags'],
+  //     });
+  //     arr.push(product1);
+  //   }
+  //   return arr;
+  // }
+  // async findPrice({ price }) {
+  //   const result = await this.elasticsearchService.search({
+  //     index: 'myproduct',
+  //     sort: 'updatedat:asc',
+  //     size: 8,
+  //     query: {
+  //       bool: {
+  //         should: [{ match: { price: `${price}` } }],
+  //       },
+  //     },
+  //   });
 
-    const arr = [];
-    const products = result.hits.hits.map((el: any) => ({
-      id: el._source.id,
-    }));
-    for (let i = 0; products.length > i; i++) {
-      const product1 = await this.productRepository.findOne({
-        where: { id: products[i].id },
-        relations: ['productTags'],
-      });
-      arr.push(product1);
-    }
-    return arr;
-  }
+  //   const arr = [];
+  //   const products = result.hits.hits.map((el: any) => ({
+  //     id: el._source.id,
+  //   }));
+  //   for (let i = 0; products.length > i; i++) {
+  //     const product1 = await this.productRepository.findOne({
+  //       where: { id: products[i].id },
+  //       relations: ['productTags'],
+  //     });
+  //     arr.push(product1);
+  //   }
+  //   return arr;
+  // }
   async findAll({ page }) {
     return await this.productRepository
       .createQueryBuilder('product')

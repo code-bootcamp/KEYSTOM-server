@@ -59,6 +59,7 @@ type User {
   nickName: String!
   profileImage: String!
   isAdmin: Boolean!
+  provider: String!
 }
 
 type Address {
@@ -125,7 +126,7 @@ type Comment {
 }
 
 type Query {
-  fetchUserAddress(email: String!): Address!
+  fetchUserAddress: Address!
   fetchAddresses: [Address!]!
   fetchUserLoggedIn: Address!
   fetchComments: [Comment!]!
@@ -139,7 +140,6 @@ type Query {
   fetchCustom(productId: String!): Custom!
   fetchOrders(page: Float): [Order!]!
   fetchOrder(orderId: String!): Order!
-  searchProducts(search: String, price: Float): [Product!]!
   fetchProducts(page: Float): [Product!]!
   fetchProduct(productId: String!): Product!
   fetchProductImages(productId: String!): [ProductImage!]!
@@ -157,10 +157,9 @@ type Query {
 
 type Mutation {
   createAddress(createAddressInput: CreateAddressInput!): Address!
-  updateAddress(updateAddressInput: UpdateAddressInput!): Address!
+  updateAddress(createAddressInput: CreateAddressInput!): Address!
   deleteAddress(addressId: String!): String!
   login(email: String!, password: String!): String!
-  logintest(email: String!, password: String!): String!
   restoreAccessToken: String!
   logout: String!
   createComment(createCommentInput: CreateCommentInput!): Comment!
@@ -195,13 +194,6 @@ input CreateAddressInput {
   address: String!
   addressDetail: String!
   zipCode: String!
-}
-
-input UpdateAddressInput {
-  address: String!
-  addressDetail: String!
-  zipCode: String!
-  email: String!
 }
 
 input CreateCommentInput {

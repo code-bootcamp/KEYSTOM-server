@@ -52,4 +52,8 @@ export class User {
 
   @OneToMany(() => UserCoupon, (userCoupon) => userCoupon.email)
   userCoupons: UserCoupon;
+
+  @Column({ nullable: true, default: 'team-f12' })
+  @Field(() => String)
+  provider: string;
 }

@@ -13,8 +13,6 @@ import type { RedisClientOptions } from 'redis';
 import * as redisStore from 'cache-manager-redis-store';
 import { SignUpModule } from './apis/signup/signup.module';
 import { ConfigModule } from '@nestjs/config';
-// import { AppController } from './app.controller';
-// import { AppService } from './app.service';
 import 'dotenv/config';
 import { CommentModule } from './apis/comments/comment.module';
 import { CouponModule } from './apis/coupon/coupon.module';
@@ -23,6 +21,8 @@ import { AddressModule } from './apis/address/address.module';
 import { ReviewLikeModule } from './apis/reviewLike/reviewLike.module';
 import { ElasticsearchModule } from '@nestjs/elasticsearch';
 import { UserCouponModule } from './apis/UserCoupon/userCoupon.module';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
 
 @Module({
   imports: [
@@ -51,14 +51,13 @@ import { UserCouponModule } from './apis/UserCoupon/userCoupon.module';
     }),
     TypeOrmModule.forRoot({
       type: 'mysql',
-      // host: '10.51.1.8',
-      host: '10.71.240.3',
-      // host: 'my-database',
+      // host: '10.71.240.3',
+      host: 'my-database',
       port: 3306,
       username: 'root',
       password: 'root',
-      database: 'team-f12-light-db',
-      // database: 'mydocker02',
+      // database: 'team-f12-light-db',
+      database: 'mydocker02',
       entities: [__dirname + '/apis/**/*.entity.*'],
       synchronize: true,
       logging: true,
@@ -67,19 +66,20 @@ import { UserCouponModule } from './apis/UserCoupon/userCoupon.module';
     }),
     CacheModule.register<RedisClientOptions>({
       store: redisStore,
+      // url: 'redis://10.71.241.3:6379',
       url: 'redis://my-redis:6379',
       isGlobal: true,
     }),
-    ElasticsearchModule.register({
-      node: 'http://elasticsearch:9200',
-    }),
+    // ElasticsearchModule.register({
+    //   node: 'http://elasticsearch:9200',
+    // }),
     ConfigModule.forRoot({
       envFilePath: '.env',
       ignoreEnvFile: true,
       isGlobal: true,
     }),
   ],
-  // controllers: [AppController],
-  // providers: [AppService],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}

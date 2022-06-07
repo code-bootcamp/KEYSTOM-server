@@ -7,9 +7,7 @@ import {
   ManyToOne,
   CreateDateColumn,
   DeleteDateColumn,
-  OneToOne,
 } from 'typeorm';
-import { Order } from '../../order/entities/order.entity';
 
 @Entity()
 @ObjectType()
