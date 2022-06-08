@@ -29,7 +29,6 @@ export class Address {
   zipCode: string;
 
   @CreateDateColumn()
-  @Field(() => String)
   createdAt: Date;
 
   @DeleteDateColumn()

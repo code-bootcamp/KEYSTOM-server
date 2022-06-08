@@ -75,7 +75,7 @@ export class IamportService {
       });
       return result.data.response.cancel_amount;
     } catch (error) {
-      console.log('환불 에러');
+      console.log('환불 에러', error);
       throw new HttpException(
         error.response.data.message,
         error.response.status,

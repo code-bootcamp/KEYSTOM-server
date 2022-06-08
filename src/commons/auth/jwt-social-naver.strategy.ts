@@ -17,7 +17,6 @@ export class JwtNaverStrategy extends PassportStrategy(Strategy, 'naver') {
   }
 
   async validate(accessToken: string, refreshToken: string, profile: any) {
-    console.log('네이버 프로필!', profile);
     return {
       email: profile.emails[0].value,
       password: profile.id, // 비밀번호는 알려주지 않으므로 임의로 적어 놓는다

@@ -1,6 +1,5 @@
-import { UseGuards, Req } from '@nestjs/common';
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { CreatePaymentInput } from './dto/createPayment.input';
+import { UseGuards } from '@nestjs/common';
+import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { Payment } from './entities/payment.entity';
 import { PaymentService } from './payments.service';
 import { GqlAuthAccessGuard } from 'src/commons/auth/gql-auth.guard';

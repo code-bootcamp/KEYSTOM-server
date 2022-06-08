@@ -36,19 +36,16 @@ export class CommentService {
       })
       .orderBy('comment.createdAt', 'ASC')
       .getMany();
-    console.log(comments);
     return comments;
   }
   async findReviewComments({ reviewId }) {
     const review = await this.reviewRepository.findOne({
       where: { id: reviewId },
     });
-    console.log('리뷰유유유유', review);
     const result = await this.commentRepository.find({
       where: { review },
       relations: ['user', 'review'],
     });
-    console.log('결과', result);
     return result;
   }
 

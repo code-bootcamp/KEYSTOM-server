@@ -4,7 +4,6 @@ import { Product } from './entities/product.entity';
 import { ProductService } from './product.service';
 import { CACHE_MANAGER, Inject } from '@nestjs/common';
 import { Cache } from 'cache-manager';
-import { UpdateProductInput } from './dto/updateProduct.input';
 import { ProductImage } from 'src/apis/productImage/entities/productImage.entity';
 
 @Resolver()
@@ -89,9 +88,9 @@ export class ProductResolver {
   @Mutation(() => Product)
   updateProduct(
     @Args('productId') productId: string,
-    @Args('updateProductInput') updateProductInput: UpdateProductInput,
+    @Args('createProductInput') createProductInput: CreateProductInput,
   ) {
-    return this.productService.update({ ...updateProductInput }, productId);
+    return this.productService.update({ ...createProductInput }, productId);
   }
 
   @Mutation(() => String)

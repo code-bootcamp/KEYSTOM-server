@@ -1,10 +1,9 @@
-import { ConsoleLogger, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Connection, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { ProductTag } from '../productsTag/entities/productTag.entity';
 import { Product } from './entities/product.entity';
 import { ProductImage } from 'src/apis/productImage/entities/productImage.entity';
-import { User } from '../user/entities/user.entity';
 import { ElasticsearchService } from '@nestjs/elasticsearch';
 
 @Injectable()

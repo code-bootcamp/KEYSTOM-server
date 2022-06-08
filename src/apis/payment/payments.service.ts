@@ -33,7 +33,6 @@ export class PaymentService {
     try {
       // 1. 아임포트 액세스 토큰 발급
       const token = await this.iamportService.getToken();
-      console.log(token);
       // 결제 내역과 올바른 금액으로 결제 했는지 확인!
       await this.iamportService.checkPaid({
         impUid,
@@ -52,7 +51,6 @@ export class PaymentService {
           lock: { mode: 'pessimistic_write' },
         },
       );
-      console.log('결제 내역 확인', checkAlreadyPayment);
 
       if (checkAlreadyPayment)
         throw new ConflictException('이미 처리된 결제 요청입니다.');
@@ -70,7 +68,6 @@ export class PaymentService {
         id: productId,
       });
 
-      console.log('상품:', product);
       // 3. 주문 내역 생성
       const order = this.orderRepository.create({
         ...rest,
@@ -79,7 +76,6 @@ export class PaymentService {
         product,
       });
       await queryRunner.manager.save(order);
-      console.log('주문 내역..', order);
 
       // 4. 결제 내역 생성
       const paymentImp = this.paymentRepository.create({
@@ -93,7 +89,6 @@ export class PaymentService {
       await queryRunner.manager.save(paymentImp);
 
       await queryRunner.commitTransaction();
-      console.log('결제 내역', paymentImp);
       return paymentImp;
     } catch (error) {
       console.log(error.message);
@@ -118,7 +113,6 @@ export class PaymentService {
     try {
       // 1. 아임포트 액세스 토큰 발급
       const token = await this.iamportService.getToken();
-      console.log(token);
 
       // 2. 이미 결제한 내역인지 확인!
       // 중복 방지를 위해 결제 테이블에 존재하는 지 확인!
@@ -154,7 +148,6 @@ export class PaymentService {
       const product = await queryRunner.manager.findOne(Product, {
         id: productId,
       });
-      console.log('상품:', product);
       // 3. 주문 내역 생성
       const order = this.orderRepository.create({
         ...rest,
@@ -163,7 +156,6 @@ export class PaymentService {
         product,
       });
       await queryRunner.manager.save(order);
-      console.log('주문 내역..', order);
 
       // 4. 결제 내역 생성
       const paymentImp = this.paymentRepository.create({

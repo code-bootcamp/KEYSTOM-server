@@ -99,7 +99,6 @@ export class AuthResolver {
   @Query(() => Address)
   async fetchUserLoggedIn(@CurrentUser() currentUser: ICurrentUser) {
     const user = await this.addressService.findOne({ currentUser });
-    console.log(user);
     return user;
   }
 }

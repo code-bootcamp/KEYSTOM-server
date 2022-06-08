@@ -17,8 +17,6 @@ export class JwtKakaoStrategy extends PassportStrategy(Strategy, 'kakao') {
   }
 
   async validate(accessToken: string, refreshToken: string, profile: any) {
-    console.log('카카오 프로필!', profile);
-
     return {
       email: profile._json.kakao_account.email,
       password: profile.id, // 비밀번호는 알려주지 않으므로 임의로 적어 놓는다

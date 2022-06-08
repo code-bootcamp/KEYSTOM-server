@@ -67,7 +67,6 @@ type Address {
   address: String!
   addressDetail: String!
   zipCode: String!
-  createdAt: String!
   user: User!
 }
 
@@ -169,11 +168,10 @@ type Mutation {
   deleteCoupon(couponId: String!): String!
   createCustom(createCustomInput: CreateCustomInput!): Custom!
   uploadFile(files: [Upload!]!): [String!]!
-  createOrder(createOrderInput: CreateOrderInput!): Order!
   payment(price: Float!, impUid: String!, createAddressInput: CreateAddressInput!, createOrderInput: CreateOrderInput!): Payment!
   refund(impUid: String!, paymentId: String!, createAddressInput: CreateAddressInput!, createOrderInput: CreateOrderInput!): Payment!
   createProduct(createProductInput: CreateProductInput!): Product!
-  updateProduct(productId: String!, updateProductInput: UpdateProductInput!): Product!
+  updateProduct(productId: String!, createProductInput: CreateProductInput!): Product!
   deleteProduct(productId: String!): String!
   createReview(createReviewInput: CreateReviewInput!): Review!
   updateReview(updateReviewInput: UpdateReviewInput!): Review!
@@ -230,14 +228,6 @@ input CreateProductInput {
   description: String!
   price: Int!
   imageUrls: [String!]
-  productTags: [String!]
-}
-
-input UpdateProductInput {
-  title: String!
-  description: String!
-  price: Int!
-  imageUrls: [String!]!
   productTags: [String!]
 }
 

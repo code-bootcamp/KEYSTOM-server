@@ -1,6 +1,5 @@
 import { Field, InputType, Int } from '@nestjs/graphql';
-import { CreateAddressInput } from '../../address/dto/createAddress.input';
-import { Address } from '../../address/entities/address.entity';
+import { Address } from 'src/apis/address/entities/address.entity';
 
 @InputType()
 export class CreateOrderInput {
