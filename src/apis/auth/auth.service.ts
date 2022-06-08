@@ -30,7 +30,7 @@ export class AuthService {
       { secret: process.env.REFRESH_SECRET_KEY, expiresIn: '2w' }, //비밀번호
     );
 
-    const alloweOrigins = ['http://localhost:3000', 'https://kestom.site:443'];
+    const alloweOrigins = ['http://localhost:3000', 'https://keystom.site:443'];
     const origin = req.headers.origin;
 
     if (alloweOrigins.indexOf(origin) > -1) {
