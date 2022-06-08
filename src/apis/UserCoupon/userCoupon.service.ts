@@ -21,7 +21,6 @@ export class UserCouponService {
     const { ...check } = await this.userCouponRepository.findOne({
       email: currentUser.email,
     });
-    // console.log('쿠폰 발급 여부!', isEvent);
 
     if (check['isEvent'])
       throw new BadRequestException('이미 이달의 쿠폰을 발급하였습니다.');
@@ -52,12 +51,10 @@ export class UserCouponService {
   async delete({ currentUser, couponId }) {
     const coupon = await this.couponRepository.findOne({ id: couponId });
 
-    console.log('사용할 쿠폰', coupon);
     const flag = await this.userCouponRepository.findOne({
       email: currentUser.email,
       coupon: coupon,
     });
-    console.log('유저가 갖고 있는 지 확인', flag);
 
     await this.userCouponRepository.delete({ ...flag });
 
@@ -79,7 +76,6 @@ export class UserCouponService {
   //   const result = await this.userCouponRepository.find({
   //     relations: ['coupon'],
   //   });
-  //   console.log(result, 'ghkrdls,');
   //   return result;
   // }
 }

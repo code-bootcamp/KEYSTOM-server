@@ -46,29 +46,28 @@ export class OrderService {
     });
   }
 
-  async create({ createOrderInput, email }) {
-    const { productId, address, ...order } = createOrderInput;
+  // async create({ createOrderInput, email }) {
+  //   const { productId, address, ...order } = createOrderInput;
 
-    const user = await this.userRepository.findOne({
-      email,
-    });
-    if (!user) throw new BadRequestException('유저가 존재하지 않습니다.');
+  //   const user = await this.userRepository.findOne({
+  //     email,
+  //   });
+  //   if (!user) throw new BadRequestException('유저가 존재하지 않습니다.');
 
-    const product = await this.productRepository.findOne({
-      id: productId,
-    });
-    if (!product) throw new BadRequestException('상품이 존재하지 않습니다.');
+  //   const product = await this.productRepository.findOne({
+  //     id: productId,
+  //   });
+  //   if (!product) throw new BadRequestException('상품이 존재하지 않습니다.');
 
-    const receiveAddress = this.addressRepository.create({ ...address });
+  //   const receiveAddress = this.addressRepository.create({ ...address });
 
-    console.log('배송 주소', receiveAddress);
-    const result = await this.orderRepository.save({
-      ...order,
-      user: user,
-      address: receiveAddress['id'],
-      product: product,
-    });
+  //   const result = await this.orderRepository.save({
+  //     ...order,
+  //     user: user,
+  //     address: receiveAddress['id'],
+  //     product: product,
+  //   });
 
-    return result;
-  }
+  //   return result;
+  // }
 }

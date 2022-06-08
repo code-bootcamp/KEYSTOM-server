@@ -3,7 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from '../user/entities/user.entity';
 import { Address } from './entities/address.entity';
-import { UpdateAddressInput } from './dto/updateAddress.input';
 
 @Injectable()
 export class AddressService {
@@ -15,9 +14,9 @@ export class AddressService {
     private readonly userRepository: Repository<User>,
   ) {}
 
-  async findOne({ email }) {
+  async findOne({ currentUser }) {
     const user = await this.userRepository.findOne({
-      where: { email: email },
+      where: { email: currentUser.email },
     });
     return await this.addressRepository.findOne({
       where: { user: user },
@@ -41,18 +40,21 @@ export class AddressService {
     return result;
   }
 
-  async update({ updateAddressInput }) {
-    const { email, ...rest } = updateAddressInput;
-
-    const user = await this.userRepository.findOne({ email });
+  async update({ createAddressInput, currentUser }) {
+    const user = await this.userRepository.findOne({
+      email: currentUser.email,
+    });
     const target = await this.addressRepository.find({ user });
     return this.addressRepository.save({
       ...target,
-      ...rest,
+      ...createAddressInput,
     });
   }
+
   async delete({ addressId }) {
-    const result = await this.addressRepository.softDelete({ id: addressId });
+    const result = await this.addressRepository.softDelete({
+      id: addressId,
+    });
     return result.affected ? true : false;
   }
 }

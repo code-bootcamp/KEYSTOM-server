@@ -59,6 +59,7 @@ type User {
   nickName: String!
   profileImage: String!
   isAdmin: Boolean!
+  provider: String!
 }
 
 type Address {
@@ -66,7 +67,6 @@ type Address {
   address: String!
   addressDetail: String!
   zipCode: String!
-  createdAt: String!
   user: User!
 }
 
@@ -125,7 +125,7 @@ type Comment {
 }
 
 type Query {
-  fetchUserAddress(email: String!): Address!
+  fetchUserAddress: Address!
   fetchAddresses: [Address!]!
   fetchUserLoggedIn: Address!
   fetchComments: [Comment!]!
@@ -139,7 +139,6 @@ type Query {
   fetchCustom(productId: String!): Custom!
   fetchOrders(page: Float): [Order!]!
   fetchOrder(orderId: String!): Order!
-  searchProducts(search: String, price: Float): [Product!]!
   fetchProducts(page: Float): [Product!]!
   fetchProduct(productId: String!): Product!
   fetchProductImages(productId: String!): [ProductImage!]!
@@ -157,10 +156,9 @@ type Query {
 
 type Mutation {
   createAddress(createAddressInput: CreateAddressInput!): Address!
-  updateAddress(updateAddressInput: UpdateAddressInput!): Address!
+  updateAddress(createAddressInput: CreateAddressInput!): Address!
   deleteAddress(addressId: String!): String!
   login(email: String!, password: String!): String!
-  logintest(email: String!, password: String!): String!
   restoreAccessToken: String!
   logout: String!
   createComment(createCommentInput: CreateCommentInput!): Comment!
@@ -170,11 +168,10 @@ type Mutation {
   deleteCoupon(couponId: String!): String!
   createCustom(createCustomInput: CreateCustomInput!): Custom!
   uploadFile(files: [Upload!]!): [String!]!
-  createOrder(createOrderInput: CreateOrderInput!): Order!
   payment(price: Float!, impUid: String!, createAddressInput: CreateAddressInput!, createOrderInput: CreateOrderInput!): Payment!
   refund(impUid: String!, paymentId: String!, createAddressInput: CreateAddressInput!, createOrderInput: CreateOrderInput!): Payment!
   createProduct(createProductInput: CreateProductInput!): Product!
-  updateProduct(productId: String!, updateProductInput: UpdateProductInput!): Product!
+  updateProduct(productId: String!, createProductInput: CreateProductInput!): Product!
   deleteProduct(productId: String!): String!
   createReview(createReviewInput: CreateReviewInput!): Review!
   updateReview(updateReviewInput: UpdateReviewInput!): Review!
@@ -195,13 +192,6 @@ input CreateAddressInput {
   address: String!
   addressDetail: String!
   zipCode: String!
-}
-
-input UpdateAddressInput {
-  address: String!
-  addressDetail: String!
-  zipCode: String!
-  email: String!
 }
 
 input CreateCommentInput {
@@ -238,14 +228,6 @@ input CreateProductInput {
   description: String!
   price: Int!
   imageUrls: [String!]
-  productTags: [String!]
-}
-
-input UpdateProductInput {
-  title: String!
-  description: String!
-  price: Int!
-  imageUrls: [String!]!
   productTags: [String!]
 }
 

@@ -1,9 +1,7 @@
-import { ConflictException, ConsoleLogger, UseGuards } from '@nestjs/common';
-import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { UseGuards } from '@nestjs/common';
+import { Args, Int, Mutation, Resolver } from '@nestjs/graphql';
 import { GqlAuthAccessGuard } from 'src/commons/auth/gql-auth.guard';
 import { CurrentUser, ICurrentUser } from 'src/commons/auth/gql-user.param';
-import { CreateReviewLikeInput } from './dto/createReviewLike.input';
-import { ReviewLike } from './entities/reviewLike.entity';
 import { ReviewLikeService } from './reviewLike.service';
 
 @Resolver()

@@ -9,10 +9,8 @@ import {
   CreateDateColumn,
   JoinColumn,
   OneToOne,
-  OneToMany,
 } from 'typeorm';
 import { Address } from '../../address/entities/address.entity';
-import { Review } from '../../review/entities/review.entity';
 
 @Entity()
 @ObjectType()

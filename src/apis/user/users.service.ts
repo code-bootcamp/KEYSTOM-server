@@ -19,23 +19,25 @@ export class UserService {
     return await this.userRepository.findOne({ where: { email: email } });
   }
 
-  async create({ bcryptUser }) {
-    // const { cartProduct, password, ...user } = bcryptUser;
-    const { password, address, ...user } = bcryptUser;
-    const user1 = await this.userRepository.findOne({ email: user.email });
-    // const result1 = await this.cartProductRepository.save({
-    //   ...cartProduct,
-    // });
-    if (user1) throw new ConflictException('이미 등록된 이메일 입니다');
+  async create({ createUserInput, hashedPassword }) {
+    const { address, email, ...rest } = createUserInput;
+    const user = await this.userRepository.findOne({ email });
+
+    if (user) throw new ConflictException('이미 등록된 이메일 입니다');
     const result = await this.userRepository.save({
-      ...user,
-      password: password,
+      email,
+      ...rest,
+      password: hashedPassword,
     });
-    const createAddressInput = { ...address, user: result };
-    //주소도 저장하기
-    await this.addressRepository.save({
-      ...createAddressInput,
-    });
+
+    // 소셜로그인 시 주소를 받지 못하므로 null인 경우 처리!
+    if (address) {
+      const createAddressInput = { ...address, user: result };
+
+      //주소 저장하기
+      await this.addressRepository.save({ ...createAddressInput });
+    }
+
     return result;
   }
 

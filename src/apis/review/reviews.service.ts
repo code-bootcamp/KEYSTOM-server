@@ -4,7 +4,7 @@ import {
   ConflictException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, Connection } from 'typeorm';
+import { Repository } from 'typeorm';
 import { Order } from '../order/entities/order.entity';
 import { Product } from '../products/entities/product.entity';
 import { ReviewImage } from '../reviewImage/entities/reviewImage.entity';
@@ -100,8 +100,6 @@ export class ReviewService {
       email: currentUser.email,
     });
 
-    console.log('주문 내역', order);
-    console.log(order.product.id);
     // 리뷰 저장
     const result = await this.reviewRepository.save({
       ...rest,
@@ -110,7 +108,6 @@ export class ReviewService {
       order: order,
       product: product,
     });
-    console.log('리뷰', result);
     // 리뷰 이미지 저장
     if (imageUrls) {
       for (let i = 0; i < imageUrls.length; i++) {

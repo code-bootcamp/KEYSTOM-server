@@ -7,9 +7,7 @@ import {
   ManyToOne,
   CreateDateColumn,
   DeleteDateColumn,
-  OneToOne,
 } from 'typeorm';
-import { Order } from '../../order/entities/order.entity';
 
 @Entity()
 @ObjectType()
@@ -31,7 +29,6 @@ export class Address {
   zipCode: string;
 
   @CreateDateColumn()
-  @Field(() => String)
   createdAt: Date;
 
   @DeleteDateColumn()

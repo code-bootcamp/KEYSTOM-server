@@ -6,8 +6,6 @@ import { ProductResolver } from './product.resolver';
 import { ProductService } from './product.service';
 import { ProductImage } from 'src/apis/productImage/entities/productImage.entity';
 import { ElasticsearchModule } from '@nestjs/elasticsearch';
-import { UserService } from '../user/users.service';
-import { User } from '../user/entities/user.entity';
 
 @Module({
   imports: [
