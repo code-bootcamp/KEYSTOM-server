@@ -31,7 +31,7 @@ export class AuthService {
     );
     res.setHeader('Access-Control-Allow-Origin', [
       'http://localhost:3000',
-      'https://keystom.site:3000',
+      'https://keystom.site:443',
     ]);
     res.setHeader('Access-Control-Allow-Credentials', 'true');
     res.setHeader('Access-Control-Allow-Methods', 'GET,HEAD,OPTIONS,POST,PUT');
