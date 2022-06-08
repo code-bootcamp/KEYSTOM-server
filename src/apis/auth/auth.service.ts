@@ -24,12 +24,19 @@ export class AuthService {
     );
     return accessToken;
   }
-  setRefreshToken({ user, res }) {
+  setRefreshToken({ user, res, req }) {
     const refreshToken = this.jwtService.sign(
       { email: user.email, sub: user.id }, //보내고 싶은 내용
       { secret: process.env.REFRESH_SECRET_KEY, expiresIn: '2w' }, //비밀번호
     );
-    res.setHeader('Access-Control-Allow-Origin', 'https://keystom.site:443');
+
+    const alloweOrigins = ['http://localhost:3000', 'https://kestom.site:443'];
+    const origin = req.headers.origin;
+
+    if (alloweOrigins.indexOf(origin) > -1) {
+      res.setHeader('Access-Control-Allow-Origin', origin);
+    }
+
     res.setHeader('Access-Control-Allow-Credentials', 'true');
     res.setHeader('Access-Control-Allow-Methods', 'GET,HEAD,OPTIONS,POST,PUT');
     res.setHeader(
@@ -56,7 +63,7 @@ export class AuthService {
     }
 
     //3.로그인
-    this.setRefreshToken({ user, res });
+    this.setRefreshToken({ user, res, req });
 
     //4. 로그인 후 리다이렉트 될 주소
     res.redirect('http://localhost:15500/frontend/social-login.html');
