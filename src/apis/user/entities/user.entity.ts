@@ -45,6 +45,5 @@ export class User {
   userCoupons: UserCoupon;
 
   @Column({ nullable: true, default: 'team-f12' })
-  @Field(() => String)
   provider: string;
 }
