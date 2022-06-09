@@ -43,7 +43,7 @@ export class Product {
   @Column({
     nullable: true,
   })
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   thumbnail: string;
 
   @JoinTable()
