@@ -14,6 +14,7 @@
 
 ## 기술스택
 <div style="width:70% text-align:center"><img src="https://user-images.githubusercontent.com/79756706/173012667-97a4d79c-02b5-4a23-a561-8fcee3a6d2d6.png"></div>
+
 `JavaScript`, `TypeScript`, `NodeJS`, `NestJS`, `TypeORM`, `JWT`, `GraphQL`, `MySQL`,`ElasticSearch`, `Logstash`, `Redis`, `Docker`, `Git`, `GitHub`, `GCP`
 
 <br/>
