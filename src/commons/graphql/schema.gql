@@ -59,7 +59,6 @@ type User {
   nickName: String!
   profileImage: String!
   isAdmin: Boolean!
-  provider: String!
 }
 
 type Address {
