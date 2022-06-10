@@ -66,7 +66,6 @@ type Address {
   address: String!
   addressDetail: String!
   zipCode: String!
-  createdAt: String!
   user: User!
 }
 
@@ -80,6 +79,7 @@ type Order {
   user: String!
   product: Product!
   createdAt: DateTime!
+  isReview: Boolean!
 }
 
 type Review {
@@ -88,7 +88,7 @@ type Review {
   description: String!
   like: Int!
   thumbnail: String
-  createdAt: String!
+  createdAt: DateTime!
   product: Product!
   user: User!
   order: Order!
@@ -117,13 +117,14 @@ enum PAYMENT_STATUS_ENUM {
 
 type Comment {
   id: Int!
-  commentContent: String!
-  parentId: String!
-  createdAt: String!
+  content: String!
+  parentId: String
+  user: User!
+  createdAt: DateTime!
 }
 
 type Query {
-  fetchUserAddress(email: String!): Address!
+  fetchUserAddress: Address!
   fetchAddresses: [Address!]!
   fetchUserLoggedIn: Address!
   fetchComments: [Comment!]!
@@ -137,17 +138,15 @@ type Query {
   fetchCustom(productId: String!): Custom!
   fetchOrders(page: Float): [Order!]!
   fetchOrder(orderId: String!): Order!
-  searchProducts(search: String, price: Float): [Product!]!
   fetchProducts(page: Float): [Product!]!
   fetchProduct(productId: String!): Product!
   fetchProductImages(productId: String!): [ProductImage!]!
   fetchProductRowCount: Int!
   fetchReview(reviewId: String!): Review!
   fetchBestReview: [Review!]!
-  fetchReviews(page: Float): [Review!]!
+  fetchReviews(page: Float, productId: String!): [Review!]!
   fetchReviewImages(reviewId: String!): [ReviewImage!]!
   fetchReviewRowCount: Int!
-  fetchProductReview(productId: String!): [Review!]!
   fetchUserReview(email: String!): [Review!]!
   fetchUsers: [User!]!
   fetchUser(email: String!): User!
@@ -156,10 +155,9 @@ type Query {
 
 type Mutation {
   createAddress(createAddressInput: CreateAddressInput!): Address!
-  updateAddress(updateAddressInput: UpdateAddressInput!): Address!
+  updateAddress(createAddressInput: CreateAddressInput!): Address!
   deleteAddress(addressId: String!): String!
   login(email: String!, password: String!): String!
-  logintest(email: String!, password: String!): String!
   restoreAccessToken: String!
   logout: String!
   createComment(createCommentInput: CreateCommentInput!): Comment!
@@ -169,11 +167,10 @@ type Mutation {
   deleteCoupon(couponId: String!): String!
   createCustom(createCustomInput: CreateCustomInput!): Custom!
   uploadFile(files: [Upload!]!): [String!]!
-  createOrder(createOrderInput: CreateOrderInput!): Order!
   payment(price: Float!, impUid: String!, createAddressInput: CreateAddressInput!, createOrderInput: CreateOrderInput!): Payment!
   refund(impUid: String!, paymentId: String!, createAddressInput: CreateAddressInput!, createOrderInput: CreateOrderInput!): Payment!
   createProduct(createProductInput: CreateProductInput!): Product!
-  updateProduct(productId: String!, updateProductInput: UpdateProductInput!): Product!
+  updateProduct(productId: String!, createProductInput: CreateProductInput!): Product!
   deleteProduct(productId: String!): String!
   createReview(createReviewInput: CreateReviewInput!): Review!
   updateReview(updateReviewInput: UpdateReviewInput!): Review!
@@ -196,16 +193,8 @@ input CreateAddressInput {
   zipCode: String!
 }
 
-input UpdateAddressInput {
-  address: String!
-  addressDetail: String!
-  zipCode: String!
-  email: String!
-}
-
 input CreateCommentInput {
-  commentContent: String!
-  email: String!
+  content: String!
   reviewId: String!
 }
 
@@ -241,28 +230,17 @@ input CreateProductInput {
   productTags: [String!]
 }
 
-input UpdateProductInput {
-  title: String!
-  description: String!
-  price: Int!
-  imageUrls: [String!]!
-  productTags: [String!]
-}
-
 input CreateReviewInput {
   title: String!
   description: String!
   imageUrls: [String!]
-  productId: String!
   orderId: String!
 }
 
 input UpdateReviewInput {
   title: String!
   description: String!
-  imageUrls: [String!]!
-  productId: String!
-  orderId: String!
+  imageUrls: [String!]
   reviewId: String!
 }
 

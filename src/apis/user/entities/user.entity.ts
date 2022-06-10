@@ -28,7 +28,7 @@ export class User {
 
   @Column({
     default:
-      'https://images.mypetlife.co.kr/content/uploads/2021/10/22152410/IMG_2087-scaled-e1634883900174.jpg',
+      'https://storage.googleapis.com/f12-bucket/KakaoTalk_Photo_2022-05-30-10-43-19.png',
     nullable: true,
   })
   @Field(() => String)
@@ -43,4 +43,7 @@ export class User {
 
   @OneToMany(() => UserCoupon, (userCoupon) => userCoupon.email)
   userCoupons: UserCoupon;
+
+  @Column({ nullable: true, default: 'team-f12' })
+  provider: string;
 }

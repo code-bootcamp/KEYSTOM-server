@@ -17,6 +17,4 @@ export class CreateUserInput {
 
   @Field(() => CreateAddressInput)
   address: CreateAddressInput;
-  // @Field(()=>[String])
-  // coupons: string[]
 }

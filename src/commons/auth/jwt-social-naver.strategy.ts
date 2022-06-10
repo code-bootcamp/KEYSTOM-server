@@ -17,20 +17,12 @@ export class JwtNaverStrategy extends PassportStrategy(Strategy, 'naver') {
   }
 
   async validate(accessToken: string, refreshToken: string, profile: any) {
-    // 네이버에서 받는 것
-    //검증 완료되면 실행(검증 실패하면 중간에 에러 떨어짐)
-    console.log('accessToken은 ', accessToken); //복호화된 내용들...
-    console.log('refreshToken은', refreshToken);
-    console.log(profile); //스코프는 프로필에서 정보 뽑아 오면 됨
-
     return {
       email: profile.emails[0].value,
-      password: '1111', // 비밀번호는 알려주지 않으므로 임의로 적어 놓는다
-      name: '선종현',
-      nickName: '111',
-      profileImage: '12',
-      isAdmin: true,
-      address: '12', //내 백엔드에서 강제 회원가입,
+      password: profile.id, // 비밀번호는 알려주지 않으므로 임의로 적어 놓는다
+      name: profile.displayName,
+      nickName: profile.displayName,
+      provider: profile.provider,
     }; //return 하면 context 안으로 들어감(context.req.user => user 는 라이브러리에서 자동으로 지정해준것)
   }
 }

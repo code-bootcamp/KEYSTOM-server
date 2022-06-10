@@ -55,4 +55,8 @@ export class Order {
   @CreateDateColumn()
   @Field(() => Date)
   createdAt: Date;
+
+  @Column({ default: false })
+  @Field(() => Boolean)
+  isReview: boolean;
 }

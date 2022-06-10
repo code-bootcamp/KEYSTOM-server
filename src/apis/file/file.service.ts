@@ -17,7 +17,6 @@ export class FileService {
     // 프론트엔드에서 파일을 다 받을 때까지 대기!
     const waitedFiles = await Promise.all(files);
 
-    console.log(waitedFiles);
     const resultUrl = await Promise.all(
       waitedFiles.map((file) => {
         return new Promise((resolve, reject) => {

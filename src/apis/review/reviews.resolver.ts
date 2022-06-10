@@ -24,9 +24,10 @@ export class ReviewResolver {
   @Query(() => [Review])
   fetchReviews(
     @Args('page', { nullable: true }) page: number, //
+    @Args('productId') productId: string,
   ) {
-    if (!page) page = 1;
-    return this.reviewService.findAll({ page });
+    if (!page || page <= 0) page = 1;
+    return this.reviewService.findProductReview({ page, productId });
   }
 
   @Query(() => [ReviewImage])
@@ -39,10 +40,11 @@ export class ReviewResolver {
     return this.reviewService.findCount();
   }
 
-  @Query(() => [Review])
-  fetchProductReview(@Args('productId') productId: string) {
-    return this.reviewService.findProductReview({ productId });
-  }
+  // @Query(() => [Review])
+  // fetchProductReview(@Args('productId') productId: string) {
+  //   return this.reviewService.findProductReview({ productId });
+  // }
+
   @Query(() => [Review])
   fetchUserReview(@Args('email') email: string) {
     return this.reviewService.findUserReview({ email });

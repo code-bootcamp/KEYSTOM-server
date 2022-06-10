@@ -8,7 +8,6 @@ import {
   DeleteDateColumn,
 } from 'typeorm';
 import { Review } from 'src/apis/review/entities/review.entity';
-import { MIN } from 'class-validator';
 import { User } from 'src/apis/user/entities/user.entity';
 
 @Entity()
@@ -20,20 +19,21 @@ export class Comment {
 
   @Column()
   @Field(() => String)
-  commentContent: string;
+  content: string;
 
   @Column({ default: null })
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   parentId: string;
 
   @ManyToOne(() => User, { onDelete: 'CASCADE' })
+  @Field(() => User)
   user: User;
 
   @ManyToOne(() => Review, { onDelete: 'CASCADE' })
   review: Review;
 
   @CreateDateColumn()
-  @Field(() => String)
+  @Field(() => Date)
   createdAt: Date;
 
   @DeleteDateColumn()

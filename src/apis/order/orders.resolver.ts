@@ -7,7 +7,6 @@ import { User } from 'src/apis/user/entities/user.entity';
 import { UseGuards } from '@nestjs/common';
 import { GqlAuthAccessGuard } from 'src/commons/auth/gql-auth.guard';
 import { CurrentUser, ICurrentUser } from 'src/commons/auth/gql-user.param';
-import { UserService } from '../user/users.service';
 
 @Resolver()
 export class OrderResolver {
@@ -36,15 +35,15 @@ export class OrderResolver {
     return order;
   }
 
-  @UseGuards(GqlAuthAccessGuard)
-  @Mutation(() => Order)
-  createOrder(
-    @Args('createOrderInput') createOrderInput: CreateOrderInput,
-    @CurrentUser() currentUser: ICurrentUser,
-  ) {
-    return this.orderService.create({
-      createOrderInput,
-      email: currentUser.email,
-    });
-  }
+  // @UseGuards(GqlAuthAccessGuard)
+  // @Mutation(() => Order)
+  // createOrder(
+  //   @Args('createOrderInput') createOrderInput: CreateOrderInput,
+  //   @CurrentUser() currentUser: ICurrentUser,
+  // ) {
+  //   return this.orderService.create({
+  //     createOrderInput,
+  //     email: currentUser.email,
+  //   });
+  // }
 }

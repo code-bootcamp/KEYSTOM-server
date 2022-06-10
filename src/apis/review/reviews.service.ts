@@ -1,12 +1,15 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  BadRequestException,
+  ConflictException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, Connection } from 'typeorm';
+import { Repository } from 'typeorm';
 import { Order } from '../order/entities/order.entity';
 import { Product } from '../products/entities/product.entity';
 import { ReviewImage } from '../reviewImage/entities/reviewImage.entity';
 import { User } from '../user/entities/user.entity';
 import { Review } from './entities/review.entity';
-
 @Injectable()
 export class ReviewService {
   constructor(
@@ -46,11 +49,12 @@ export class ReviewService {
     });
   }
 
-  async findAll({ page }) {
+  async findProductReview({ page, productId }) {
     return await this.reviewRepository
       .createQueryBuilder('review')
       .leftJoinAndSelect('review.product', 'product')
       .leftJoinAndSelect('review.user', 'user')
+      .where('review.product = :id', { id: productId })
       .orderBy('review.createdAt', 'DESC')
       .skip(0 + Number((page - 1) * 10))
       .take(10)
@@ -61,35 +65,48 @@ export class ReviewService {
     return this.productRepository.count();
   }
 
-  async findProductReview({ productId }) {
-    const product = await this.productRepository.findOne({
-      id: productId,
-    });
-    return await this.reviewRepository.find({ where: { product: product } });
-  }
+  // async findProductReview({ productId }) {
+  //   return await this.reviewRepository.find({
+  //     where: { productId },
+  //     relations: ['product', 'userId'],
+  //   });
+  // }
 
   async findUserReview({ email }) {
     const user = await this.userRepository.findOne({
-      email: email,
+      email,
     });
-    return await this.reviewRepository.find({ where: { user: user } });
+    return await this.reviewRepository.find({
+      where: { user: user },
+      relations: ['user, product'],
+    });
   }
 
-  async create({ imageUrls, productId, orderId, ...rest }, currentUser) {
+  async create({ imageUrls, orderId, ...rest }, currentUser) {
     // 어떠한 상품을 누가 구매했는지 불러오기
-    const product = await this.productRepository.findOne({ id: productId });
+    const order = await this.orderRepository.findOne({
+      where: { id: orderId },
+      relations: ['product'],
+    });
+
+    if (order.isReview)
+      throw new ConflictException('이미 리뷰를 작성하였습니다.');
+
+    const product = await this.productRepository.findOne({
+      id: order.product.id,
+    });
+
     const user = await this.userRepository.findOne({
       email: currentUser.email,
     });
-    const order = await this.orderRepository.findOne({ id: orderId });
 
     // 리뷰 저장
     const result = await this.reviewRepository.save({
       ...rest,
-      product: product,
       thumbnail: imageUrls ? imageUrls[0] : ' ',
       user: user,
       order: order,
+      product: product,
     });
     // 리뷰 이미지 저장
     if (imageUrls) {
@@ -111,39 +128,33 @@ export class ReviewService {
         }
       }
     }
+
+    // 리뷰를 작성했으므로 상태 변경!
+    await this.orderRepository.save({
+      ...order,
+      isReview: true,
+    });
+
+    //리뷰를 작성하면 주문 내역에 작성 여부 변경
     return result;
   }
 
-  async update(
-    { imageUrls, productId, orderId, reviewId, ...rest },
-    currentUser,
-  ) {
+  async update({ imageUrls, reviewId, ...rest }, currentUser) {
     // 업데이트 할 리뷰가 존재하는 지 확인
     const target = await this.reviewRepository.findOne({ id: reviewId });
     if (!target)
       throw new BadRequestException('업데이트할 리뷰가 존재하지 않습니다.');
 
-    // 상품, 유저, 주문 내역 찾아오기
-    const product = await this.productRepository.findOne({ id: productId });
-    if (!product)
-      throw new BadRequestException('상품 정보가 존재하지 않습니다.');
+    // 유저, 주문 내역 찾아오기
     const user = await this.userRepository.findOne({
       email: currentUser.email,
     });
     if (!user) throw new BadRequestException('유저 정보가 존재하지 않습니다.');
 
-    const order = await this.orderRepository.findOne({
-      id: orderId,
-    });
-    if (!order) throw new BadRequestException('주문 내역이 존재하지 않습니다.');
-
     //업데이트 된 상품과 연관된 이미지 삭제!!
     const result = await this.reviewRepository.save({
       ...target,
       ...rest,
-      product: product,
-      user: user,
-      order: order,
     });
 
     await this.reviewImageRepository.delete({ review: result });
